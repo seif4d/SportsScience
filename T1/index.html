@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفرقة الأولى | Team 1</title>
+    <!-- نفس الخطوط والأيقونات للحفاظ على الهوية البصرية -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/number-1-circle.png">
+
+    <style>
+        /* --- نفس الـ Theme --- */
+        :root {
+            --primary: #00e1ff;
+            --secondary: #7000ff;
+            --dark-bg: #050505;
+            --glass-bg: rgba(20, 20, 20, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --card-hover: #1a1a1a;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body {
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 10% 20%, rgba(0, 225, 255, 0.05) 0%, transparent 20%),
+                              radial-gradient(circle at 90% 80%, rgba(112, 0, 255, 0.05) 0%, transparent 20%);
+        }
+
+        /* --- Navbar --- */
+        nav {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        
+        .logo { font-weight: 900; font-size: 1.2rem; text-decoration: none; color: white; }
+        .back-btn {
+            text-decoration: none;
+            color: var(--primary);
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: 0.3s;
+        }
+        .back-btn:hover { transform: translateX(5px); }
+
+        /* --- Header --- */
+        header {
+            text-align: center;
+            padding: 60px 20px;
+        }
+        
+        h1 { font-size: 3rem; margin-bottom: 10px; background: linear-gradient(to right, #fff, #00e1ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        p.desc { color: #aaa; max-width: 600px; margin: 0 auto; font-size: 1.1rem; }
+
+        /* --- Grid Materials --- */
+        .container { padding: 40px 5%; }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+        }
+
+        .subject-card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px;
+            text-decoration: none;
+            color: white;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .subject-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: var(--card-hover);
+        }
+
+        .icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 5px;
+        }
+
+        .subject-title { font-size: 1.3rem; font-weight: 700; }
+        
+        .tags { display: flex; gap: 5px; flex-wrap: wrap; }
+        .tag { font-size: 0.75rem; padding: 4px 10px; background: rgba(255,255,255,0.1); border-radius: 10px; color: #ccc; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; color: #555; font-size: 0.9rem; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo">SportsScience <span style="color:var(--primary)">T1</span></a>
+        <!-- زرار الرجوع للصفحة الرئيسية -->
+        <a href="../index.html" class="back-btn">
+             الرئيسية <i class="fa-solid fa-house"></i>
+        </a>
+    </nav>
+
+    <header>
+        <h1>الفرقة الأولى</h1>
+        <p class="desc">جميع المواد الدراسية المقررة على الفرقة الأولى - جامعة أسيوط. اختر المادة للوصول للملخصات والامتحانات.</p>
+    </header>
+
+    <div class="container">
+        <div class="grid">
+            
+            <!-- مادة 1: التشريح -->
+            <!-- لاحظ الرابط بيودي على فولدر المادة في الريبو -->
+            <a href="https://github.com/seif4d/SportsScience/tree/main/T1/Anatomy" target="_blank" class="subject-card">
+                <i class="fa-solid fa-bone icon"></i>
+                <div class="subject-title">التشريح الوصفي (Anatomy)</div>
+                <div class="tags">
+                    <span class="tag">ملخصات</span>
+                    <span class="tag">عظام</span>
+                    <span class="tag">عضلات</span>
+                </div>
+            </a>
+
+            <!-- مادة 2: تاريخ التربية الرياضية -->
+            <a href="https://github.com/seif4d/SportsScience/tree/main/T1/History" target="_blank" class="subject-card">
+                <i class="fa-solid fa-landmark icon" style="color: #ffaa00;"></i>
+                <div class="subject-title">تاريخ التربية الرياضية</div>
+                <div class="tags">
+                    <span class="tag">نشأة الرياضة</span>
+                    <span class="tag">الألعاب الأولمبية</span>
+                </div>
+            </a>
+
+            <!-- مادة 3: علم النفس -->
+            <a href="https://github.com/seif4d/SportsScience/tree/main/T1/Psychology" target="_blank" class="subject-card">
+                <i class="fa-solid fa-brain icon" style="color: #ff0055;"></i>
+                <div class="subject-title">علم النفس الرياضي</div>
+                <div class="tags">
+                    <span class="tag">الشخصية</span>
+                    <span class="tag">الدافعية</span>
+                </div>
+            </a>
+
+            <!-- مادة 4: ترويح رياضي -->
+            <a href="https://github.com/seif4d/SportsScience/tree/main/T1/Recreation" target="_blank" class="subject-card">
+                <i class="fa-solid fa-umbrella-beach icon" style="color: #00ff88;"></i>
+                <div class="subject-title">الترويح الرياضي</div>
+                <div class="tags">
+                    <span class="tag">أوقات الفراغ</span>
+                    <span class="tag">الألعاب الصغيرة</span>
+                </div>
+            </a>
+
+            <!-- مادة 5: الصحة الرياضية -->
+            <a href="https://github.com/seif4d/SportsScience/tree/main/T1/Health" target="_blank" class="subject-card">
+                <i class="fa-solid fa-heart-pulse icon" style="color: #ff4444;"></i>
+                <div class="subject-title">الصحة والاسعافات</div>
+                <div class="tags">
+                    <span class="tag">إصابات</span>
+                    <span class="tag">تغذية</span>
+                </div>
+            </a>
+
+             <!-- مادة 6: التمرينات -->
+             <a href="https://github.com/seif4d/SportsScience/tree/main/T1/Exercises" target="_blank" class="subject-card">
+                <i class="fa-solid fa-person-running icon" style="color: #ae00ff;"></i>
+                <div class="subject-title">تمرينات وجمباز</div>
+                <div class="tags">
+                    <span class="tag">عملي</span>
+                    <span class="tag">مهارات</span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <footer>
+        Sports Science Hub - Assiut University &copy; 2024
+    </footer>
+
+</body>
+</html>
