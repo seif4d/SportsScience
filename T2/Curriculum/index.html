@@ -4,308 +4,330 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>مناهج التربية الرياضية | Curriculum</title>
+    
+    <!-- الخطوط والأيقونات -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- أيقونة الكتاب -->
-    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/book.png">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/overview-pages-3.png">
 
     <style>
+        /* --- إعدادات الألوان والتصميم --- */
         :root {
-            --primary: #00ff88;      /* أخضر نيون */
-            --secondary: #00b8ff;    /* أزرق سماوي */
-            --dark-bg: #0a0f0d;      /* خلفية داكنة مائلة للأخضر */
-            --glass-bg: rgba(20, 30, 25, 0.7);
-            --glass-border: rgba(0, 255, 136, 0.15);
+            --primary: #00ff9d;       /* أخضر نيون ساطع */
+            --primary-dim: #00ff9d20; /* أخضر شفاف */
+            --bg-dark: #090f0b;       /* خلفية داكنة جداً */
+            --card-bg: rgba(20, 30, 25, 0.6);
+            --border-color: rgba(0, 255, 157, 0.15);
             --text-main: #ffffff;
-            --text-gray: #b0b0b0;
+            --text-gray: #a0a0a0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
-        
+
         body {
-            background-color: var(--dark-bg);
+            background-color: var(--bg-dark);
             color: var(--text-main);
             min-height: 100vh;
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 255, 136, 0.1) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 50% 0%, #00ff9d15 0%, transparent 60%);
             overflow-x: hidden;
         }
 
-        /* --- Navbar --- */
+        /* --- القائمة العلوية --- */
         nav {
-            padding: 20px 5%;
+            padding: 15px 5%;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            background: rgba(10, 15, 13, 0.9);
+            background: rgba(9, 15, 11, 0.95);
             backdrop-filter: blur(10px);
-            border-bottom: 1px solid var(--glass-border);
+            border-bottom: 1px solid var(--border-color);
             position: sticky;
             top: 0;
-            z-index: 100;
+            z-index: 1000;
         }
-        
         .logo { font-weight: 900; font-size: 1.2rem; text-decoration: none; color: white; }
         .logo span { color: var(--primary); }
         
         .back-btn {
-            text-decoration: none;
-            color: var(--text-gray);
-            font-weight: 700;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            transition: 0.3s;
-            font-size: 0.9rem;
+            text-decoration: none; color: var(--text-gray); font-weight: 700; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
         }
         .back-btn:hover { color: var(--primary); transform: translateX(-5px); }
 
-        /* --- Header --- */
-        header {
-            text-align: center;
-            padding: 60px 20px 40px;
-        }
+        /* --- الهيدر الرئيسي --- */
+        header { text-align: center; padding: 50px 20px 30px; }
         
-        .course-badge {
-            background: rgba(0, 255, 136, 0.1);
-            color: var(--primary);
-            padding: 5px 15px;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            border: 1px solid var(--glass-border);
-            display: inline-block;
-            margin-bottom: 15px;
+        .badge {
+            background: var(--primary-dim); color: var(--primary);
+            padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; border: 1px solid var(--border-color);
+            display: inline-block; margin-bottom: 15px;
         }
 
-        h1 { font-size: 2.8rem; margin-bottom: 10px; line-height: 1.3; }
-        
-        .prof-name {
+        h1 { font-size: 2.5rem; margin-bottom: 10px; line-height: 1.2; }
+        .prof { color: var(--text-gray); margin-bottom: 40px; font-size: 1rem; }
+
+        /* --- أزرار التحكم (Tabs) --- */
+        .tabs-wrapper {
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
             color: var(--text-gray);
-            font-size: 1.1rem;
-            margin-bottom: 30px;
-        }
-        .prof-name i { color: var(--secondary); margin-left: 5px; }
-
-        /* --- Action Buttons --- */
-        .actions {
-            display: flex;
-            justify-content: center;
-            gap: 15px;
-            flex-wrap: wrap;
-            margin-bottom: 50px;
-        }
-
-        .btn {
-            padding: 12px 30px;
+            padding: 12px 25px;
             border-radius: 12px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: 0.3s;
-            display: flex;
-            align-items: center;
-            gap: 10px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px;
         }
 
-        .btn-primary {
+        .tab-btn:hover { background: var(--primary-dim); color: white; }
+
+        .tab-btn.active {
             background: var(--primary);
             color: #000;
-            box-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 0 25px rgba(0, 255, 136, 0.5); }
-
-        .btn-outline {
-            background: transparent;
-            border: 1px solid var(--glass-border);
-            color: var(--text-main);
-        }
-        .btn-outline:hover { border-color: var(--primary); background: rgba(0, 255, 136, 0.05); }
-
-        /* --- Content Grid --- */
-        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px 60px; }
-        
-        .section-title {
-            border-right: 4px solid var(--primary);
-            padding-right: 15px;
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            font-weight: 700;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 25px;
-        }
-
-        .chapter-card {
-            background: var(--glass-bg);
-            border: 1px solid var(--glass-border);
-            border-radius: 16px;
-            padding: 25px;
-            transition: 0.3s;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .chapter-card:hover {
             border-color: var(--primary);
-            transform: translateY(-5px);
+            box-shadow: 0 0 20px rgba(0, 255, 157, 0.4);
         }
 
-        .chapter-num {
-            font-size: 0.8rem;
-            color: var(--primary);
-            opacity: 0.8;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .download-btn {
+            text-decoration: none;
+            background: rgba(255, 255, 255, 0.05);
+            color: white; border: 1px solid var(--border-color);
         }
 
-        .chapter-card h3 { font-size: 1.3rem; margin-bottom: 10px; }
+        /* --- منطقة المحتوى --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5% 80px; }
         
-        .chapter-card p {
-            font-size: 0.9rem;
-            color: var(--text-gray);
-            line-height: 1.6;
-            margin-bottom: 20px;
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- كروت الفصول --- */
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        .card {
+            display: block; text-decoration: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 25px;
+            transition: 0.3s; position: relative; overflow: hidden;
         }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(30, 40, 35, 0.8);
+        }
+
+        .card-num { font-size: 0.8rem; color: var(--primary); letter-spacing: 1px; margin-bottom: 10px; opacity: 0.8; }
+        .card h3 { font-size: 1.4rem; color: white; margin-bottom: 10px; }
+        .card p { color: var(--text-gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
 
         .tags { display: flex; gap: 8px; flex-wrap: wrap; }
-        .tag {
-            font-size: 0.75rem;
-            background: rgba(255,255,255,0.05);
-            padding: 4px 10px;
-            border-radius: 6px;
-            color: #ddd;
+        .tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; color: #ccc; }
+
+        .arrow {
+            position: absolute; bottom: 25px; left: 25px;
+            color: var(--primary); opacity: 0; transition: 0.3s;
+        }
+        .card:hover .arrow { opacity: 1; transform: translateX(-5px); }
+
+        /* تمييز فصل لابان */
+        .highlight {
+            border: 1px solid var(--primary);
+            background: linear-gradient(160deg, rgba(0, 255, 157, 0.05) 0%, transparent 100%);
         }
 
-        /* Special highlight for Laban Chapter */
-        .highlight-card {
-            background: linear-gradient(145deg, rgba(0, 255, 136, 0.05), transparent);
-            border-color: var(--primary);
+        /* --- قائمة الملفات (Files List) --- */
+        .file-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.02);
+            padding: 20px; border-radius: 12px; margin-bottom: 15px;
+            text-decoration: none; border: 1px solid transparent; transition: 0.3s;
         }
+        .file-row:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
+        
+        .file-info { display: flex; align-items: center; gap: 15px; }
+        .file-icon { font-size: 1.8rem; width: 40px; text-align: center; }
+        .fa-markdown { color: #3b82f6; }
+        .fa-file-pdf { color: #ef4444; }
+        .fa-file-word { color: #2563eb; }
+        
+        .file-data h4 { color: white; font-size: 1.1rem; margin-bottom: 4px; }
+        .file-data span { color: #888; font-size: 0.85rem; }
 
         /* Footer */
-        footer {
-            text-align: center;
-            padding: 30px;
-            border-top: 1px solid var(--glass-border);
-            color: var(--text-gray);
-            font-size: 0.9rem;
-        }
+        
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); color: #666; font-size: 0.9rem; margin-top: 40px; }
 
         @media (max-width: 768px) {
             h1 { font-size: 2rem; }
-            .actions { flex-direction: column; padding: 0 40px; }
-            .btn { width: 100%; justify-content: center; }
+            .tabs-wrapper { flex-direction: column; }
+            .tab-btn, .download-btn { width: 100%; justify-content: center; }
         }
     </style>
 </head>
 <body>
 
+    <!-- القائمة العلوية -->
     <nav>
         <a href="#" class="logo">Sports<span>Science</span></a>
         <a href="../index.html" class="back-btn">
             الفرقة الثانية <i class="fa-solid fa-arrow-left"></i>
         </a>
     </nav>
-
+    <!-- رأس الصفحة -->
     <header>
-        <span class="course-badge">مادة نظرية (ساعتان)</span>
-        <h1>أساسيات مناهج<br><span style="color:var(--primary)">التربية الرياضية</span></h1>
-        <div class="prof-name">
-            <i class="fa-solid fa-user-tie"></i> أ.د/ محمود عبد الحليم عبد الكريم
-        </div>
+        <div class="badge">مادة نظرية (ساعتان)</div>
+        <h1>أساسيات مناهج <br><span style="color:var(--primary)">التربية الرياضية</span></h1>
+        <div class="prof"><i class="fa-solid fa-user-tie"></i> تأليف: أ.د/ محمود عبد الحليم عبد الكريم</div>
 
-        <div class="actions">
-            <!-- رابط التحميل المباشر للكتاب -->
-            <a href="Books/Fundamentals-of-PE-Curricula.pdf" download class="btn btn-primary">
-                <i class="fa-solid fa-file-pdf"></i> تحميل الكتاب
-            </a>
-            <!-- رابط للملخصات -->
-            <a href="Summaries/" class="btn btn-outline">
-                <i class="fa-solid fa-list-check"></i> الملخصات
-            </a>
-            <!-- رابط للامتحانات -->
-            <a href="Exams/" class="btn btn-outline">
-                <i class="fa-solid fa-file-pen"></i> الامتحانات
+        <!-- أزرار التبديل -->
+        <div class="tabs-wrapper">
+            <button class="tab-btn active" onclick="openTab(event, 'chapters')">
+                <i class="fa-solid fa-layer-group"></i> فصول المنهج
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'files')">
+                <i class="fa-solid fa-folder-open"></i> الملخصات والملفات
+            </button>
+            <a href="Books/Fundamentals-of-PE-Curricula.pdf" target="_blank" class="tab-btn download-btn">
+                <i class="fa-solid fa-download"></i> تحميل الكتاب
             </a>
         </div>
     </header>
 
+    <!-- المحتوى -->
     <div class="container">
-        <div class="section-title">محتويات المنهج</div>
-        
-        <div class="grid">
-            
-            <!-- الفصل الأول -->
-            <div class="chapter-card">
-                <div class="chapter-num">الفصل الأول</div>
-                <h3>حيثيات الرياضة المدرسية</h3>
-                <p>الميثاق الدولي للتربية البدنية (اليونسكو)، جودة الرياضة المدرسية، والأهداف والمبادئ المنهجية.</p>
-                <div class="tags">
-                    <span class="tag">الميثاق الدولي</span>
-                    <span class="tag">أهداف</span>
-                </div>
-            </div>
 
-            <!-- الفصل الثاني (مهم جداً) -->
-            <div class="chapter-card highlight-card">
-                <div class="chapter-num">الفصل الثاني 🔥</div>
-                <h3>الحركة محتوى الرياضة (Laban)</h3>
-                <p>تحليل الحركة بنظام لابان: الجسم، الجهد، الفراغ، والعلاقات. (أهم فصل في المادة).</p>
-                <div class="tags">
-                    <span class="tag" style="color:var(--primary)">تحليل لابان</span>
-                    <span class="tag">فراغ ومسار</span>
-                    <span class="tag">علاقات</span>
-                </div>
-                <!-- رابط مباشر لملخص الفصل ده -->
-                <a href="Summaries/Chapter2-Movement-Analysis.md" style="display:block; margin-top:15px; color:var(--primary); font-size:0.9rem; text-decoration:none; font-weight:bold;">
-                     اقرأ ملخص لابان <i class="fa-solid fa-arrow-left"></i>
+        <!-- 1. تبويب الفصول (Chapters) -->
+        <div id="chapters" class="tab-content active">
+            <div class="grid">
+                
+                <!-- الفصل 1 -->
+                <a href="Summaries/Ch1" class="card">
+                    <div class="card-num">الفصل الأول</div>
+                    <h3>حيثيات الرياضة المدرسية</h3>
+                    <p>الميثاق الدولي لليونسكو، الجودة الشاملة، والأهداف التربوية للرياضة المدرسية.</p>
+                    <div class="tags"><span class="tag">نظري</span><span class="tag">مواثيق</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
                 </a>
-            </div>
 
-            <!-- الفصل الثالث -->
-            <div class="chapter-card">
-                <div class="chapter-num">الفصل الثالث</div>
-                <h3>ماهية المنهج المدرسي</h3>
-                <p>الفرق بين المنهج التقليدي والحديث، ومكونات المنهج الأساسية والتغيرات المعاصرة.</p>
-                <div class="tags">
-                    <span class="tag">مقارنة</span>
-                    <span class="tag">مفاهيم</span>
-                </div>
-            </div>
+                <!-- الفصل 2 (المميز) -->
+                <a href="Summaries/Ch2" class="card highlight">
+                    <div class="card-num">الفصل الثاني 🔥</div>
+                    <h3>تحليل الحركة (نظام لابان)</h3>
+                    <p>أهم فصل في المادة: تحليل أبعاد الحركة (الجسم، الجهد، الفراغ، العلاقات) وتطبيقاتها.</p>
+                    <div class="tags">
+                        <span class="tag" style="color:var(--primary)">Laban Analysis</span>
+                        <span class="tag">فهم الحركة</span>
+                    </div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
 
-            <!-- الفصل الرابع -->
-            <div class="chapter-card">
-                <div class="chapter-num">الفصل الرابع</div>
-                <h3>بناء وتطوير المنهج</h3>
-                <p>خطوات تخطيط المنهج، الإطار العام، وكيفية وضع الأهداف التربوية.</p>
-                <div class="tags">
-                    <span class="tag">تخطيط</span>
-                    <span class="tag">صياغة الأهداف</span>
-                </div>
-            </div>
+                <!-- الفصل 3 -->
+                <a href="Summaries/Ch3" class="card">
+                    <div class="card-num">الفصل الثالث</div>
+                    <h3>ماهية المنهج المدرسي</h3>
+                    <p>مفهوم المنهج، الفرق بين المنهج التقليدي والحديث، والمكونات الأساسية.</p>
+                    <div class="tags"><span class="tag">مفاهيم</span><span class="tag">مقارنة</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
 
-            <!-- الفصل الخامس -->
-            <div class="chapter-card">
-                <div class="chapter-num">الفصل الخامس</div>
-                <h3>تخطيط البرامج التعليمية</h3>
-                <p>كيفية إعداد "خطة الوحدة" (Unit Plan)، البرامج التكميلية، وتخطيط الموسم الرياضي.</p>
-                <div class="tags">
-                    <span class="tag">جداول</span>
-                    <span class="tag">وحدات تدريسية</span>
-                </div>
+                <!-- الفصل 4 -->
+                <a href="Summaries/Ch4" class="card">
+                    <div class="card-num">الفصل الرابع</div>
+                    <h3>بناء وتطوير المنهج</h3>
+                    <p>الخطوات العلمية لبناء المنهج، الإطار العام للتخطيط، وصياغة الأهداف.</p>
+                    <div class="tags"><span class="tag">تخطيط</span><span class="tag">أهداف</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 5 -->
+                <a href="Summaries/Ch5" class="card">
+                    <div class="card-num">الفصل الخامس</div>
+                    <h3>تخطيط البرامج التعليمية</h3>
+                    <p>كيفية إعداد "خطة الوحدة" (Unit Plan)، الجدول الزمني، والبرامج التكميلية.</p>
+                    <div class="tags"><span class="tag">عملي</span><span class="tag">جداول</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
             </div>
+        </div>
+
+        <!-- 2. تبويب الملفات (Files) -->
+        <div id="files" class="tab-content">
+            <h3 style="margin-bottom: 25px; color:white;">📥 مكتبة التحميلات</h3>
+
+            <!-- ملف 1 -->
+            <a href="Summaries/Chapter2-Movement-Analysis.md" class="file-row">
+                <div class="file-info">
+                    <i class="fa-brands fa-markdown file-icon"></i>
+                    <div class="file-data">
+                        <h4>ملخص الفصل الثاني (تحليل لابان)</h4>
+                        <span>ملخص شامل بنظام Markdown للجداول والمقارنات.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-download" style="color:var(--primary)"></i>
+            </a>
+
+            <!-- ملف 2 -->
+            <a href="Summaries/Unit-Planning-Table.png" download class="file-row">
+                <div class="file-info">
+                    <i class="fa-solid fa-image file-icon" style="color:#a55eea"></i>
+                    <div class="file-data">
+                        <h4>جدول تخطيط الوحدة (صورة)</h4>
+                        <span>نموذج الجدول المستخدم في تخطيط الوحدات (ص 138).</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-download" style="color:var(--primary)"></i>
+            </a>
+
+            <!-- ملف 3 -->
+            <a href="Exams/Past-Exams-2023.pdf" class="file-row">
+                <div class="file-info">
+                    <i class="fa-solid fa-file-pdf file-icon"></i>
+                    <div class="file-data">
+                        <h4>امتحان العام السابق 2023</h4>
+                        <span>ملف PDF يحتوي على أسئلة الامتحان السابق.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-download" style="color:var(--primary)"></i>
+            </a>
 
         </div>
+
     </div>
+
 
     <footer>
         <p>جميع الحقوق محفوظة &copy; كلية التربية الرياضية - جامعة أسيوط</p>
         <p style="font-size:0.8rem; opacity:0.6; margin-top:5px;">Developed for Sports Science Hub</p>
     </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            // إخفاء كل المحتويات
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+
+            // إزالة التفعيل من الأزرار
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+
+            // إظهار المحتوى المطلوب وتفعيل الزر
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
 
 </body>
 </html>
