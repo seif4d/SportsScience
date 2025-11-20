@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="المصدر المفتوح الأول لطلاب كلية علوم الرياضة - جامعة أسيوط">
+    <title>Sports Science Hub | جامعة أسيوط</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/dumbbell.png">
+
+    <style>
+        /* --- المتغيرات والألوان --- */
+        :root {
+            --primary: #00e1ff;       /* سيان نيون */
+            --secondary: #7000ff;     /* بنفسجي */
+            --accent: #ff0055;        /* وردي */
+            --bg-dark: #050505;       /* أسود عميق */
+            --glass: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+            --text: #ffffff;
+            --text-gray: #a0a0a0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* --- الخلفية المتحركة --- */
+        .bg-glow {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1;
+            background: radial-gradient(circle at 15% 50%, rgba(112, 0, 255, 0.08), transparent 25%),
+                        radial-gradient(circle at 85% 30%, rgba(0, 225, 255, 0.08), transparent 25%);
+        }
+
+        /* --- الناف بار --- */
+        nav {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 20px 5%; position: fixed; width: 100%; top: 0; z-index: 1000;
+            background: rgba(5, 5, 5, 0.8); backdrop-filter: blur(15px);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            font-size: 1.4rem; font-weight: 900; color: white; text-decoration: none;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .logo i { color: var(--primary); }
+
+        .github-btn {
+            background: rgba(255,255,255,0.1); padding: 8px 20px; border-radius: 50px;
+            color: white; text-decoration: none; font-weight: 700; font-size: 0.9rem;
+            border: 1px solid var(--border); transition: 0.3s; display: flex; align-items: center; gap: 8px;
+        }
+        .github-btn:hover { background: white; color: black; transform: translateY(-2px); }
+
+        /* --- الهيرو (الرئيسية) --- */
+        header {
+            min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center; padding: 100px 20px 50px; position: relative;
+        }
+
+        .badge {
+            background: rgba(0, 225, 255, 0.1); color: var(--primary); padding: 5px 15px;
+            border-radius: 20px; font-size: 0.9rem; border: 1px solid rgba(0, 225, 255, 0.3); margin-bottom: 20px;
+        }
+
+        h1 {
+            font-size: 4rem; font-weight: 900; line-height: 1.1; margin-bottom: 20px;
+            background: linear-gradient(to bottom, #fff, #999); -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+
+        .typing-container {
+            font-size: 1.5rem; color: var(--primary); font-weight: 700; height: 40px; margin-bottom: 30px;
+        }
+
+        p.desc { font-size: 1.2rem; color: var(--text-gray); max-width: 700px; margin-bottom: 50px; }
+
+        .cta-btns { display: flex; gap: 20px; flex-wrap: wrap; justify-content: center; }
+
+        .btn {
+            padding: 15px 40px; border-radius: 50px; font-size: 1.1rem; font-weight: 700;
+            text-decoration: none; transition: 0.3s; border: 1px solid transparent;
+        }
+
+        .btn-main {
+            background: var(--primary); color: #000;
+            box-shadow: 0 0 20px rgba(0, 225, 255, 0.3);
+        }
+        .btn-main:hover { transform: translateY(-5px); box-shadow: 0 0 40px rgba(0, 225, 255, 0.5); }
+
+        .btn-glass {
+            background: rgba(255,255,255,0.05); color: white; border-color: var(--border);
+        }
+        .btn-glass:hover { background: rgba(255,255,255,0.1); border-color: var(--primary); }
+
+        /* --- قسم الفرق الدراسية --- */
+        #years { padding: 80px 5%; }
+        .section-title { text-align: center; margin-bottom: 60px; }
+        .section-title h2 { font-size: 2.5rem; margin-bottom: 10px; }
+        .section-title p { color: var(--text-gray); }
+
+        .grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px;
+        }
+
+        .card {
+            background: var(--glass); border: 1px solid var(--border); padding: 30px;
+            border-radius: 20px; text-decoration: none; color: white; transition: 0.4s;
+            position: relative; overflow: hidden; display: flex; flex-direction: column; gap: 15px;
+        }
+
+        .card:hover { transform: translateY(-10px); border-color: var(--primary); background: rgba(255,255,255,0.03); }
+
+        .card-icon {
+            width: 60px; height: 60px; background: rgba(255,255,255,0.05); border-radius: 15px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.8rem; color: var(--primary);
+        }
+
+        .card h3 { font-size: 1.5rem; }
+        .card p { font-size: 0.9rem; color: var(--text-gray); }
+        
+        .arrow { margin-top: auto; color: var(--primary); font-weight: 700; font-size: 0.9rem; }
+
+        /* --- قسم التميز (Featured) --- */
+        #featured {
+            margin: 50px 5%; background: linear-gradient(45deg, rgba(112, 0, 255, 0.1), rgba(0, 225, 255, 0.05));
+            border: 1px solid var(--border); border-radius: 25px; padding: 50px;
+            display: flex; align-items: center; justify-content: space-between; gap: 40px;
+            flex-wrap: wrap;
+        }
+
+        .feat-content h3 { font-size: 2rem; margin-bottom: 15px; }
+        .feat-content p { color: var(--text-gray); margin-bottom: 25px; max-width: 500px; }
+        .feat-btn {
+            display: inline-block; padding: 12px 30px; background: white; color: black;
+            border-radius: 50px; text-decoration: none; font-weight: 700; transition: 0.3s;
+        }
+        .feat-btn:hover { transform: scale(1.05); box-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        
+        .feat-visual {
+            font-size: 8rem; color: rgba(255,255,255,0.1); animation: float 6s infinite ease-in-out;
+        }
+
+        @keyframes float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+        /* Footer */
+        footer {
+            text-align: center; padding: 40px; border-top: 1px solid var(--border);
+            color: var(--text-gray); font-size: 0.9rem; margin-top: 50px;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            #featured { flex-direction: column; text-align: center; padding: 30px; }
+            .feat-visual { display: none; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-glow"></div>
+
+    <!-- Navbar -->
+    <nav>
+        <a href="#" class="logo"><i class="fa-solid fa-dumbbell"></i> SportsScience</a>
+        <a href="https://github.com/seif4d/SportsScience" target="_blank" class="github-btn">
+            <i class="fa-brands fa-github"></i> Repo
+        </a>
+    </nav>
+
+    <!-- Hero Section -->
+    <header>
+        <div class="badge">جامعة أسيوط - كلية التربية الرياضية 🎓</div>
+        <h1>المستقبل يبدأ<br>بالمعرفة.</h1>
+        <div class="typing-container">
+            <span id="typing-text"></span><span style="animation: blink 1s infinite">|</span>
+        </div>
+        <p class="desc">أول منصة طلابية مفتوحة المصدر. ملخصات، امتحانات، وشروحات تفاعلية لكل الفرق الدراسية في مكان واحد.</p>
+        
+        <div class="cta-btns">
+            <a href="#years" class="btn btn-main">اختر الفرقة الدراسية <i class="fa-solid fa-arrow-down"></i></a>
+            <a href="https://github.com/seif4d/SportsScience/issues" target="_blank" class="btn btn-glass">ساهم معنا</a>
+        </div>
+    </header>
+
+    <!-- Featured Interactive Lesson -->
+    <section id="featured">
+        <div class="feat-content">
+            <h3>🔥 جرب التعلم التفاعلي</h3>
+            <p>شوفنا عملنا إيه في مادة "مناهج التربية الرياضية". درس تفاعلي كامل بنظام Flip Cards واختبارات ذكية.</p>
+            <a href="T2/Curriculum/Summaries/Ch1/index.html" class="feat-btn">ابدأ التجربة الآن</a>
+        </div>
+        <div class="feat-visual">
+            <i class="fa-solid fa-laptop-code"></i>
+        </div>
+    </section>
+
+    <!-- Years Grid -->
+    <section id="years">
+        <div class="section-title">
+            <h2>المراحل الدراسية</h2>
+            <p>كل المصادر اللي هتحتاجها مترتبة بنظام</p>
+        </div>
+
+        <div class="grid">
+            <!-- الفرقة الأولى -->
+            <a href="T1/index.html" class="card">
+                <div class="card-icon">1️⃣</div>
+                <h3>الفرقة الأولى</h3>
+                <p>تشريح، تاريخ رياضة، علم نفس، ومواد التأسيس.</p>
+                <span class="arrow">تصفح المواد &larr;</span>
+            </a>
+
+            <!-- الفرقة الثانية -->
+            <a href="T2/index.html" class="card" style="border-color: var(--accent);">
+                <div class="card-icon" style="color: var(--accent);">2️⃣</div>
+                <h3>الفرقة الثانية</h3>
+                <p>فسيولوجيا، مناهج، طرق تدريس، ومواد التخصص.</p>
+                <span class="arrow" style="color: var(--accent);">تصفح المواد &larr;</span>
+            </a>
+
+            <!-- الفرقة الثالثة (قريباً) -->
+            <a href="#" class="card" style="opacity: 0.6; cursor: not-allowed;">
+                <div class="card-icon">3️⃣</div>
+                <h3>الفرقة الثالثة</h3>
+                <p>إصابات ملاعب، ميكانيكا حيوية (قريباً).</p>
+                <span class="arrow">Coming Soon <i class="fa-solid fa-lock"></i></span>
+            </a>
+
+            <!-- الفرقة الرابعة (قريباً) -->
+            <a href="#" class="card" style="opacity: 0.6; cursor: not-allowed;">
+                <div class="card-icon">4️⃣</div>
+                <h3>الفرقة الرابعة</h3>
+                <p>الإدارة الرياضية، التدريب الميداني (قريباً).</p>
+                <span class="arrow">Coming Soon <i class="fa-solid fa-lock"></i></span>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>Developed with ❤️ by <a href="https://github.com/seif4d" style="color:white; text-decoration:none;">Seif4d</a> for Assiut University.</p>
+        <p style="margin-top:10px; opacity: 0.5;">Open Source Education Project 2024</p>
+    </footer>
+
+    <script>
+        // تأثير الكتابة التلقائية
+        const textElement = document.getElementById('typing-text');
+        const phrases = ["نظام تعليمي حديث", "مصادر مفتوحة للجميع", "مجتمع طلابي متعاون"];
+        let phraseIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeEffect() {
+            const currentPhrase = phrases[phraseIndex];
+            
+            if (isDeleting) {
+                textElement.textContent = currentPhrase.substring(0, charIndex - 1);
+                charIndex--;
+            } else {
+                textElement.textContent = currentPhrase.substring(0, charIndex + 1);
+                charIndex++;
+            }
+
+            if (!isDeleting && charIndex === currentPhrase.length) {
+                isDeleting = true;
+                setTimeout(typeEffect, 2000);
+            } else if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                phraseIndex = (phraseIndex + 1) % phrases.length;
+                setTimeout(typeEffect, 500);
+            } else {
+                setTimeout(typeEffect, isDeleting ? 50 : 100);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', typeEffect);
+
+        // أنيميشن ظهور الكروت
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.style.opacity = 1;
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        });
+
+        document.querySelectorAll('.card').forEach((el) => {
+            el.style.opacity = 0;
+            el.style.transform = 'translateY(30px)';
+            el.style.transition = 'all 0.5s ease-out';
+            observer.observe(el);
+        });
+    </script>
+</body>
+</html>
