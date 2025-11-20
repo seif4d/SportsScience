@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -9,16 +8,17 @@
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
     
     <style>
-        /* --- SETUP & VARS --- */
+        /* --- إعدادات التصميم والمتغيرات --- */
         :root {
-            --bg-dark: #0b0c10;
-            --bg-secondary: #1f2833;
-            --accent-cyan: #66fcf1;
-            --accent-dark-cyan: #45a29e;
-            --text-main: #c5c6c7;
-            --text-white: #ffffff;
-            --card-bg: #15191d;
+            --bg-dark: #0b0c10;       /* خلفية سوداء داكنة */
+            --bg-secondary: #1f2833;  /* رمادي غامق للكروت */
+            --accent-cyan: #66fcf1;   /* لون السيان المضيء (Neon) */
+            --accent-dark-cyan: #45a29e; /* سيان مطفي */
+            --text-main: #c5c6c7;     /* لون النص الفضي */
+            --text-white: #ffffff;    /* لون العناوين */
+            --card-bg: #15191d;       /* خلفية الأقسام */
             --font-main: 'Cairo', sans-serif;
+            --font-gaming: 'Press Start 2P', cursive;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; scroll-behavior: smooth; }
@@ -27,22 +27,24 @@
             background-color: var(--bg-dark);
             color: var(--text-main);
             font-family: var(--font-main);
-            overflow-x: hidden;
+            overflow-x: hidden; /* منع السكرول العرضي */
             line-height: 1.8;
         }
 
-        /* --- UTILS --- */
+        /* --- التنسيقات العامة --- */
         .container { max-width: 1100px; margin: 0 auto; padding: 0 20px; }
         .highlight { color: var(--accent-cyan); font-weight: bold; }
+        
+        /* تأثير النص المتدرج */
         .gradient-text {
             background: linear-gradient(45deg, var(--accent-cyan), #fff);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* --- HEADER --- */
+        /* --- الهيدر (الواجهة الرئيسية) --- */
         header {
-            height: 80vh;
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
             justify-content: center;
@@ -50,11 +52,35 @@
             text-align: center;
             background: radial-gradient(circle, #1a1a2e 0%, var(--bg-dark) 80%);
             border-bottom: 2px solid var(--accent-dark-cyan);
+            padding: 20px;
+            position: relative;
         }
 
-        h1 { font-size: 3.5rem; margin-bottom: 10px; color: var(--text-white); }
-        .subtitle { font-size: 1.5rem; color: var(--accent-dark-cyan); margin-bottom: 30px; }
+        /* تأثيرات الخلفية المتحركة البسيطة */
+        header::before {
+            content: '';
+            position: absolute;
+            width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+
+        h1 { 
+            font-size: 3.5rem; 
+            margin-bottom: 15px; 
+            color: var(--text-white); 
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.3);
+        }
         
+        .subtitle { 
+            font-size: 1.4rem; 
+            color: var(--accent-dark-cyan); 
+            margin-bottom: 30px; 
+        }
+        
+        /* أزرار التنقل العلوية */
         .nav-pills {
             display: flex;
             gap: 15px;
@@ -68,35 +94,57 @@
             background: transparent;
             border: 1px solid var(--accent-cyan);
             color: var(--accent-cyan);
-            border-radius: 30px;
+            border-radius: 30px; /* شكل كبسولة */
             cursor: pointer;
             font-family: var(--font-main);
             font-weight: bold;
-            transition: 0.3s;
+            transition: 0.3s ease;
             text-decoration: none;
+            position: relative;
+            overflow: hidden;
         }
 
-        .nav-btn:hover { background: var(--accent-cyan); color: var(--bg-dark); box-shadow: 0 0 15px var(--accent-cyan); }
+        .nav-btn:hover { 
+            background: var(--accent-cyan); 
+            color: var(--bg-dark); 
+            box-shadow: 0 0 20px var(--accent-cyan); 
+            transform: translateY(-3px);
+        }
 
-        /* --- CONTENT LAYOUT --- */
+        /* --- عناوين الأقسام --- */
         .section-header {
             text-align: center;
             margin: 80px 0 40px;
+            position: relative;
         }
-        .section-header h2 { font-size: 2.5rem; color: var(--text-white); }
-        .section-header p { color: var(--accent-dark-cyan); font-size: 1.2rem; }
+        .section-header h2 { 
+            font-size: 2.5rem; 
+            color: var(--text-white); 
+            margin-bottom: 10px;
+        }
+        .section-header p { 
+            color: var(--accent-dark-cyan); 
+            font-size: 1.1rem; 
+        }
 
-        /* --- TABS SYSTEM FOR BODY SECTION --- */
+        /* --- نظام التبويبات (TABS) للقسم الأول --- */
         .tabs-container {
             background: var(--card-bg);
             border-radius: 15px;
             overflow: hidden;
             border: 1px solid #333;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
         }
         
-        .tabs-header { display: flex; background: #222; }
+        .tabs-header { 
+            display: flex; 
+            background: #222; 
+            overflow-x: auto; /* للسماح بالسكرول في الموبايل */
+        }
+        
         .tab-btn {
             flex: 1;
+            min-width: 120px;
             padding: 20px;
             background: #222;
             border: none;
@@ -108,12 +156,23 @@
             transition: 0.3s;
             border-bottom: 3px solid transparent;
         }
-        .tab-btn.active { color: var(--accent-cyan); border-bottom: 3px solid var(--accent-cyan); background: var(--bg-secondary); }
         
-        .tab-content { padding: 30px; display: none; animation: fadeIn 0.5s; }
+        .tab-btn:hover { background: #2a2a2a; color: #fff; }
+        
+        .tab-btn.active { 
+            color: var(--accent-cyan); 
+            border-bottom: 3px solid var(--accent-cyan); 
+            background: var(--bg-secondary); 
+        }
+        
+        .tab-content { 
+            padding: 30px; 
+            display: none; 
+            animation: fadeIn 0.5s; 
+        }
         .tab-content.active { display: block; }
 
-        /* --- INFO CARDS --- */
+        /* --- كروت المعلومات (Grid System) --- */
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -125,119 +184,201 @@
             background: var(--bg-secondary);
             padding: 25px;
             border-radius: 12px;
-            border-right: 4px solid var(--accent-cyan);
-            transition: transform 0.3s;
+            border-right: 4px solid var(--accent-cyan); /* خط جمالي يمين الكارت */
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        .info-card:hover { transform: translateY(-5px); }
-        .info-card h3 { color: var(--text-white); margin-bottom: 10px; font-size: 1.4rem; }
+        .info-card:hover { 
+            transform: translateY(-7px); 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+        }
+        
+        .info-card h3 { 
+            color: var(--text-white); 
+            margin-bottom: 10px; 
+            font-size: 1.4rem; 
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
         .info-card .example {
             margin-top: 15px;
-            background: rgba(102, 252, 241, 0.1);
+            background: rgba(102, 252, 241, 0.05);
             padding: 10px;
             border-radius: 5px;
             font-size: 0.9rem;
             color: var(--accent-cyan);
+            border: 1px dashed rgba(102, 252, 241, 0.3);
         }
 
-        /* --- EFFORT SLIDERS --- */
+        /* --- قسم الجهد (Sliders Style) --- */
         .effort-wrapper {
             background: var(--card-bg);
             padding: 30px;
             border-radius: 15px;
             margin-bottom: 20px;
+            border: 1px solid #333;
         }
+        
         .effort-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
             padding-bottom: 20px;
-            border-bottom: 1px solid #333;
+            border-bottom: 1px solid #2a2a2a;
         }
-        .effort-row:last-child { border-bottom: none; }
-        .effort-label { font-weight: bold; color: var(--text-white); flex: 1; }
-        .effort-desc { flex: 2; font-size: 0.95rem; color: #aaa; }
+        .effort-row:last-child { border-bottom: none; padding-bottom: 0; margin-bottom: 0; }
+        
+        .effort-label { 
+            font-weight: bold; 
+            color: var(--text-white); 
+            flex: 1; 
+            font-size: 1.2rem;
+        }
+        
+        .effort-desc { 
+            flex: 2; 
+            font-size: 0.95rem; 
+            color: #aaa; 
+        }
+        
         .badge {
+            display: inline-block;
             background: var(--accent-dark-cyan);
             color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
+            padding: 4px 10px;
+            border-radius: 4px;
             font-size: 0.8rem;
-            margin-right: 10px;
+            margin-left: 5px;
+            margin-bottom: 5px;
         }
 
-        /* --- RELATIONSHIPS --- */
+        /* --- العلاقات (Relationships) --- */
         .rel-box {
             border: 2px dashed var(--accent-dark-cyan);
-            padding: 20px;
+            padding: 30px;
             border-radius: 15px;
-            margin-top: 20px;
+            margin-top: 40px;
             text-align: center;
+            background: rgba(69, 162, 158, 0.1);
         }
+        
         .rel-types {
             display: flex;
-            justify-content: space-around;
+            justify-content: center;
             flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 20px;
+            gap: 15px;
+            margin-top: 25px;
         }
+        
         .rel-type {
-            background: #333;
-            padding: 10px 20px;
+            background: #2a2a2a;
+            padding: 12px 25px;
             border-radius: 50px;
             color: white;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
+            border: 1px solid #444;
+            transition: 0.3s;
         }
+        .rel-type:hover { border-color: var(--accent-cyan); color: var(--accent-cyan); }
 
-        /* --- QUIZ --- */
+        /* --- الاختبار (BOSS FIGHT QUIZ) --- */
         .quiz-section {
             background: #000;
-            border: 1px solid var(--accent-cyan);
+            border: 2px solid var(--accent-cyan);
             padding: 40px;
             border-radius: 20px;
-            margin-top: 80px;
+            margin-top: 100px;
             text-align: center;
+            box-shadow: 0 0 30px rgba(102, 252, 241, 0.1);
+            position: relative;
         }
-        .question-box { font-size: 1.3rem; color: white; margin-bottom: 30px; }
-        .answers-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        /* أيقونة Boss */
+        .boss-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            animation: float 3s ease-in-out infinite;
+            display: inline-block;
+        }
+
+        .question-box { 
+            font-size: 1.3rem; 
+            color: white; 
+            margin: 30px 0; 
+            font-weight: bold;
+        }
+        
+        .answers-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 15px; 
+        }
+        
         .ans-btn {
-            padding: 15px;
-            background: #222;
-            border: 1px solid #444;
+            padding: 20px;
+            background: #1a1a1a;
+            border: 1px solid #333;
             color: #ccc;
             cursor: pointer;
             border-radius: 8px;
-            transition: 0.3s;
+            transition: 0.2s;
             font-family: var(--font-main);
             font-size: 1rem;
+            font-weight: bold;
         }
-        .ans-btn:hover { background: #333; border-color: var(--accent-cyan); }
-        .ans-btn.correct { background: #2ecc71; color: white; border-color: #2ecc71; }
-        .ans-btn.wrong { background: #e74c3c; color: white; border-color: #e74c3c; }
-        .score-display { margin-top: 20px; font-size: 1.2rem; color: var(--accent-cyan); font-weight: bold; }
+        
+        .ans-btn:hover:not([disabled]) { 
+            background: #333; 
+            border-color: var(--accent-cyan); 
+            color: var(--accent-cyan);
+        }
+        
+        /* حالات الإجابة */
+        .ans-btn.correct { background: #2ecc71 !important; color: white !important; border-color: #2ecc71 !important; }
+        .ans-btn.wrong { background: #e74c3c !important; color: white !important; border-color: #e74c3c !important; opacity: 0.7; }
+        
+        .score-display { 
+            margin-top: 20px; 
+            font-size: 1.2rem; 
+            color: var(--accent-cyan); 
+            font-weight: bold; 
+        }
 
         /* --- ANIMATIONS --- */
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { 
+            from { opacity: 0; transform: translateY(10px); } 
+            to { opacity: 1; transform: translateY(0); } 
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
         
+        /* --- استجابة الهاتف (Mobile) --- */
         @media (max-width: 768px) {
-            h1 { font-size: 2.5rem; }
+            h1 { font-size: 2.2rem; }
+            header { min-height: 80vh; }
             .answers-grid { grid-template-columns: 1fr; }
-            .nav-pills { flex-direction: column; align-items: center; }
+            .nav-pills { flex-direction: column; align-items: stretch; width: 100%; }
+            .effort-row { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .tabs-header { padding-bottom: 5px; }
         }
     </style>
 </head>
 <body>
 
-    <!-- HERO -->
     <header>
         <div class="container">
-            <div style="font-family: 'Press Start 2P', cursive; color: var(--accent-cyan); margin-bottom: 20px;">LEVEL 02</div>
+            <div style="font-family: var(--font-gaming); color: var(--accent-cyan); margin-bottom: 20px; letter-spacing: 2px;">LEVEL 02</div>
             <h1>الحركة: محتوى الرياضة <span class="gradient-text">المدرسية</span></h1>
             <p class="subtitle">نظرية لابان (Laban) بس مشروحة بستايل الـ Gaming 🎮</p>
-            <p style="max-width: 600px; margin: 0 auto; color: #999;">
+            <p style="max-width: 600px; margin: 0 auto; color: #999; font-size: 0.95rem;">
                 الفصل ده هو "المحرك" (Engine) لأي حصة ألعاب. افهم الـ 4 مكونات الأساسية للحركة عشان تصمم أي نشاط رياضي صح.
             </p>
+            
             <div class="nav-pills">
                 <a href="#body" class="nav-btn">🧍‍♂️ الجسم (Body)</a>
                 <a href="#effort" class="nav-btn">⚡ الجهد (Effort)</a>
@@ -250,9 +391,9 @@
 
     <div class="container">
 
-        <!-- 1. THE BODY -->
         <section id="body">
             <div class="section-header">
+                <div style="font-family: var(--font-gaming); font-size: 0.8rem; color: #555;">COMPONENT #01</div>
                 <h2>1️⃣ عنصر الجسم (The Avatar)</h2>
                 <p>ماذا يفعل الجسم؟ (What the body does)</p>
             </div>
@@ -264,143 +405,139 @@
                     <button class="tab-btn" onclick="openTab(event, 'manip')">⚽ المعالجة (Manipulation)</button>
                 </div>
 
-                <!-- Tab 1: Stability -->
                 <div id="stability" class="tab-content active">
-                    <h3>وضع الـ AFK / التثبيت</h3>
+                    <h3><span class="highlight">وضع الـ AFK / التثبيت</span></h3>
                     <p>أي حركة بتعملها وإنت في مكانك، أو بتحاول تحافظ فيها على توازنك ضد الجاذبية.</p>
                     <div class="info-grid">
                         <div class="info-card">
-                            <h3>التوازن</h3>
+                            <h3>⚖️ التوازن</h3>
                             <p>الحفاظ على مركز الثقل.</p>
-                            <div class="example">مثال: الوقوف على رجل واحدة.</div>
+                            <div class="example">مثال: الوقوف على رجل واحدة (الميزان).</div>
                         </div>
                         <div class="info-card">
-                            <h3>اللف والدوران</h3>
+                            <h3>🔄 اللف والدوران</h3>
                             <p>حركة حول محور الجسم وأنت مكانك.</p>
                             <div class="example">مثال: لف الجذع يمين وشمال.</div>
                         </div>
                         <div class="info-card">
-                            <h3>التكور والامتداد</h3>
-                            <p>تصغير أو تكبير حجم الجسم.</p>
+                            <h3>📉 التكور والامتداد</h3>
+                            <p>تصغير أو تكبير حجم الجسم (Hitbox).</p>
                             <div class="example">مثال: وضع القرفصاء (Crouch).</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tab 2: Locomotion -->
                 <div id="loco" class="tab-content">
-                    <h3>وضع الـ Roaming / التحرك في الماب</h3>
+                    <h3><span class="highlight">وضع الـ Roaming / التحرك في الماب</span></h3>
                     <p>الحركات اللي بتنقل جسمك من النقطة A للنقطة B.</p>
                     <div class="info-grid">
                         <div class="info-card">
-                            <h3>المشي والجري</h3>
+                            <h3>🏃 المشي والجري</h3>
                             <p>نقل الوزن من قدم لأخرى.</p>
-                            <div class="example">مثال: الجري المتعرج.</div>
+                            <div class="example">مثال: الجري المتعرج، المشي العسكري.</div>
                         </div>
                         <div class="info-card">
-                            <h3>الحجل (Hopping)</h3>
-                            <p>دفع الأرض بقدم واحدة والهبوط عليها.</p>
+                            <h3>🦘 الحجل (Hopping)</h3>
+                            <p>دفع الأرض بقدم واحدة والهبوط على نفس القدم.</p>
                             <div class="example">مثال: لعبة الأولى.</div>
                         </div>
                         <div class="info-card">
-                            <h3>الوثب (Jumping)</h3>
-                            <p>الطيران في الهواء والهبوط.</p>
+                            <h3>🚀 الوثب (Jumping)</h3>
+                            <p>الطيران في الهواء (قدمين أو قدم واحدة) والهبوط.</p>
                             <div class="example">مثال: الوثب الطويل.</div>
                         </div>
                     </div>
                 </div>
 
-                <!-- Tab 3: Manipulation -->
                 <div id="manip" class="tab-content">
-                    <h3>وضع الـ Looting / استخدام الأدوات</h3>
+                    <h3><span class="highlight">وضع الـ Looting / استخدام الأدوات</span></h3>
                     <p>أي حركة بتتعامل فيها مع أداة (كورة، مضرب، طوق) باستخدام إيدك أو رجلك.</p>
                     <div class="info-grid">
                         <div class="info-card">
-                            <h3>الرمي والاستقبال</h3>
+                            <h3>🤲 الرمي والاستقبال</h3>
                             <p>إعطاء قوة للأداة أو امتصاص قوتها.</p>
-                            <div class="example">مثال: كرة السلة وكرة اليد.</div>
+                            <div class="example">مثال: تمرير كرة السلة.</div>
                         </div>
                         <div class="info-card">
-                            <h3>الركل (Kicking)</h3>
+                            <h3>🦶 الركل (Kicking)</h3>
                             <p>استخدام القدم لتوجيه أداة.</p>
-                            <div class="example">مثال: كرة القدم.</div>
+                            <div class="example">مثال: التصويب في كرة القدم.</div>
                         </div>
                         <div class="info-card">
-                            <h3>الضرب (Striking)</h3>
+                            <h3>🏏 الضرب (Striking)</h3>
                             <p>استخدام أداة لضرب أداة أخرى.</p>
-                            <div class="example">مثال: التنس، الهوكي.</div>
+                            <div class="example">مثال: التنس، الهوكي، البيسبول.</div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- 2. EFFORT -->
         <section id="effort">
             <div class="section-header">
-                <h2>2️⃣ عنصر الجهد (Movement Quality)</h2>
-                <p>كيف يتحرك الجسم؟ (الـ Stats بتاعت الحركة)</p>
+                <div style="font-family: var(--font-gaming); font-size: 0.8rem; color: #555;">COMPONENT #02</div>
+                <h2>2️⃣ عنصر الجهد (Movement Stats)</h2>
+                <p>كيف يتحرك الجسم؟ (إعدادات الحركة والجودة)</p>
             </div>
 
             <div class="effort-wrapper">
                 <div class="effort-row">
                     <div class="effort-label">⏳ الزمن (Time)</div>
                     <div class="effort-desc">
-                        <span class="badge">سريع (Sudden)</span> زي الرصاصة.
+                        <span class="badge">سريع (Sudden)</span> زي الرصاصة أو اللسعة.
                         <br>
-                        <span class="badge">بطيء (Sustained)</span> زي التصوير البطيء.
+                        <span class="badge">بطيء (Sustained)</span> زي التصوير البطيء (Slow Mo).
                     </div>
                 </div>
                 <div class="effort-row">
-                    <div class="effort-label">💪 الوزن (Weight/Force)</div>
+                    <div class="effort-label">💪 القوة/الوزن (Force)</div>
                     <div class="effort-desc">
-                        <span class="badge">قوي (Strong)</span> فيه مقاومة وعنف.
+                        <span class="badge">قوي (Strong)</span> فيه مقاومة وعنف (Tank).
                         <br>
-                        <span class="badge">خفيف (Light)</span> ناعم زي الريشة.
+                        <span class="badge">خفيف (Light)</span> ناعم زي الريشة (Stealth).
                     </div>
                 </div>
                 <div class="effort-row">
                     <div class="effort-label">🌊 الانسياب (Flow)</div>
                     <div class="effort-desc">
-                        <span class="badge">حر (Free)</span> حركة صعب توقفها فجأة (جري).
+                        <span class="badge">حر (Free)</span> حركة مستمرة صعب توقفها فجأة (الجري).
                         <br>
-                        <span class="badge">مقيد (Bound)</span> حركة مسيطر عليها (مشي على حبل).
+                        <span class="badge">مقيد (Bound)</span> حركة مسيطر عليها وتقدر توقفها أي وقت (مشي على حبل).
                     </div>
                 </div>
                 <div class="effort-row">
-                    <div class="effort-label">🎯 الفراغ (Space Use)</div>
+                    <div class="effort-label">🎯 الفراغ (Spatial Attention)</div>
                     <div class="effort-desc">
                         <span class="badge">مباشر (Direct)</span> ماشي دغري للهدف (Laser Focus).
                         <br>
-                        <span class="badge">غير مباشر (Indirect)</span> ماشي بتموج وتمايل.
+                        <span class="badge">غير مباشر (Indirect)</span> ماشي بتموج وتمايل واستكشاف.
                     </div>
                 </div>
             </div>
-            <div style="text-align: center; color: #777; font-size: 0.9rem;">
+            <div style="text-align: center; color: #777; font-size: 0.9rem; background: #111; padding: 10px; border-radius: 5px;">
                 💡 <strong>الزتونة:</strong> الجهد هو اللي بيدي للحركة "طعم" ومعنى تعبيري.
             </div>
         </section>
 
-        <!-- 3. SPACE -->
         <section id="space">
             <div class="section-header">
+                <div style="font-family: var(--font-gaming); font-size: 0.8rem; color: #555;">COMPONENT #03</div>
                 <h2>3️⃣ عنصر الفراغ (The Map)</h2>
                 <p>أين يتحرك الجسم؟ (Where the body moves)</p>
             </div>
 
             <div class="info-grid">
                 <div class="info-card">
-                    <h3>📍 نوع الفراغ</h3>
-                    <p><span class="highlight">فراغ شخصي:</span> المساحة اللي بتوصلها إيدك وأنت واقف (الـ Hitbox).</p>
-                    <hr style="border-color: #333; margin: 10px 0;">
-                    <p><span class="highlight">فراغ عام:</span> المكان كله اللي بتجري فيه (The Open World).</p>
+                    <h3>📍 حدود الفراغ (Zone)</h3>
+                    <p style="margin-bottom: 10px;"><span class="highlight">1. فراغ شخصي:</span> المساحة اللي بتوصلها إيدك وأنت واقف مكانك (الـ Hitbox بتاعك).</p>
+                    <p><span class="highlight">2. فراغ عام:</span> المكان كله اللي بتجري فيه وتشاركه مع الآخرين (The Open World).</p>
                 </div>
                 <div class="info-card">
                     <h3>📶 المستويات (Levels)</h3>
                     <ul style="list-style: none; margin-top: 10px;">
-                        <li>☁️ <strong>عالي:</strong> وثب، رفع الذراعين.</li>
-                        <li>🧍 <strong>متوسط:</strong> وقوف، مشي عادي.</li>
-                        <li>🐛 <strong>منخفض:</strong> زحف، دحرجة (Crouch).</li>
+                        <li style="margin-bottom: 5px;">☁️ <strong>عالي:</strong> وثب، رفع الذراعين لأعلى.</li>
+                        <li style="margin-bottom: 5px;">🧍 <strong>متوسط:</strong> وقوف عادي، مشي.</li>
+                        <li>🐛 <strong>منخفض:</strong> زحف، دحرجة (Crouch/Prone).</li>
                     </ul>
                 </div>
                 <div class="info-card">
@@ -411,9 +548,9 @@
             </div>
         </section>
 
-        <!-- 4. RELATIONSHIPS -->
         <section id="relations">
             <div class="section-header">
+                <div style="font-family: var(--font-gaming); font-size: 0.8rem; color: #555;">COMPONENT #04</div>
                 <h2>4️⃣ عنصر العلاقات (Multiplayer Mode)</h2>
                 <p>مع من أو مع ماذا تتحرك؟</p>
             </div>
@@ -422,58 +559,57 @@
                 <div class="info-card">
                     <h3>1. علاقة أجزاء الجسم</h3>
                     <p>إزاي إيدك بتتحرك مع رجلك؟</p>
-                    <div class="example">مثال: حركة تبادلية (إيد عكس رجل).</div>
+                    <div class="example">مثال: حركة تبادلية (إيد عكس رجل) أو متوافقة.</div>
                 </div>
                 <div class="info-card">
                     <h3>2. علاقة مع الأدوات</h3>
                     <p>جسمك فين بالنسبة للكورة أو العارضة؟</p>
-                    <div class="example">مثال: فوق، تحت، بجانب، حول.</div>
+                    <div class="example">مثال: فوق الأداة، تحتها، بجانبها، حولها.</div>
                 </div>
                 <div class="info-card">
                     <h3>3. علاقة مع الزملاء (Co-op)</h3>
-                    <p>التفاعل مع اللاعبين الآخرين.</p>
+                    <p>التفاعل بين اللاعبين وبعضهم.</p>
+                    <p style="font-size: 0.8rem; color: #777;">انظر الأسفل للتفاصيل 👇</p>
                 </div>
             </div>
 
             <div class="rel-box">
-                <h3>أنماط العلاقات مع الزملاء 👇</h3>
+                <h3 style="color: var(--text-white);">أنماط العلاقات مع الزملاء (Interaction Types)</h3>
                 <div class="rel-types">
-                    <div class="rel-type">👥 المرآة (Mirroring) - تقلد حركته بالظبط</div>
-                    <div class="rel-type">🔄 التعاقب (Matching) - تمشي وراه</div>
+                    <div class="rel-type">👥 المرآة (Mirroring) - تقلد حركته بالظبط (وجه لوجه)</div>
+                    <div class="rel-type">🔄 التوافق (Matching) - تمشي بجانبه أو خلفه نفس الحركة</div>
                     <div class="rel-type">⚡ التضاد (Contrast) - هو يقف أنت تقعد</div>
                     <div class="rel-type">🤝 التعاون (Teamwork) - تشيلوا حاجة سوا</div>
                 </div>
             </div>
         </section>
 
-        <!-- BOSS FIGHT QUIZ -->
         <section id="quiz">
             <div class="quiz-section">
-                <div style="font-family: 'Press Start 2P'; color: var(--accent-cyan); margin-bottom: 20px;">FINAL BOSS</div>
+                <div class="boss-icon">👹</div>
+                <div style="font-family: var(--font-gaming); color: var(--accent-cyan); margin-bottom: 10px;">FINAL BOSS BATTLE</div>
                 <h2>اختبار الفصل الثاني ⚔️</h2>
-                <p style="margin-bottom: 30px; color: #aaa;">جاوب صح عشان تختم اللعبة وتفرم الفصل!</p>
+                <p style="margin-bottom: 30px; color: #aaa;">جاوب صح عشان تهزم الوحش وتختم الفصل!</p>
                 
                 <div id="quiz-content">
-                    <div class="question-box" id="question">جاري تحميل السؤال...</div>
+                    <div class="question-box" id="question">جاري تحميل المعركة...</div>
                     <div class="answers-grid" id="answers">
-                        <!-- Buttons will be injected here -->
-                    </div>
+                        </div>
                     <div class="score-display" id="score-area"></div>
-                    <button id="next-btn" class="nav-btn" style="margin-top: 20px; display: none;" onclick="nextQuestion()">السؤال التالي >></button>
+                    <button id="next-btn" class="nav-btn" style="margin-top: 30px; width: 100%; display: none;" onclick="nextQuestion()">الهجوم التالي >></button>
                 </div>
             </div>
         </section>
         
-        <!-- FOOTER -->
         <footer style="text-align: center; padding: 50px 0; color: #555; margin-top: 50px; border-top: 1px solid #222;">
-            <p>تم التصميم بـ ☕ و 💻 | ملخص شامل لأساسيات المناهج</p>
-            <p style="font-size: 0.8rem;">وداعاً للكتاب الممل 👋</p>
+            <p>تم التصميم بـ ❤️ وبرمجة 💻 | ملخص المناهج الدراسية بأسلوب تفاعلي</p>
+            <p style="font-size: 0.8rem; margin-top: 10px;">وداعاً للكتاب الممل 👋 | Ultimate Guide Edition</p>
         </footer>
 
     </div>
 
     <script>
-        // --- TABS LOGIC ---
+        // --- منطق التبويبات (Tabs Logic) ---
         function openTab(evt, tabName) {
             var i, tabcontent, tablinks;
             tabcontent = document.getElementsByClassName("tab-content");
@@ -486,14 +622,17 @@
                 tablinks[i].className = tablinks[i].className.replace(" active", "");
             }
             document.getElementById(tabName).style.display = "block";
-            document.getElementById(tabName).classList.add('active');
+            // Timeout صغير عشان الأنيميشن يشتغل صح
+            setTimeout(() => {
+                document.getElementById(tabName).classList.add('active');
+            }, 10);
             evt.currentTarget.className += " active";
         }
 
-        // --- QUIZ DATA & LOGIC ---
+        // --- بيانات ومنطق الاختبار (Quiz Logic) ---
         const questions = [
             {
-                q: "الحركة التي يتم فيها انتقال الجسم من مكان لآخر تسمى؟",
+                q: "الحركة التي يتم فيها انتقال الجسم من مكان لآخر (A to B) تسمى؟",
                 a: [
                     { text: "ثبات (Stability)", isCorrect: false },
                     { text: "انتقال (Locomotion)", isCorrect: true },
@@ -502,30 +641,30 @@
                 ]
             },
             {
-                q: "عندما ترمي الكرة لزميلك، هذا يندرج تحت عنصر؟",
+                q: "عندما ترمي الكرة لزميلك أو تركلها، هذا يندرج تحت عنصر؟",
                 a: [
                     { text: "المعالجة (Manipulation)", isCorrect: true },
                     { text: "الثبات", isCorrect: false },
                     { text: "الفراغ الشخصي", isCorrect: false },
-                    { text: "الانسياب الحر", isCorrect: false }
+                    { text: "المسارات", isCorrect: false }
                 ]
             },
             {
                 q: "أي مما يلي يعتبر من عناصر 'الجهد' (Effort)؟",
                 a: [
-                    { text: "المستويات", isCorrect: false },
-                    { text: "المسارات", isCorrect: false },
-                    { text: "الزمن والوزن", isCorrect: true },
-                    { text: "العلاقات", isCorrect: false }
+                    { text: "المستويات (عالي/منخفض)", isCorrect: false },
+                    { text: "المسارات (متعرج/مستقيم)", isCorrect: false },
+                    { text: "الزمن والوزن (Time/Force)", isCorrect: true },
+                    { text: "العلاقة مع الزميل", isCorrect: false }
                 ]
             },
             {
-                q: "المساحة المحيطة بالجسم مباشرة ولا يتطلب الوصول إليها تحركاً تسمى؟",
+                q: "المساحة المحيطة بالجسم مباشرة التي تصل إليها أطرافك وأنت ثابت تسمى؟",
                 a: [
-                    { text: "الفراغ العام", isCorrect: false },
+                    { text: "الفراغ العام (General Space)", isCorrect: false },
                     { text: "المسار المتعرج", isCorrect: false },
                     { text: "الفراغ الشخصي (Personal Space)", isCorrect: true },
-                    { text: "المستوى العالي", isCorrect: false }
+                    { text: "المستوى المتوسط", isCorrect: false }
                 ]
             },
             {
@@ -533,8 +672,8 @@
                 a: [
                     { text: "تضاد (Contrast)", isCorrect: true },
                     { text: "مرآة (Mirroring)", isCorrect: false },
-                    { text: "تطابق", isCorrect: false },
-                    { text: "انسياب مقيد", isCorrect: false }
+                    { text: "توافق (Matching)", isCorrect: false },
+                    { text: "تعاون", isCorrect: false }
                 ]
             }
         ];
@@ -547,18 +686,19 @@
             const aGrid = document.getElementById('answers');
             const nextBtn = document.getElementById('next-btn');
             
-            // Clear previous
+            // تنظيف المحتوى السابق
             aGrid.innerHTML = '';
             nextBtn.style.display = 'none';
-            document.getElementById('score-area').innerText = '';
+            document.getElementById('score-area').innerText = `Score: ${score}`;
 
+            // التحقق من انتهاء الأسئلة
             if(currentQIndex >= questions.length) {
                 showResult();
                 return;
             }
 
             const currentQ = questions[currentQIndex];
-            qBox.innerText = `سؤال ${currentQIndex + 1}: ${currentQ.q}`;
+            qBox.innerHTML = `<span style="color:var(--accent-cyan)">ROUND ${currentQIndex + 1}:</span> ${currentQ.q}`;
 
             currentQ.a.forEach(ans => {
                 const btn = document.createElement('button');
@@ -571,21 +711,24 @@
 
         function selectAnswer(btn, isCorrect) {
             const buttons = document.querySelectorAll('.ans-btn');
-            buttons.forEach(b => b.disabled = true); // Disable all
+            buttons.forEach(b => b.disabled = true); // تعطيل الأزرار بعد الاختيار
 
             if(isCorrect) {
                 btn.classList.add('correct');
+                btn.innerHTML += " ✅";
                 score++;
+                document.getElementById('score-area').innerText = `Score: ${score}`;
             } else {
                 btn.classList.add('wrong');
-                // Highlight correct one
+                btn.innerHTML += " ❌";
+                // إظهار الإجابة الصحيحة
                 questions[currentQIndex].a.forEach((ans, idx) => {
                     if(ans.isCorrect) {
                         buttons[idx].classList.add('correct');
                     }
                 });
             }
-            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('next-btn').style.display = 'block';
         }
 
         function nextQuestion() {
@@ -596,19 +739,30 @@
         function showResult() {
             const quizContent = document.getElementById('quiz-content');
             let msg = "";
-            if(score === questions.length) msg = "🥇 أسطورة! قفلت اللعبة!";
-            else if(score > questions.length/2) msg = "🥈 وحش! مستوى ممتاز.";
-            else msg = "🥉 محتاج تذاكر تاني يا بطل.";
+            let color = "";
+            
+            if(score === questions.length) {
+                msg = "🏆 LEGENDARY! قفلت اللعبة يا بطل!";
+                color = "#ffd700";
+            }
+            else if(score > questions.length/2) {
+                msg = "🥈 وحش! أداء ممتاز بس ركز شوية.";
+                color = "#c0c0c0";
+            }
+            else {
+                msg = "💀 GAME OVER! محتاج تذاكر تاني.";
+                color = "#e74c3c";
+            }
 
             quizContent.innerHTML = `
                 <h3 style="font-size: 2rem; color: white; margin-bottom: 20px;">النتيجة النهائية</h3>
-                <div style="font-size: 3rem; color: var(--accent-cyan); margin-bottom: 20px;">${score} / ${questions.length}</div>
-                <p style="font-size: 1.5rem; color: #aaa;">${msg}</p>
-                <button class="nav-btn" style="margin-top: 30px;" onclick="location.reload()">إعادة المحاولة 🔄</button>
+                <div style="font-size: 4rem; color: var(--accent-cyan); margin-bottom: 20px; text-shadow: 0 0 20px var(--accent-cyan); font-family: var(--font-gaming);">${score} / ${questions.length}</div>
+                <p style="font-size: 1.3rem; color: ${color}; margin-bottom: 30px;">${msg}</p>
+                <button class="nav-btn" style="margin-top: 10px;" onclick="location.reload()">إعادة المحاولة (Respawn) 🔄</button>
             `;
         }
 
-        // Start Quiz
+        // بدء الاختبار عند التحميل
         loadQuiz();
 
     </script>
