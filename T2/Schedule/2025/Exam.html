@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول الامتحانات | الفرقة الثانية</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/calendar.png">
+
+    <style>
+        :root {
+            --primary: #ff0055;      /* أحمر نيون (لون الخطر/الامتحانات) */
+            --secondary: #00e1ff;    /* أزرق نيون */
+            --bg-dark: #09090b;      /* أسود */
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --text-main: #ffffff;
+            --glass-border: rgba(255, 255, 255, 0.1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: linear-gradient(45deg, #000000 0%, #1a0509 100%);
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            padding: 20px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(10px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .logo { font-weight: 900; font-size: 1.2rem; color: white; text-decoration: none; }
+        .back-btn { color: #aaa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { color: var(--primary); }
+
+        /* --- Header & Countdown --- */
+        header { text-align: center; padding: 50px 20px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        h1 span { color: var(--primary); }
+
+        .countdown-box {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid var(--primary);
+            padding: 20px;
+            border-radius: 15px;
+            display: inline-block;
+            margin-top: 20px;
+            box-shadow: 0 0 30px rgba(255, 0, 85, 0.2);
+        }
+        .timer { font-size: 2rem; font-weight: 900; color: var(--primary); letter-spacing: 2px; direction: ltr; }
+        .timer-label { font-size: 0.9rem; color: #ccc; margin-bottom: 5px; }
+
+        /* --- Timeline Container --- */
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
+
+        .exam-card {
+            display: flex;
+            background: var(--card-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: 0.3s;
+            position: relative;
+        }
+
+        .exam-card:hover {
+            transform: translateX(-10px);
+            border-color: var(--primary);
+            background: rgba(255, 0, 85, 0.05);
+        }
+
+        /* Date Side (Right) */
+        .date-box {
+            background: rgba(255,255,255,0.05);
+            min-width: 100px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border-left: 1px solid var(--glass-border);
+            padding: 15px;
+        }
+        .day-name { font-size: 0.9rem; color: #aaa; }
+        .day-number { font-size: 2rem; font-weight: 900; color: white; line-height: 1; }
+        .month { font-size: 0.8rem; color: var(--primary); font-weight: 700; }
+
+        /* Info Side (Left) */
+        .info-box {
+            padding: 20px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .subject { font-size: 1.4rem; font-weight: 700; margin-bottom: 8px; }
+        .time { display: flex; align-items: center; gap: 8px; color: #ccc; font-size: 0.95rem; }
+        .time i { color: var(--secondary); }
+
+        /* Special Badges */
+        .badge { font-size: 0.75rem; padding: 4px 10px; border-radius: 4px; margin-left: 10px; background: rgba(255,255,255,0.1); }
+        .b-boys { color: #00e1ff; border: 1px solid #00e1ff; }
+        .b-girls { color: #ff00de; border: 1px solid #ff00de; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; color: #555; font-size: 0.9rem; }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .exam-card { flex-direction: column; text-align: center; }
+            .date-box { width: 100%; border-left: none; border-bottom: 1px solid var(--glass-border); flex-direction: row; gap: 10px; padding: 10px; }
+            .exam-card:hover { transform: translateY(-5px); }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo"><i class="fa-solid fa-calendar-days"></i> الامتحانات</a>
+        <a href="index.html" class="back-btn">الرجوع للمواد <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <header>
+        <h1>جدول <span>نهاية الترم</span></h1>
+        <p style="color:#aaa">الفصل الدراسي الأول 2025 - 2026</p>
+        
+        <!-- العداد التنازلي -->
+        <div class="countdown-box">
+            <div class="timer-label">باقي على أول امتحان (مبادئ التدريب)</div>
+            <div class="timer" id="countdown">00d 00h 00m 00s</div>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- الثلاثاء 23/12 -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الثلاثاء</span>
+                <span class="day-number">23</span>
+                <span class="month">ديسمبر</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">مبادئ التدريب الرياضي</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- الخميس 25/12 -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الخميس</span>
+                <span class="day-number">25</span>
+                <span class="month">ديسمبر</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">الدفاع عن النفس</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- الأحد 28/12 -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الأحد</span>
+                <span class="day-number">28</span>
+                <span class="month">ديسمبر</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">فسيولوجيا الرياضة (1)</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- الأحد 4/1 (سنة جديدة) -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الأحد</span>
+                <span class="day-number">04</span>
+                <span class="month" style="color:var(--secondary)">يناير 26</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">أساسيات مناهج</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- السبت 10/1 -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">السبت</span>
+                <span class="day-number">10</span>
+                <span class="month" style="color:var(--secondary)">يناير</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">أساسيات الجمباز (جهاز)</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- الاثنين 12/1 (تخصصي) -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الاثنين</span>
+                <span class="day-number">12</span>
+                <span class="month" style="color:var(--secondary)">يناير</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">
+                    مواد التخصص
+                    <span class="badge b-boys">بنين: رفع أثقال</span>
+                    <span class="badge b-girls">بنات: تعبير حركي</span>
+                </div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+        <!-- الأربعاء 14/1 -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الأربعاء</span>
+                <span class="day-number">14</span>
+                <span class="month" style="color:var(--secondary)">يناير</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">كرة السلة</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>بالتوفيق يا أبطال.. شدوا حيلكم! 💪🔥</p>
+        <p style="opacity:0.5; font-size:0.8rem; margin-top:5px">Sports Science Hub</p>
+    </footer>
+
+    <script>
+        // --- كود العداد التنازلي ---
+        // تاريخ أول امتحان: 23 ديسمبر 2025 الساعة 12:30 ظهرًا
+        const examDate = new Date("Dec 23, 2025 12:30:00").getTime();
+
+        const timer = setInterval(function() {
+            const now = new Date().getTime();
+            const distance = examDate - now;
+
+            // حساب الأيام والساعات..
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // عرض النتيجة
+            document.getElementById("countdown").innerHTML = 
+                days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
+
+            // لو الوقت عدى
+            if (distance < 0) {
+                clearInterval(timer);
+                document.getElementById("countdown").innerHTML = "الامتحانات بدأت! 🏃‍♂️";
+                document.getElementById("countdown").style.color = "#00ff88";
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
