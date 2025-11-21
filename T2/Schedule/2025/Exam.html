@@ -11,7 +11,7 @@
 
     <style>
         :root {
-            --primary: #ff0055;      /* أحمر نيون (لون الخطر/الامتحانات) */
+            --primary: #ff0055;      /* أحمر نيون */
             --secondary: #00e1ff;    /* أزرق نيون */
             --bg-dark: #09090b;      /* أسود */
             --card-bg: rgba(255, 255, 255, 0.05);
@@ -43,7 +43,7 @@
             border-bottom: 1px solid var(--glass-border);
         }
         .logo { font-weight: 900; font-size: 1.2rem; color: white; text-decoration: none; }
-        .back-btn { color: #aaa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn { color: #aaa; text-decoration: none; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; cursor: pointer; }
         .back-btn:hover { color: var(--primary); }
 
         /* --- Header & Countdown --- */
@@ -119,6 +119,89 @@
         /* Footer */
         footer { text-align: center; padding: 40px; color: #555; font-size: 0.9rem; }
 
+        /* --- POPUP (MODAL) STYLES --- */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-box {
+            background: var(--bg-dark);
+            border: 1px solid var(--primary);
+            padding: 30px 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+            transform: scale(0.8);
+            transition: all 0.3s ease;
+            max-width: 90%;
+            width: 350px;
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            animation: pulse 2s infinite;
+        }
+
+        .modal-title {
+            font-size: 1.8rem;
+            font-weight: 900;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .modal-text {
+            color: #aaa;
+            margin-bottom: 25px;
+        }
+
+        .modal-close-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);
+        }
+
+        .modal-close-btn:hover {
+            background: #ff3377;
+            transform: scale(1.05);
+        }
+
+        @keyframes pulse {
+            0% { text-shadow: 0 0 10px var(--primary); }
+            50% { text-shadow: 0 0 30px var(--primary); transform: scale(1.1); }
+            100% { text-shadow: 0 0 10px var(--primary); }
+        }
+
         /* Responsive */
         @media (max-width: 600px) {
             .exam-card { flex-direction: column; text-align: center; }
@@ -131,19 +214,34 @@
 
     <nav>
         <a href="#" class="logo"><i class="fa-solid fa-calendar-days"></i> الامتحانات</a>
-        <a href="https://seif4d.github.io/SportsScience/T2/" class="back-btn">الرجوع للمواد <i class="fa-solid fa-arrow-left"></i></a>
+        <!-- تم إضافة id="backLink" للرابط -->
+        <a href="#" id="backLink" class="back-btn">الرجوع للمواد <i class="fa-solid fa-arrow-left"></i></a>
     </nav>
 
     <header>
         <h1>جدول <span>نهاية الترم</span></h1>
         <p style="color:#aaa">الفصل الدراسي الأول 2025 - 2026</p>
         
-        <!-- العداد التنازلي -->
         <div class="countdown-box">
             <div class="timer-label">باقي على أول امتحان (مبادئ التدريب)</div>
             <div class="timer" id="countdown">00d 00h 00m 00s</div>
         </div>
     </header>
+
+    <div class="container">
+        <!-- المحتوى كما هو (الامتحانات) -->
+        <div class="exam-card">
+            <div class="date-box">
+                <span class="day-name">الثلاثاء</span>
+                <span class="day-number">23</span>
+                <span class="month">ديسمبر</span>
+            </div>
+            <div class="info-box">
+                <div class="subject">مبادئ التدريب الرياضي</div>
+                <div class="time"><i class="fa-regular fa-clock"></i> 12:30 ظهراً – 02:30 ظهراً</div>
+            </div>
+        </div>
+        
 
     <div class="container">
 
@@ -244,37 +342,63 @@
 
     </div>
 
+    </div>
+
     <footer>
         <p>بالتوفيق يا أبطال.. شدوا حيلكم! 💪🔥</p>
         <p style="opacity:0.5; font-size:0.8rem; margin-top:5px">Sports Science Hub</p>
     </footer>
 
+    <!-- نافذة قريباً (الجديدة) -->
+    <div class="modal-overlay" id="soonModal">
+        <div class="modal-box">
+            <div class="modal-icon"><i class="fa-solid fa-person-digging"></i></div>
+            <h2 class="modal-title">قريباً!</h2>
+            <p class="modal-text">نحن نعمل على تجهيز صفحة المواد.<br>انتظرونا قريباً.</p>
+            <button class="modal-close-btn" onclick="toggleModal()">حسناً</button>
+        </div>
+    </div>
+
     <script>
         // --- كود العداد التنازلي ---
-        // تاريخ أول امتحان: 23 ديسمبر 2025 الساعة 12:30 ظهرًا
         const examDate = new Date("Dec 23, 2025 12:30:00").getTime();
-
         const timer = setInterval(function() {
             const now = new Date().getTime();
             const distance = examDate - now;
-
-            // حساب الأيام والساعات..
             const days = Math.floor(distance / (1000 * 60 * 60 * 24));
             const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-
-            // عرض النتيجة
             document.getElementById("countdown").innerHTML = 
                 days + "d " + hours + "h " + minutes + "m " + seconds + "s ";
-
-            // لو الوقت عدى
             if (distance < 0) {
                 clearInterval(timer);
                 document.getElementById("countdown").innerHTML = "الامتحانات بدأت! 🏃‍♂️";
                 document.getElementById("countdown").style.color = "#00ff88";
             }
         }, 1000);
+
+        // --- كود النافذة المنبثقة (الجديد) ---
+        const backLink = document.getElementById('backLink');
+        const modal = document.getElementById('soonModal');
+
+        // دالة فتح/غلق النافذة
+        function toggleModal() {
+            modal.classList.toggle('active');
+        }
+
+        // عند الضغط على زر الرجوع
+        backLink.addEventListener('click', function(e) {
+            e.preventDefault(); // منع الانتقال للرابط
+            toggleModal(); // فتح النافذة
+        });
+
+        // إغلاق النافذة عند الضغط في أي مكان خارج الصندوق
+        modal.addEventListener('click', function(e) {
+            if (e.target === modal) {
+                toggleModal();
+            }
+        });
     </script>
 
 </body>
