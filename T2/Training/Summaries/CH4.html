@@ -1,0 +1,273 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفصل الرابع: الراحة في مجال التدريب الرياضي</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0B1220;
+            --primary-accent: #34E4A7; /* لون أخضر هادئ للاستشفاء */
+            --secondary-accent: #33B1FF; /* أزرق علمي */
+            --text-color: #F0F4F8;
+            --text-muted: #A0B1C4;
+            --card-bg: rgba(26, 38, 60, 0.6);
+            --card-border: rgba(52, 228, 167, 0.2);
+            --font-main: 'Tajawal', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top right, rgba(52, 228, 167, 0.08) 0px, transparent 50%),
+                              radial-gradient(circle at bottom left, rgba(51, 177, 255, 0.08) 0px, transparent 50%);
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary-accent), var(--secondary-accent)); border-radius: 10px; }
+
+        .container { width: 90%; max-width: 1200px; margin: auto; padding: 100px 0; }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { font-size: clamp(2.8rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.2; text-align: center; }
+        h1 .highlight { color: var(--primary-accent); }
+        h2 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 20px; text-align: center; }
+        .section-subtitle { text-align: center; color: var(--text-muted); max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        /* -- مصفوفة الراحة -- */
+        .recovery-matrix { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 30px; }
+        .recovery-card {
+            text-align: center;
+            padding: 25px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .recovery-card:hover { transform: translateY(-10px); box-shadow: 0 10px 30px rgba(0,0,0,0.2), 0 0 20px var(--card-border); }
+        .recovery-card .icon { font-size: 3rem; margin-bottom: 15px; color: var(--primary-accent); }
+        .recovery-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: var(--text-color); }
+        .recovery-card p { font-size: 0.95rem; color: var(--text-muted); }
+
+        /* -- هرم فلسفة التدريب -- */
+        .philosophy-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+        @media (min-width: 992px) { .philosophy-grid { grid-template-columns: 1fr 2fr; } }
+        .philosophy-pyramid { position: relative; width: 100%; max-width: 300px; height: 260px; margin: 0 auto; }
+        .pyramid-shape { position: relative; width: 100%; height: 100%; clip-path: polygon(50% 0%, 0% 100%, 100% 100%); background: var(--card-bg); }
+        .pyramid-label {
+            position: absolute;
+            color: var(--text-color);
+            font-weight: 700;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 5px;
+            transition: color 0.3s, background-color 0.3s;
+        }
+        .pyramid-label:hover, .pyramid-label.active { color: var(--primary-accent); background-color: rgba(52, 228, 167, 0.1); }
+        #label-framework { top: 10px; left: 50%; transform: translateX(-50%); }
+        #label-content { bottom: 10px; right: 10px; }
+        #label-evaluation { bottom: 10px; left: 10px; }
+        
+        .philosophy-content .content-box { display: none; }
+        .philosophy-content .content-box.active { display: block; animation: fadeIn 0.5s; }
+        .philosophy-content h3 { color: var(--primary-accent); }
+
+        /* -- أكورديون الاتجاهات الحديثة -- */
+        .accordion-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            width: 100%;
+            background: transparent;
+            border: none;
+            padding: 20px;
+            text-align: right;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--text-color);
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .accordion-header i { transition: transform 0.3s; }
+        .accordion-body { max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; }
+        .accordion-content { padding: 0 20px 20px 20px; color: var(--text-muted); }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+        .accordion-item.active .accordion-body { max-height: 500px; /* sufficiently large value */ }
+        
+        footer { text-align: center; padding: 50px 20px; margin-top: 80px; color: var(--text-muted); font-size: 0.9rem; }
+        .credits { margin-top: 15px; font-weight: 700; color: var(--secondary-accent); letter-spacing: 1px; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <h1 class="reveal">الراحة: الركن المنسي <br><span class="highlight">في معادلة الأداء</span></h1>
+        <p class="section-subtitle reveal">الفصل الرابع يوضح أن الراحة ليست مجرد توقف عن العمل، بل هي عملية فسيولوجية نشطة يتم فيها التكيف، وبناء القوة، وتجنب التدريب الزائد. إنها استثمار لا يقل أهمية عن التدريب نفسه.</p>
+    </header>
+
+    <main>
+        <section id="recovery-matrix" class="container">
+            <h2 class="reveal">مصفوفة الراحة: أبعاد الاستشفاء</h2>
+            <p class="section-subtitle reveal">الراحة ليست مفهوماً واحداً، بل تتخذ أشكالاً متعددة تخدم أهدافاً مختلفة عبر الجدول الزمني للرياضي. فهم هذه الأبعاد هو مفتاح التخطيط السليم.</p>
+            <div class="recovery-matrix">
+                <div class="recovery-card glass-card reveal">
+                    <div class="icon"><i class="fas fa-stopwatch"></i></div>
+                    <h3>الراحة البينية</h3>
+                    <p>فترات الراحة القصيرة بين التكرارات والمجموعات. تتحكم في نظام الطاقة المستهدف.</p>
+                </div>
+                <div class="recovery-card glass-card reveal">
+                    <div class="icon"><i class="fas fa-calendar-week"></i></div>
+                    <h3>الراحة بين الدورات</h3>
+                    <p>الراحة بين الوحدات التدريبية (الأيام). ضرورية للاستشفاء الكامل وإعادة بناء الأنسجة.</p>
+                </div>
+                <div class="recovery-card glass-card reveal">
+                    <div class="icon"><i class="fas fa-calendar-alt"></i></div>
+                    <h3>الراحة السنوية</h3>
+                    <p>فترة الراحة في نهاية الموسم (Off-season) للاستشفاء البدني والذهني الكامل.</p>
+                </div>
+                <div class="recovery-card glass-card reveal">
+                    <div class="icon"><i class="fas fa-battery-quarter"></i></div>
+                    <h3>الراحة السلبية</h3>
+                    <p>التوقف التام عن أي نشاط، وتعتبر أساس كل أنواع الراحات الأخرى.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="philosophy" class="container">
+            <h2 class="reveal">فلسفة التدريب الفردي</h2>
+            <p class="section-subtitle reveal">تعتمد فلسفة التدريب الناجحة على ثلاثة أضلاع مترابطة تشكل إطار عمل متكامل لتطوير الرياضي. انقر على كل ضلع لاستكشاف محتواه.</p>
+            <div class="philosophy-grid">
+                <div class="philosophy-pyramid reveal">
+                    <div class="pyramid-shape"></div>
+                    <div id="label-framework" class="pyramid-label active" data-content="content-framework">إطار التدريب</div>
+                    <div id="label-content" class="pyramid-label" data-content="content-content">محتوى التدريب</div>
+                    <div id="label-evaluation" class="pyramid-label" data-content="content-evaluation">تقويم التدريب</div>
+                </div>
+                <div class="philosophy-content glass-card reveal">
+                    <div id="content-framework" class="content-box active">
+                        <h3>1. وضع إطار للتدريب الفردي</h3>
+                        <p>الخطوة الأولى في التخطيط، وتشمل تحديد الفلسفة التدريبية الخاصة، مراعاة اعتبارات النمو والتطور، وضمان السلامة البدنية والوظيفية للاعب.</p>
+                    </div>
+                    <div id="content-content" class="content-box">
+                        <h3>2. تحديد محتوى التدريب الفردي</h3>
+                        <p>الخطوة الثانية، وتتكون من ثلاثة محاور: أنشطة تنمية المهارات، الإعداد البدني العام والخاص، والإعداد العقلي والذهني للاعب.</p>
+                    </div>
+                    <div id="content-evaluation" class="content-box">
+                        <h3>3. تقويم التدريب الفردي</h3>
+                        <p>الخطوة الثالثة والمستمرة، وتشمل تقييم المستوى الحالي للاعب وتحديد الأهداف المستقبلية، وهي قاعدة أساسية لا يجب إغفالها.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="modern-trends" class="container">
+            <h2 class="reveal">الاتجاهات الحديثة في تطوير التدريب</h2>
+            <p class="section-subtitle reveal">يستعرض هذا القسم أهم الاتجاهات العلمية الحديثة التي تشكل مستقبل التدريب الرياضي، من زيادة الأحمال إلى التخصيص الفردي.</p>
+            <div class="accordion-container reveal">
+                <div class="accordion-item">
+                    <button class="accordion-header"><span>1. الزيادة القصوى في الأحمال التنافسية</span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-content">أكدت الأبحاث ضرورة زيادة حجم وشدة التدريب والمنافسات، حيث وصلت في بعض الرياضات إلى 1350-1800 ساعة سنويًا.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header"><span>2. تقنين انتقاء الناشئين وفحصهم معمليًا</span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-content">الاعتماد على الطرق العلمية في انتقاء المواهب، عبر تحاليل فسيولوجية (نسبة الجلوكوز، تشبع الأكسجين) ودراسة الصفات الوراثية.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header"><span>3. زيادة التخصصية في التدريب</span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-content">التركيز على متطلبات الأداء التخصصي للرياضة الممارسة، وتقليل حجم الإعداد العام لصالح الإعداد الخاص.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header"><span>4. تطوير نظم التدريب الفردي</span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-content">الاهتمام بالتشخيص الدقيق للفروق الفردية (نفسيًا وفسيولوجيًا) ووضع برامج مخصصة تكفل رفع الكفاءة الفردية.</div></div>
+                </div>
+                <div class="accordion-item">
+                    <button class="accordion-header"><span>5. زيادة المنهجية العلمية في البحث</span><i class="fas fa-chevron-down"></i></button>
+                    <div class="accordion-body"><div class="accordion-content">اتباع منهج علمي واضح ومتكامل في البحث والمفاضلة بين اللاعبين وتطوير الأداء، بناءً على مؤشرات قابلة للقياس.</div></div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+    
+    <footer>
+        <p>تم تصميم هذه الصفحة كمرجع علمي وتفاعلي لطلاب كلية علوم الرياضة بجامعة أسيوط، بناءً على مذكرة "مبادئ وأسس التدريب الرياضي" للدكتور أحمد صلاح قراعة.</p>
+        <p class="credits">Seif X DebiaN</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- 1. تأثير الظهور عند التمرير --
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+            // -- 2. منطق هرم فلسفة التدريب --
+            const pyramidLabels = document.querySelectorAll('.pyramid-label');
+            const contentBoxes = document.querySelectorAll('.content-box');
+            pyramidLabels.forEach(label => {
+                label.addEventListener('click', () => {
+                    // Remove active class from all
+                    pyramidLabels.forEach(l => l.classList.remove('active'));
+                    contentBoxes.forEach(c => c.classList.remove('active'));
+                    // Add active class to clicked
+                    label.classList.add('active');
+                    document.getElementById(label.dataset.content).classList.add('active');
+                });
+            });
+
+            // -- 3. منطق الأكورديون --
+            const accordionItems = document.querySelectorAll('.accordion-item');
+            accordionItems.forEach(item => {
+                const header = item.querySelector('.accordion-header');
+                header.addEventListener('click', () => {
+                    // Optional: Close other items
+                    // accordionItems.forEach(otherItem => {
+                    //     if (otherItem !== item) otherItem.classList.remove('active');
+                    // });
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
