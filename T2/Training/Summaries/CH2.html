@@ -1,0 +1,296 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تحليل أسس التدريب الرياضي | ملخص الفصل الثاني</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0F0F1A;
+            --primary-accent: #00A9FF;
+            --secondary-accent: #A076F9;
+            --text-color: #EAEAEA;
+            --text-muted: #A0A0B0;
+            --card-bg: rgba(25, 25, 40, 0.5);
+            --card-border: rgba(0, 169, 255, 0.2);
+            --font-main: 'Tajawal', sans-serif;
+            --warning-color: #FF4D4D;
+            --thumb-color: var(--primary-accent); /* متغير جديد للتحكم في لون مقبض الشريط */
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.7;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at 1% 1%, rgba(0, 169, 255, 0.15) 0px, transparent 50%),
+                              radial-gradient(circle at 99% 99%, rgba(160, 118, 249, 0.15) 0px, transparent 50%);
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary-accent), var(--secondary-accent)); border-radius: 10px; }
+
+        .container { width: 90%; max-width: 1200px; margin: auto; padding: 100px 0; }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { font-size: clamp(2.8rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.2; }
+        h1 .highlight { color: var(--primary-accent); }
+        h2 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 20px; text-align: center; }
+        .section-subtitle { text-align: center; color: var(--text-muted); max-width: 700px; margin: 0 auto 60px; font-size: 1.1rem; }
+
+        .hero { min-height: 90vh; display: flex; align-items: center; text-align: right; }
+        .hero p { font-size: 1.2rem; color: var(--text-muted); max-width: 600px; margin-top: 25px; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 15px;
+            padding: 30px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .glass-card:hover { transform: translateY(-8px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
+
+        .grid-2, .grid-3 { display: grid; gap: 30px; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); }
+
+        .info-card .icon { font-size: 2.5rem; margin-bottom: 15px; }
+        .info-card h3 { color: var(--text-color); font-size: 1.5rem; margin-bottom: 10px; }
+        .info-card .icon-primary { color: var(--primary-accent); }
+        .info-card .icon-secondary { color: var(--secondary-accent); }
+        
+        .variable-card ul { list-style-type: none; padding-right: 20px; margin-top: 10px; }
+        .variable-card ul li { font-size: 0.95rem; color: var(--text-muted); }
+
+        #spectrum { background-color: rgba(0,0,0,0.2); border-radius: 20px; }
+        .spectrum-container { display: grid; grid-template-columns: 1fr; gap: 50px; align-items: center; }
+        .spectrum-display { text-align: center; }
+        .spectrum-level { font-size: 2.5rem; font-weight: 900; margin-bottom: 15px; transition: color 0.4s; }
+        .spectrum-percentage { font-size: 1.5rem; font-weight: 700; color: var(--text-muted); background: var(--card-bg); padding: 5px 15px; border-radius: 20px; display: inline-block; margin-bottom: 20px; }
+        .spectrum-info { display: flex; justify-content: center; gap: 20px; margin-top: 25px; flex-wrap: wrap; }
+        .info-box { background: var(--card-bg); padding: 10px 20px; border-radius: 10px; }
+        .info-box .label { font-size: 0.8rem; color: var(--text-muted); }
+        .info-box .value { font-size: 1.2rem; font-weight: 700; }
+        
+        .spectrum-slider { -webkit-appearance: none; width: 100%; height: 8px; background: var(--card-bg); border-radius: 5px; outline: none; transition: opacity .2s; cursor: pointer; }
+        .spectrum-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 25px; height: 25px; background: var(--thumb-color); border-radius: 50%; border: 3px solid var(--bg-color); box-shadow: 0 0 10px var(--thumb-color); transition: background-color 0.4s; }
+        .spectrum-slider::-moz-range-thumb { width: 25px; height: 25px; background: var(--thumb-color); border-radius: 50%; border: 3px solid var(--bg-color); box-shadow: 0 0 10px var(--thumb-color); transition: background-color 0.4s; }
+        
+        .warning-card { border-left: 5px solid var(--warning-color); }
+        .warning-card h3 { color: var(--warning-color); }
+        .warning-list { list-style: none; margin-top: 20px; }
+        .warning-list li { margin-bottom: 15px; display: flex; align-items: flex-start; }
+        .warning-list .icon { color: var(--warning-color); margin-left: 15px; margin-top: 5px; }
+        
+        .table-container { overflow-x: auto; }
+        .max-load-table { width: 100%; border-collapse: collapse; margin-top: 30px; text-align: center; background: var(--card-bg); border-radius: 10px; overflow: hidden; }
+        .max-load-table th, .max-load-table td { padding: 15px; }
+        .max-load-table thead { background-color: rgba(0, 169, 255, 0.2); }
+        .max-load-table th { color: var(--primary-accent); font-weight: 700; }
+        .max-load-table tbody tr:not(:last-child) { border-bottom: 1px solid var(--card-border); }
+        .max-load-table td { color: var(--text-muted); }
+        .max-load-table td strong { color: var(--text-color); font-weight: 700; }
+        
+        footer { text-align: center; padding: 50px 20px; margin-top: 80px; color: var(--text-muted); font-size: 0.9rem; }
+        .credits { margin-top: 15px; font-weight: 700; color: var(--secondary-accent); letter-spacing: 1px; }
+
+        @media (min-width: 992px) {
+            .spectrum-container { grid-template-columns: 1fr 1fr; }
+            .spectrum-display { text-align: right; }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="hero container">
+        <div class="reveal">
+            <h1>أسس التدريب الرياضي <br><span class="highlight">المرجع العلمي للأداء</span></h1>
+            <p>مرجع علمي تفاعلي لمبادئ التدريب الرياضي، يجمع بين الدقة الأكاديمية والتصميم الحديث، لتقديم فهم عميق لكيفية بناء القوة وتحقيق الأداء الأمثل.</p>
+        </div>
+    </header>
+
+    <main>
+        <section id="load-concept" class="container">
+            <h2 class="reveal">مفهوم الحمل التدريبي: علاقة السبب والنتيجة</h2>
+            <p class="section-subtitle reveal">يعرف الحمل بأنه "العبء البدني والعصبي" الذي يؤثر على الرياضي. العلاقة بين ما نفعله وكيف يستجيب الجسم له هي جوهر علم التدريب.</p>
+            <div class="grid-2">
+                <div class="glass-card info-card reveal">
+                    <div class="icon icon-primary"><i class="fas fa-satellite-dish"></i></div>
+                    <h3>الحمل الخارجي (External Load)</h3>
+                    <p>المؤثرات الموضوعية والقابلة للقياس التي يتعرض لها الرياضي. هو "السبب" في عملية التكيف.</p>
+                </div>
+                <div class="glass-card info-card reveal">
+                    <div class="icon icon-secondary"><i class="fas fa-brain"></i></div>
+                    <h3>الحمل الداخلي (Internal Load)</h3>
+                    <p>الاستجابة الفسيولوجية والنفسية للجسم تجاه الحمل الخارجي. هي "النتيجة" التي تحدث داخل الجسم.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="variables" class="container">
+            <h2 class="reveal">متغيرات الحمل: أدوات بناء البرنامج</h2>
+            <p class="section-subtitle reveal">لكل هدف رياضي، يجب معايرة هذه المتغيرات بدقة. هي لغة المدرب للتواصل مع أنظمة الجسم وتحفيزها للتطور.</p>
+            <div class="grid-3">
+                <div class="glass-card info-card variable-card reveal">
+                    <div class="icon icon-primary"><i class="fa-solid fa-gauge-high"></i></div>
+                    <h3>الشدة (Intensity)</h3>
+                    <p>درجة صعوبة المجهود (سرعة، قوة، مقاومة) كنسبة من القدرة القصوى.</p>
+                </div>
+                <div class="glass-card info-card variable-card reveal">
+                    <div class="icon icon-primary"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>الحجم (Volume)</h3>
+                    <p>الكمية الإجمالية للعمل المنجز (تكرارات × مجموعات × وزن).</p>
+                </div>
+                <div class="glass-card info-card variable-card reveal">
+                    <div class="icon icon-secondary"><i class="fa-solid fa-clock-rotate-left"></i></div>
+                    <h3>الراحة (Recovery)</h3>
+                    <p>فترات الاستشفاء بين التمارين والمجموعات.</p>
+                    <ul>
+                        <li><strong>- إيجابية (نشطة):</strong> نشاط خفيف كالمشي.</li>
+                        <li><strong>- سلبية (غير نشطة):</strong> توقف تام عن الحركة.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="measurements" class="container">
+            <h2 class="reveal">كيف نقيس الحمل؟</h2>
+            <p class="section-subtitle reveal">لتحويل التدريب من عمل عشوائي إلى علم دقيق، نستخدم مؤشرات محددة لتقييم الحمل بنوعيه.</p>
+            <div class="grid-2">
+                <div class="glass-card info-card reveal">
+                    <div class="icon icon-primary"><i class="fas fa-ruler-combined"></i></div>
+                    <h3>قياس الحمل الخارجي</h3>
+                    <p>يتم قياسه بوحدات موضوعية مثل: الكيلوجرام، المتر، الثانية، عدد التكرارات، وزمن الأداء.</p>
+                </div>
+                <div class="glass-card info-card reveal">
+                    <div class="icon icon-secondary"><i class="fas fa-heart-pulse"></i></div>
+                    <h3>قياس الحمل الداخلي</h3>
+                    <p>يتم قياسه عبر مؤشرات فسيولوجية مثل: معدل النبض، استهلاك الأكسجين (VO2Max)، ومعدل التنفس.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="spectrum" class="container">
+            <h2 class="reveal">طيف الشدة التدريبية التفاعلي</h2>
+            <p class="section-subtitle reveal">استخدم الشريط أدناه لاستكشاف كيف تتغير استجابات الجسم عبر 8 مستويات من الشدة، من الراحة المطلقة إلى أقصى مجهود.</p>
+            <div class="spectrum-container">
+                <div class="spectrum-display reveal">
+                    <h3 id="spectrum-level" class="spectrum-level"></h3>
+                    <div id="spectrum-percentage" class="spectrum-percentage"></div>
+                    <p id="spectrum-description"></p>
+                    <div class="spectrum-info">
+                        <div class="info-box"><span class="label">معدل النبض (نبضة/د)</span><div id="spectrum-pulse" class="value"></div></div>
+                        <div class="info-box"><span class="label">التكرارات الممكنة</span><div id="spectrum-reps" class="value"></div></div>
+                    </div>
+                </div>
+                <div class="spectrum-slider-wrapper reveal">
+                    <input type="range" min="0" max="110" value="5" class="spectrum-slider" id="intensity-slider">
+                </div>
+            </div>
+        </section>
+
+        <section id="max-load-table" class="container">
+            <h2 class="reveal">جدول الحمل الأقصى: الدقة في التطبيق</h2>
+            <p class="section-subtitle reveal">كما ورد في المذكرة (ص 95)، يوضح هذا الجدول العلاقة العكسية الدقيقة بين نسبة الشدة وعدد التكرارات الممكنة في منطقة القوة القصوى.</p>
+            <div class="table-container reveal">
+                <table class="max-load-table">
+                    <thead>
+                        <tr>
+                            <th>نسبة الشدة من القدرة القصوى</th>
+                            <th>عدد التكرارات الممكنة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td><strong>90%</strong></td><td>5 تكرارات</td></tr>
+                        <tr><td><strong>93%</strong></td><td>4 تكرارات</td></tr>
+                        <tr><td><strong>96%</strong></td><td>3 تكرارات</td></tr>
+                        <tr><td><strong>98%</strong></td><td>2 تكرار</td></tr>
+                        <tr><td><strong>100%</strong></td><td>1 تكرار</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="warnings" class="container">
+            <h2 class="reveal">منطقة الخطر: الحمل الأعلى من الأقصى</h2>
+            <p class="section-subtitle reveal">أداة شديدة الفعالية لكسر ثبات المستوى، لكن استخدامها يتطلب الالتزام الصارم بهذه الإرشادات لتجنب الإصابات.</p>
+            <div class="glass-card warning-card reveal">
+                <h3><i class="fas fa-exclamation-triangle"></i> إرشادات استخدام إلزامية (ص 98-99)</h3>
+                <ul class="warning-list">
+                    <li><i class="fas fa-user-slash icon"></i> لا يستخدم مع المبتدئين، الناشئين، أو العائدين من تأهيل.</li>
+                    <li><i class="fas fa-calendar-times icon"></i> لا يستخدم قبل المنافسات المباشرة (5 أيام على الأقل).</li>
+                    <li><i class="fas fa-ban icon"></i> لا يستخدم في حالة الإجهاد أو المرض.</li>
+                    <li><i class="fas fa-shield-alt icon"></i> يستخدم بشكل مقنن (مرة كل 6-8 وحدات تدريبية) وليس بإفراط.</li>
+                    <li><i class="fas fa-hand-paper icon"></i> يجب التوقف فورًا عند الشعور بألم حاد أو ألم في العظام.</li>
+                    <li><i class="fas fa-clock icon"></i> يتطلب فترات استشفاء طويلة نسبيًا بعد تطبيقه.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>تم تصميم هذه الصفحة كمرجع علمي وتفاعلي لطلاب كلية علوم الرياضة بجامعة أسيوط، بناءً على مذكرة "مبادئ وأسس التدريب الرياضي" للدكتور أحمد صلاح قراعة.</p>
+        <p class="credits">Seif X DebiaN</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+            const slider = document.getElementById('intensity-slider');
+            const levelEl = document.getElementById('spectrum-level'), percentageEl = document.getElementById('spectrum-percentage'),
+                  descriptionEl = document.getElementById('spectrum-description'), pulseEl = document.getElementById('spectrum-pulse'),
+                  repsEl = document.getElementById('spectrum-reps');
+
+            const intensityData = [
+                { limit: 10,  name: 'الراحة السلبية',    percentage: '< 10%',    desc: 'الحالة الطبيعية للجسم دون أي مجهود، ومؤشر مهم لسلامة الجهاز العصبي والاستشفاء.', pulse: '~60-80', reps: 'N/A', color: '#888' },
+                { limit: 20,  name: 'الراحة الإيجابية',    percentage: '10% - 20%', desc: 'نشاط خفيف جدًا مثل المشي أو الإطالات الخفيفة، يساعد على تسريع الاستشفاء.', pulse: '80-100', reps: 'N/A', color: '#77b5fe' },
+                { limit: 30,  name: 'حمل بسيط',           percentage: '20% - 30%', desc: 'مجهود منخفض لا يسبب التعب، مناسب للتدريبات الهوائية طويلة المدة وحرق الدهون.', pulse: '100-140', reps: '+30', color: '#00A9FF' },
+                { limit: 50,  name: 'أعلى من البسيط',     percentage: '30% - 50%', desc: 'مجهود يتطلب تركيزًا بسيطًا، يساهم في تحسين التحمل وإظهار التشريحات العضلية.', pulse: '140-155', reps: '20-29', color: '#3E7AD6' },
+                { limit: 75,  name: 'حمل متوسط',         percentage: '50% - 75%', desc: 'مستوى مثالي لتطوير التحمل العضلي والقوة، يبدأ الشعور بالتعب بعد الأداء.', pulse: '155-165', reps: '12-19', color: '#7D47AD' },
+                { limit: 90,  name: 'أعلى من المتوسط',   percentage: '75% - 90%', desc: 'مجهود عالٍ يتطلب تركيزًا كبيرًا، فعال جدًا في بناء القوة العضلية والتحمل اللاهوائي.', pulse: '165-180', reps: '6-11', color: '#A076F9' },
+                { limit: 100, name: 'حمل أقصى',          percentage: '90% - 100%', desc: 'أقصى مجهود يمكن للفرد تحمله لفترة قصيرة جدًا، يطور القوة القصوى بشكل مباشر.', pulse: '+180', reps: '1-5', color: '#f976a0' },
+                { limit: 111, name: 'أعلى من الأقصى',    percentage: '100% - 110%',   desc: 'مجهود يفوق القدرة القصوى (باستخدام المساعدة)، يستخدم لكسر ثبات المستوى وتطوير القوة بشكل هائل.', pulse: 'Max', reps: '1-3', color: '#FF4D4D' }
+            ];
+
+            function updateSpectrum(value) {
+                const data = intensityData.find(d => value < d.limit);
+                if (data) {
+                    levelEl.textContent = data.name;
+                    percentageEl.textContent = data.percentage;
+                    descriptionEl.textContent = data.desc;
+                    pulseEl.textContent = data.pulse;
+                    repsEl.textContent = data.reps;
+                    levelEl.style.color = data.color;
+                    document.documentElement.style.setProperty('--thumb-color', data.color);
+                }
+            }
+            slider.addEventListener('input', (e) => updateSpectrum(e.target.value));
+            updateSpectrum(slider.value);
+        });
+    </script>
+</body>
+</html>
