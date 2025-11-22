@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفصل اأول | مدخل للتدريب</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            --primary: #ffa502;
+            --bg-dark: #121212;
+            --text-main: #e0e0e0;
+            --card-bg: #1e1e1e;
+            --accent-blue: #3742fa;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            position: fixed; top: 0; left: 0; width: 100%; height: 5px; background: transparent; z-index: 1001;
+        }
+        .progress-bar { height: 100%; background: var(--primary); width: 0%; transition: 0.2s; }
+
+        /* Navbar */
+        nav {
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(18, 18, 18, 0.95); border-bottom: 1px solid #333;
+            position: sticky; top: 0; z-index: 1000;
+        }
+        .back-btn { text-decoration: none; color: #aaa; font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; }
+        .back-btn:hover { color: var(--primary); }
+
+        /* Hero Section */
+        header {
+            text-align: center; padding: 60px 20px;
+            background: linear-gradient(to bottom, rgba(255, 165, 2, 0.1), transparent);
+        }
+        .chapter-tag { color: var(--primary); font-weight: bold; letter-spacing: 1px; font-size: 0.9rem; }
+        h1 { font-size: 2.5rem; margin: 10px 0; color: white; }
+        .meta { color: #777; font-size: 0.9rem; }
+
+        /* Content Container */
+        .content { max-width: 800px; margin: 0 auto; padding: 0 20px 80px; }
+
+        /* Typography */
+        h2 { color: white; margin-top: 50px; margin-bottom: 20px; font-size: 1.8rem; border-right: 4px solid var(--primary); padding-right: 15px; }
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #ccc; }
+        
+        /* Highlight Box (Definitions) */
+        .highlight-box {
+            background: rgba(255, 165, 2, 0.1);
+            border-right: 4px solid var(--primary);
+            padding: 20px; border-radius: 8px; margin: 30px 0;
+            font-style: italic; color: white;
+        }
+        .highlight-box span { display: block; margin-top: 10px; font-size: 0.9rem; color: var(--primary); font-style: normal; font-weight: bold; }
+
+        /* Timeline (History) */
+        .timeline-item {
+            position: relative; padding-right: 30px; margin-bottom: 25px; border-right: 2px solid #333;
+        }
+        .timeline-item::after {
+            content: ''; position: absolute; right: -6px; top: 5px; width: 10px; height: 10px;
+            background: var(--primary); border-radius: 50%;
+        }
+        .timeline-title { color: white; font-weight: bold; margin-bottom: 5px; }
+
+        /* Objectives Grid */
+        .grid-objectives { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-top: 30px; }
+        .obj-card {
+            background: var(--card-bg); padding: 20px; border-radius: 12px; text-align: center;
+            border: 1px solid #333; transition: 0.3s;
+        }
+        .obj-card:hover { transform: translateY(-5px); border-color: var(--primary); }
+        .obj-icon { font-size: 2rem; color: var(--primary); margin-bottom: 15px; }
+        .obj-title { color: white; font-weight: bold; margin-bottom: 10px; }
+        .obj-desc { font-size: 0.9rem; color: #aaa; margin-bottom: 0; }
+
+        /* Footer navigation */
+        .footer-nav {
+            display: flex; justify-content: space-between; margin-top: 60px; padding-top: 30px; border-top: 1px solid #333;
+        }
+        .nav-link { text-decoration: none; color: #fff; background: #333; padding: 10px 20px; border-radius: 8px; transition: 0.3s; font-size: 0.9rem; }
+        .nav-link:hover { background: var(--primary); color: #000; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Progress Bar -->
+    <div class="progress-container"><div class="progress-bar" id="myBar"></div></div>
+
+    <!-- Nav -->
+    <nav>
+        <div style="font-weight:900; color:white;">مبادئ التدريب</div>
+        <a href="index.html" class="back-btn">الرجوع للمقرر <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <span class="chapter-tag">الفصل اأول</span>
+        <h1>مدخل إلى التدريب الرياضي</h1>
+        <div class="meta"><i class="fa-regular fa-clock"></i> مدة القراءة: 10 دقائق • د/ أحمد صالح قراعة</div>
+    </header>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <p class="intro">
+            يعتبر علم التدريب الرياضي أحد العلوم المتطورة الحديثة التي ترتبط ارتباطاً وثيقاً بالعديد من العلوم اأخرى مثل الفسيولوجيا، التشريح، وعلم النفس. في هذا الفصل سنتناول التطور التاريخي ومفاهيم التدريب اأساسية.
+        </p>
+
+        <!-- 1. نبذة تاريخية -->
+        <h2>1. التطور التاريخي للتدريب</h2>
+        <p>لم يكن التدريب وليد اللحظة، بل تطور عبر العصور:</p>
+        
+        <div class="timeline-item">
+            <div class="timeline-title">اإنسان البدائي</div>
+            <p style="font-size:0.95rem; margin-bottom:0">كان التدريب وسيلة للبقاء (الصيد، القنص، الهروب من الوحوش). لم يكن هناك وقت مخصص للرياضة بل كانت جزءاً من الحياة اليومية.</p>
+        </div>
+        
+        <div class="timeline-item">
+            <div class="timeline-title">الحضارات القديمة (الفراعنة واإغريق)</div>
+            <p style="font-size:0.95rem; margin-bottom:0">ظهرت األعاب اأوليمبية القديمة، وبدأ ااهتمام بإعداد المحاربين واأبطال للمهرجانات وااحتفاالت.</p>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-title">العصور الوسطى</div>
+            <p style="font-size:0.95rem; margin-bottom:0">تراجع ااهتمام بالبدن في أوروبا بسبب المعتقدات الدينية التي رأت في تقوية الجسد "إيذاءً للروح"، بينما ازدهرت الفروسية والمبارزة عند العرب.</p>
+        </div>
+
+        <div class="timeline-item">
+            <div class="timeline-title" style="color:var(--primary)">العصر الحديث (نقطة التحول)</div>
+            <p style="font-size:0.95rem; margin-bottom:0">بعد دورة هلسنكي 1952، بدأ الصراع العلمي بين الشرق والغرب (أمريكا vs روسيا وألمانيا الشرقية)، مما أدى لظهور "علم التدريب" القائم على الفسيولوجيا والقياسات.</p>
+        </div>
+
+        <!-- 2. مفهوم التدريب -->
+        <h2>2. ما هو التدريب الرياضي؟</h2>
+        <p>تعددت التعريفات، ولكنها اتفقت على أنه عملية منظمة. إليك أهم التعريفات التي وردت بالكتاب:</p>
+
+        <div class="highlight-box">
+            "عملية تربوية مقننة شاملة ومترابطة طويلة المدى، تخضع لألسس والمبادئ العلمية إلحداث تكيف وظيفي، بهدف الوصول إلى أعلى مستوى رياضي."
+            <span>— التعريف الشامل (المؤلف)</span>
+        </div>
+
+        <div class="highlight-box" style="border-color: var(--accent-blue); background: rgba(55, 66, 250, 0.1);">
+            "إعداد الرياضيين للوصول إلى المستوى العالي فاعلى."
+            <span>— هارا (Harra)</span>
+        </div>
+
+        <!-- 3. أهداف التدريب -->
+        <h2>3. أهداف التدريب الرياضي</h2>
+        <p>ال يهدف التدريب فقط للفوز بالمباريات، بل هو عملية بناء متكاملة:</p>
+
+        <div class="grid-objectives">
+            <div class="obj-card">
+                <i class="fa-solid fa-dumbbell obj-icon"></i>
+                <div class="obj-title">اللياقة البدنية</div>
+                <p class="obj-desc">تنمية القوة، السرعة، والتحمل العام والخاص.</p>
+            </div>
+            <div class="obj-card">
+                <i class="fa-solid fa-brain obj-icon"></i>
+                <div class="obj-title">اإعداد الخططي</div>
+                <p class="obj-desc">تطوير التفكير وحل المشكالت أثناء اللعب.</p>
+            </div>
+            <div class="obj-card">
+                <i class="fa-solid fa-heart-pulse obj-icon"></i>
+                <div class="obj-title">الصحة والوقاية</div>
+                <p class="obj-desc">رفع كفاءة اأجهزة الحيوية والوقاية من اإصابات.</p>
+            </div>
+            <div class="obj-card">
+                <i class="fa-solid fa-user-shield obj-icon"></i>
+                <div class="obj-title">السمات اإرادية</div>
+                <p class="obj-desc">غرس الثقة بالنفس، المثابرة، وإنكار الذات.</p>
+            </div>
+        </div>
+
+        <!-- 4. الخصائص -->
+        <h2>4. خصائص التدريب الحديث</h2>
+        <p>يتميز التدريب الرياضي الحديث بعدة خصائص تميزه عن الممارسة العشوائية:</p>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 15px; background: #1e1e1e; padding: 15px; border-radius: 8px; border-right: 3px solid #2ed573;">
+                <strong>🎯 ااستمرارية:</strong> التدريب عملية ال تتوقف طوال العام ولعدة سنوات.
+            </li>
+            <li style="margin-bottom: 15px; background: #1e1e1e; padding: 15px; border-radius: 8px; border-right: 3px solid #2ed573;">
+                <strong>🧬 الفردية:</strong> مراعاة الفروق الفردية بين الالعبين (حتى داخل الفريق الواحد).
+            </li>
+            <li style="margin-bottom: 15px; background: #1e1e1e; padding: 15px; border-radius: 8px; border-right: 3px solid #2ed573;">
+                <strong>🔬 العلمية:</strong> ااعتماد على علوم (فسيولوجيا، ميكانيكا، تغذية) وليس العشوائية.
+            </li>
+            <li style="margin-bottom: 15px; background: #1e1e1e; padding: 15px; border-radius: 8px; border-right: 3px solid #2ed573;">
+                <strong>🔄 القيادة:</strong> المدرب هو القائد الذي يوجه العملية والالعب ينفذ بوعي.
+            </li>
+        </ul>
+
+        <!-- Footer Nav -->
+        <div class="footer-nav">
+            <a href="#" class="nav-link" style="opacity: 0.5; cursor: not-allowed;">السابق</a>
+            <a href="Summaries/2-Training-Load.md" class="nav-link">التالي: حمل التدريب <i class="fa-solid fa-arrow-left"></i></a>
+        </div>
+
+    </div>
+
+    <script>
+        // شريط التقدم عند السكرول
+        window.onscroll = function() {myFunction()};
+        function myFunction() {
+            var winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            var height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            var scrolled = (winScroll / height) * 100;
+            document.getElementById("myBar").style.width = scrolled + "%";
+        }
+    </script>
+
+</body>
+</html>
