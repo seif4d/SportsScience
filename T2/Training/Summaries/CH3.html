@@ -1,0 +1,405 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفصل الثالث: تقنين حمل التدريب</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-color: #0A0A14;
+            --primary-accent: #00C2FF;
+            --secondary-accent: #8A3FFC;
+            --success-color: #42BE65;
+            --warning-color: #FFC700;
+            --danger-color: #FA4D56;
+            --text-color: #F4F4F4;
+            --text-muted: #A8A8A8;
+            --card-bg: rgba(22, 22, 38, 0.6);
+            --card-border: rgba(0, 194, 255, 0.2);
+            --font-main: 'Tajawal', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: var(--font-main);
+            line-height: 1.8;
+            overflow-x: hidden;
+            background-image: radial-gradient(circle at top left, rgba(0, 194, 255, 0.1) 0px, transparent 40%),
+                              radial-gradient(circle at bottom right, rgba(138, 63, 252, 0.1) 0px, transparent 40%);
+        }
+        
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(var(--primary-accent), var(--secondary-accent)); border-radius: 10px; }
+
+        .container { width: 90%; max-width: 1200px; margin: auto; padding: 120px 0; }
+        h1, h2, h3 { font-weight: 700; }
+        h1 { font-size: clamp(2.8rem, 6vw, 4.2rem); font-weight: 900; line-height: 1.2; text-align: center; }
+        h1 .highlight { color: var(--primary-accent); }
+        h2 { font-size: clamp(2rem, 5vw, 2.8rem); margin-bottom: 20px; text-align: center; }
+        .section-subtitle { text-align: center; color: var(--text-muted); max-width: 800px; margin: 0 auto 60px; font-size: 1.1rem; }
+
+        .reveal { opacity: 0; transform: translateY(40px); transition: opacity 0.8s, transform 0.8s; transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
+        .reveal.visible { opacity: 1; transform: translateY(0); }
+
+        .glass-card {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 16px;
+            padding: 30px;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        
+        /* -- محاكي أساليب التقنين -- */
+        .methods-simulator { padding: 30px; }
+        .methods-tabs { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px; }
+        .tab-btn {
+            background: transparent;
+            color: var(--text-muted);
+            border: 1px solid var(--card-border);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-family: var(--font-main);
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        .tab-btn:hover { background: var(--card-bg); color: var(--text-color); }
+        .tab-btn.active { background: var(--primary-accent); color: var(--bg-color); border-color: var(--primary-accent); }
+        
+        .method-content { display: none; }
+        .method-content.active { display: block; }
+        .method-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .variable-status { padding: 20px; border-radius: 10px; }
+        .variable-status i { font-size: 2rem; margin-bottom: 10px; }
+        .variable-status.fixed { background: rgba(168, 168, 168, 0.1); border: 1px solid rgba(168, 168, 168, 0.2); }
+        .variable-status.changing { background: rgba(0, 194, 255, 0.1); border: 1px solid var(--card-border); animation: pulse 2s infinite; }
+        .example-box { background: var(--bg-color); border-radius: 10px; padding: 20px; }
+        .example-box code { display: block; background: #0A0A14; padding: 15px; border-radius: 8px; font-size: 1rem; direction: ltr; text-align: left; white-space: pre-wrap; color: #F4F4F4; }
+
+        /* -- مخطط التعويض الزائد -- */
+        .supercompensation-container { text-align: center; }
+        #supercompensation-svg { width: 100%; max-width: 800px; margin: 30px auto; }
+        #bio-rhythm-path {
+            stroke-width: 4;
+            fill: none;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+            transition: d 0.8s cubic-bezier(0.6, 0, 0.4, 1);
+        }
+        .controls { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+        .control-btn { border: none; padding: 12px 25px; border-radius: 8px; font-weight: 700; cursor: pointer; transition: transform 0.2s; font-family: var(--font-main); }
+        .control-btn:hover { transform: scale(1.05); }
+        .btn-optimal { background: var(--success-color); color: white; }
+        .btn-warning { background: var(--warning-color); color: var(--bg-color); }
+        .btn-danger { background: var(--danger-color); color: white; }
+        
+        /* -- قسم المبادئ الأساسية -- */
+        .principles-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 25px;
+        }
+        .principle-card {
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+            padding: 25px;
+        }
+        .principle-card .icon { font-size: 2rem; color: var(--primary-accent); }
+        .principle-card h3 { font-size: 1.2rem; margin-bottom: 5px; color: var(--text-color); }
+        .principle-card p { font-size: 0.9rem; color: var(--text-muted); line-height: 1.6; }
+
+        footer { text-align: center; padding: 50px 20px; margin-top: 80px; color: var(--text-muted); font-size: 0.9rem; }
+        .credits { margin-top: 15px; font-weight: 700; color: var(--secondary-accent); letter-spacing: 1px; }
+
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(0, 194, 255, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 194, 255, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 194, 255, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header class="container">
+        <h1 class="reveal">تقنين حمل التدريب <br><span class="highlight">فن التحكم في الأداء</span></h1>
+        <p class="section-subtitle reveal">يمثل التحكم الدقيق في مكونات الحمل (الشدة، الحجم، الراحة) الأساس لتمكين المدرب من تشكيل استجابات الجسم وتحقيق التكيف المطلوب للوصول إلى أعلى المستويات.</p>
+    </header>
+
+    <main>
+        <section id="methods" class="container">
+            <h2 class="reveal">محاكي أساليب التقنين</h2>
+            <p class="section-subtitle reveal">استكشف الأساليب السبعة الأساسية التي يستخدمها المدرب للتحكم في درجات الحمل التدريبي. اختر أسلوبًا لرؤية كيفية عمله مع مثال عملي مباشر من المذكرة.</p>
+            
+            <div class="glass-card methods-simulator reveal">
+                <div class="methods-tabs" id="methods-tabs">
+                    <button class="tab-btn active" data-method="1">تغيير الشدة</button>
+                    <button class="tab-btn" data-method="2">تغيير الحجم</button>
+                    <button class="tab-btn" data-method="3">تغيير الراحة</button>
+                    <button class="tab-btn" data-method="4">تغيير الشدة والحجم</button>
+                    <button class="tab-btn" data-method="5">تغيير الشدة والراحة</button>
+                    <button class="tab-btn" data-method="6">تغيير الحجم والراحة</button>
+                    <button class="tab-btn" data-method="7">تغيير الكل</button>
+                </div>
+
+                <div id="method-1" class="method-content active">
+                    <div class="method-display">
+                        <div class="variable-status changing"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: متغيرة</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-layer-group"></i><strong>الحجم: ثابت</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: ثابتة</strong></div>
+                    </div>
+                    <div class="example-box">
+                        <h4>مثال: تغيير مقدار الثقل (ص 103)</h4>
+                        <p>زيادة أو خفض مقدار الثقل المستخدم في تمرين القوة مع تثبيت عدد التكرارات وفترات الراحة.</p>
+                        <code>Set 1: 50kg x 10 reps, 60s rest
+Set 2: 55kg x 10 reps, 60s rest
+Set 3: 60kg x 10 reps, 60s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-2" class="method-content">
+                    <div class="method-display">
+                        <div class="variable-status fixed"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: ثابتة</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-layer-group"></i><strong>الحجم: متغير</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: ثابتة</strong></div>
+                    </div>
+                    <div class="example-box">
+                        <h4>مثال: تغيير عدد التكرارات (ص 105)</h4>
+                        <p>زيادة أو خفض عدد مرات تكرار التمرين مع الحفاظ على نفس الشدة (الوزن أو السرعة) وفترة الراحة.</p>
+                        <code>Set 1: 50kg x 8 reps, 60s rest
+Set 2: 50kg x 10 reps, 60s rest
+Set 3: 50kg x 12 reps, 60s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-3" class="method-content">
+                    <div class="method-display">
+                        <div class="variable-status fixed"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: ثابتة</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-layer-group"></i><strong>الحجم: ثابت</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: متغيرة</strong></div>
+                    </div>
+                     <div class="example-box">
+                        <h4>مثال: تغيير فترة الراحة (ص 107)</h4>
+                        <p>زيادة أو خفض فترة الراحة البينية بين المجموعات مع تثبيت الشدة والحجم.</p>
+                        <code>Set 1: 50kg x 10 reps, 40s rest
+Set 2: 50kg x 10 reps, 60s rest
+Set 3: 50kg x 10 reps, 90s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-4" class="method-content">
+                    <div class="method-display">
+                        <div class="variable-status changing"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: متغيرة</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-layer-group"></i><strong>الحجم: متغير</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: ثابتة</strong></div>
+                    </div>
+                     <div class="example-box">
+                        <h4>مثال: تقليل الشدة وزيادة الحجم (ص 108)</h4>
+                        <p>تغيير الشدة والحجم بشكل عكسي للحفاظ على مستوى جهد متقارب مع استهداف أنظمة طاقة مختلفة.</p>
+                        <code>Set 1: 50kg x 10 reps, 60s rest
+Set 2: 45kg x 12 reps, 60s rest
+Set 3: 40kg x 13 reps, 60s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-5" class="method-content">
+                     <div class="method-display">
+                        <div class="variable-status changing"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: متغيرة</strong></div>
+                        <div class="variable-status fixed"><i class="fa-solid fa-layer-group"></i><strong>الحجم: ثابت</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: متغيرة</strong></div>
+                    </div>
+                     <div class="example-box">
+                        <h4>مثال: زيادة الشدة والراحة معًا (ص 109)</h4>
+                        <p>عند زيادة الشدة، يتم زيادة فترة الراحة للسماح بالاستشفاء الكافي للحفاظ على جودة الأداء.</p>
+                        <code>Set 1: 30kg x 10 reps, 45s rest
+Set 2: 35kg x 10 reps, 60s rest
+Set 3: 40kg x 10 reps, 90s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-6" class="method-content">
+                    <div class="method-display">
+                        <div class="variable-status fixed"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: ثابتة</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-layer-group"></i><strong>الحجم: متغير</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: متغيرة</strong></div>
+                    </div>
+                     <div class="example-box">
+                        <h4>مثال: تقليل الحجم وزيادة الراحة (ص 110)</h4>
+                        <p>مع اقتراب المنافسات، قد يقل الحجم وتزداد الراحة للحفاظ على الشدة العالية مع تقليل الإجهاد التراكمي.</p>
+                        <code>Week 1: 40kg x 25 reps, 45s rest
+Week 2: 40kg x 20 reps, 60s rest
+Week 3: 40kg x 15 reps, 90s rest</code>
+                    </div>
+                </div>
+
+                <div id="method-7" class="method-content">
+                    <div class="method-display">
+                        <div class="variable-status changing"><i class="fa-solid fa-gauge-high"></i><strong>الشدة: متغيرة</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-layer-group"></i><strong>الحجم: متغير</strong></div>
+                        <div class="variable-status changing"><i class="fa-solid fa-clock-rotate-left"></i><strong>الراحة: متغيرة</strong></div>
+                    </div>
+                     <div class="example-box">
+                        <h4>مثال: التغيير الشامل (ص 111)</h4>
+                        <p>أسلوب متقدم يتم فيه تغيير جميع المكونات لتحقيق هدف تدريبي معقد أو محاكاة ظروف المنافسة.</p>
+                        <code>Set 1: 30kg x 25 reps, 90s rest
+Set 2: 40kg x 20 reps, 105s rest
+Set 3: 50kg x 15 reps, 60s rest</code>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="supercompensation" class="container">
+            <h2 class="reveal">مخطط التكيف الحيوي (التعويض الزائد)</h2>
+            <p class="section-subtitle reveal">التكيف لا يحدث أثناء التدريب، بل في فترة الراحة التي تليه. هذا المخطط يوضح كيف تؤدي العلاقة بين الحمل والراحة إلى التقدم أو التراجع.</p>
+            <div class="supercompensation-container glass-card reveal">
+                <svg id="supercompensation-svg" viewBox="0 0 800 200" preserveAspectRatio="xMidYMid meet">
+                    <path id="bio-rhythm-path" d="M 0 100 L 100 100 Q 150 180, 200 100 T 400 100 L 400 100 Q 450 180, 500 100 T 700 100 L 800 100" stroke="url(#line-gradient)"/>
+                    <defs>
+                        <linearGradient id="line-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                            <stop offset="0%" style="stop-color:var(--secondary-accent);" />
+                            <stop offset="100%" style="stop-color:var(--primary-accent);" />
+                        </linearGradient>
+                    </defs>
+                </svg>
+                <div class="controls">
+                    <button id="btn-optimal" class="control-btn btn-optimal">سيناريو التدريب الأمثل</button>
+                    <button id="btn-warning" class="control-btn btn-warning">سيناريو الراحة المفرطة</button>
+                    <button id="btn-danger" class="control-btn btn-danger">سيناريو التدريب الزائد</button>
+                </div>
+            </div>
+        </section>
+
+        <section id="principles" class="container">
+            <h2 class="reveal">المبادئ الأساسية لحمل التدريب</h2>
+            <p class="section-subtitle reveal">مجموعة القواعد الذهبية التي توجه المدرب في تصميم وتنفيذ البرامج التدريبية لضمان الفعالية والأمان وتجنب الأخطاء الشائعة.</p>
+            <div class="principles-grid">
+                <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-arrow-trend-up"></i></div>
+                    <div><h3>1. مبدأ التدرج بالحمل</h3><p>الارتفاع التدريجي والمخطط له في الحمل لضمان استمرار عملية التكيف.</p></div>
+                </div>
+                <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-repeat"></i></div>
+                    <div><h3>2. مبدأ الاستمرارية</h3><p>التدريب المنتظم دون انقطاع طويل للحفاظ على المكتسبات وتجنب التراجع.</p></div>
+                </div>
+                <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-shuffle"></i></div>
+                    <div><h3>3. مبدأ التغيير في الحمل</h3><p>تجنب الثبات في الحمل واستخدام أساليب متنوعة لتحفيز الجسم باستمرار.</p></div>
+                </div>
+                <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-calendar-days"></i></div>
+                    <div><h3>4. مبدأ التحميل الفتري</h3><p>تطبيق الحمل المؤثر على فترات للسماح بالتكيف قبل تطبيق حمل جديد.</p></div>
+                </div>
+                 <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-person-running"></i></div>
+                    <div><h3>5. مبدأ الفردية</h3><p>تصميم برامج تتناسب مع القدرات والخصائص الفردية لكل رياضي.</p></div>
+                </div>
+                 <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-wave-square"></i></div>
+                    <div><h3>6. مبدأ التموج في التحميل</h3><p>التناوب بين الأحمال المرتفعة والمنخفضة على مدار الأسبوع لتسهيل الاستشفاء.</p></div>
+                </div>
+                 <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-dumbbell"></i></div>
+                    <div><h3>7. مبدأ التحميل الزائد (Overload)</h3><p>تطبيق حمل يفوق ما اعتاد عليه الجسم لتحفيز التكيف، ولكن بشكل مقنن.</p></div>
+                </div>
+                 <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-battery-full"></i></div>
+                    <div><h3>8. مبدأ الراحة</h3><p>الراحة جزء لا يتجزأ من التدريب، وهي ضرورية لعمليات التكيف والاستشفاء.</p></div>
+                </div>
+                 <div class="principle-card glass-card reveal">
+                    <div class="icon"><i class="fa-solid fa-hand-holding-heart"></i></div>
+                    <div><h3>9. مبدأ الإحماء والتهدئة</h3><p>إعداد الجسم للحمل (Warm-up) وإعادته لحالة الراحة (Cool-down) لتقليل خطر الإصابة.</p></div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+    
+    <footer>
+        <p>تم تصميم هذه الصفحة كمرجع علمي وتفاعلي لطلاب كلية علوم الرياضة بجامعة أسيوط، بناءً على مذكرة "مبادئ وأسس التدريب الرياضي" للدكتور أحمد صلاح قراعة.</p>
+        <p class="credits">Seif X DebiaN</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // -- 1. تأثير الظهور عند التمرير --
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) entry.target.classList.add('visible');
+                });
+            }, { threshold: 0.1 });
+            document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
+
+            // -- 2. منطق محاكي أساليب التقنين --
+            const tabsContainer = document.getElementById('methods-tabs');
+            const tabButtons = tabsContainer.querySelectorAll('.tab-btn');
+            const methodContents = document.querySelectorAll('.method-content');
+
+            tabsContainer.addEventListener('click', (e) => {
+                const clicked = e.target.closest('.tab-btn');
+                if (!clicked) return;
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                clicked.classList.add('active');
+                
+                const methodToShow = document.getElementById(`method-${clicked.dataset.method}`);
+                methodContents.forEach(content => content.classList.remove('active'));
+                methodToShow.classList.add('active');
+            });
+
+            // -- 3. منطق مخطط التعويض الزائد --
+            const path = document.getElementById('bio-rhythm-path');
+            const btnOptimal = document.getElementById('btn-optimal');
+            const btnWarning = document.getElementById('btn-warning');
+            const btnDanger = document.getElementById('btn-danger');
+
+            const paths = {
+                optimal: "M 0 100 L 100 100 Q 150 180, 200 100 T 300 80 Q 350 160, 400 80 T 500 60 Q 550 140, 600 60 L 800 60",
+                warning: "M 0 100 L 100 100 Q 150 180, 200 100 T 400 100 L 450 100 Q 500 180, 550 100 T 750 100 L 800 100",
+                danger:  "M 0 100 L 100 100 Q 150 180, 200 100 T 250 120 Q 300 200, 350 120 T 400 140 Q 450 220, 500 140 L 800 140"
+            };
+
+            const pathColors = {
+                optimal: "var(--success-color)",
+                warning: "var(--warning-color)",
+                danger: "var(--danger-color)"
+            };
+
+            function animatePath(scenario) {
+                path.setAttribute('d', paths[scenario]);
+                path.style.stroke = pathColors[scenario];
+            }
+
+            btnOptimal.addEventListener('click', () => animatePath('optimal'));
+            btnWarning.addEventListener('click', () => animatePath('warning'));
+            btnDanger.addEventListener('click', () => animatePath('danger'));
+
+            // Set initial state
+            animatePath('optimal');
+        });
+    </script>
+</body>
+</html>
