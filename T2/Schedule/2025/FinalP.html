@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>جدول العملي | الفرقة الثانية</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/calendar.png">
+
+    <style>
+        /* --- إعدادات الألوان --- */
+        :root {
+            --primary: #ff4757;       /* اللون الأساسي (أحمر) */
+            --bg-dark: #121212;       /* الخلفية */
+            --card-bg: #1e1e1e;       /* لون الكروت */
+            --text-main: #ffffff;
+            --text-gray: #a0a0a0;
+            
+            /* ألوان المواد */
+            --color-basket: #ff9f43;
+            --color-defense: #ff6b81;
+            --color-weights: #2ed573;
+            --color-gym: #54a0ff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+        
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding-bottom: 60px;
+            overflow-x: hidden;
+        }
+
+        /* --- الناف بار --- */
+        nav {
+            padding: 15px 20px;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(30, 30, 30, 0.8);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .logo { font-weight: 900; font-size: 1.1rem; color: white; text-decoration: none; display: flex; align-items: center; gap: 8px;}
+        .back-btn { text-decoration: none; color: var(--text-gray); font-weight: 700; font-size: 0.9rem; transition: 0.3s;}
+        .back-btn:hover { color: var(--primary); }
+
+        /* --- الهيدر --- */
+        header { text-align: center; padding: 40px 20px 30px; }
+        
+        .exam-info {
+            background: rgba(255, 71, 87, 0.1); color: var(--primary);
+            padding: 8px 20px; border-radius: 50px; font-size: 0.9rem; font-weight: 700;
+            border: 1px solid rgba(255, 71, 87, 0.3); display: inline-block; margin-bottom: 15px;
+        }
+        
+        h1 { font-size: 2.2rem; margin-bottom: 10px; line-height: 1.3; }
+        p.sub { color: var(--text-gray); font-size: 1rem; }
+
+        /* --- فلاتر المجموعات --- */
+        .filter-scroll {
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 10px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+            -webkit-overflow-scrolling: touch; /* For smooth scrolling on iOS */
+        }
+        
+        .filter-container {
+            display: inline-flex; gap: 10px;
+        }
+
+        .filter-btn {
+            background: var(--card-bg);
+            border: 1px solid rgba(255,255,255,0.1);
+            color: var(--text-gray);
+            padding: 12px 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            display: flex; flex-direction: column; align-items: center; justify-content: center;
+            min-width: 140px;
+        }
+
+        .filter-btn span { font-size: 0.75rem; font-weight: 400; opacity: 0.7; margin-top: 3px; }
+
+        .filter-btn:hover { background: #333; }
+        
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+            box-shadow: 0 5px 15px rgba(255, 71, 87, 0.4);
+            transform: translateY(-2px);
+        }
+        .filter-btn.active span { color: rgba(255,255,255,0.9); }
+
+        /* --- كروت الجدول (Timeline) --- */
+        .schedule-view { max-width: 600px; margin: 0 auto; padding: 0 20px; min-height: 400px; }
+        
+        .group-timeline { display: none; animation: fadeInUp 0.5s cubic-bezier(0.165, 0.84, 0.44, 1); }
+        .group-timeline.active { display: block; }
+
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        .timeline-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative;
+            overflow: hidden;
+            border-right: 6px solid #555; /* Default border */
+            box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        /* Subject Styles */
+        .type-basket { border-color: var(--color-basket); }
+        .type-basket .icon-bg { color: var(--color-basket); }
+        
+        .type-defense { border-color: var(--color-defense); }
+        .type-defense .icon-bg { color: var(--color-defense); }
+        
+        .type-weights { border-color: var(--color-weights); }
+        .type-weights .icon-bg { color: var(--color-weights); }
+        
+        .type-gym { border-color: var(--color-gym); }
+        .type-gym .icon-bg { color: var(--color-gym); }
+
+        /* Card Content */
+        .time-col { text-align: right; z-index: 2; }
+        .time-label { font-size: 0.8rem; color: var(--text-gray); display: block; margin-bottom: 2px; }
+        .time-value { font-size: 1.2rem; font-weight: 900; color: white; letter-spacing: 1px; font-family: sans-serif; }
+
+        .subject-col { display: flex; align-items: center; gap: 15px; z-index: 2; }
+        .subject-name { font-size: 1.3rem; font-weight: 700; color: white; }
+        
+        .icon-bg {
+            position: absolute; left: -10px; bottom: -15px;
+            font-size: 5rem; opacity: 0.1; transform: rotate(15deg);
+            z-index: 1;
+        }
+
+        /* --- التعليمات --- */
+        .instructions {
+            max-width: 600px; margin: 40px auto 0; padding: 0 20px;
+            border-top: 1px solid rgba(255,255,255,0.1); padding-top: 30px;
+        }
+        .note-item {
+            background: rgba(255,255,255,0.03);
+            padding: 15px; border-radius: 12px;
+            margin-bottom: 10px; display: flex; align-items: center; gap: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        .note-icon {
+            width: 40px; height: 40px; background: rgba(255, 71, 87, 0.1);
+            color: var(--primary); border-radius: 50%;
+            display: flex; justify-content: center; align-items: center; font-size: 1.1rem;
+        }
+        .note-text { font-size: 0.9rem; color: #ccc; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo"><i class="fa-solid fa-calendar-days"></i> جدول العملي</a>
+        <a href="../index.html" class="back-btn">الفرقة الثانية <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <header>
+        <div class="exam-info"><i class="fa-regular fa-clock"></i> الثلاثاء 16 / 12 / 2025</div>
+        <h1>اختر مجموعتك<br>لعرض الجدول</h1>
+        <p class="sub">امتحانات الفصل الدراسي الأول (بنين) - دور يناير</p>
+    </header>
+
+    <!-- أزرار المجموعات -->
+    <div class="filter-scroll">
+        <div class="filter-container">
+            <button class="filter-btn active" onclick="showGroup(event, 'g1')">
+                المجموعات (1 - 4) <span>الفترة الصباحية</span>
+            </button>
+            <button class="filter-btn" onclick="showGroup(event, 'g2')">
+                المجموعات (5 - 8) <span>الفترة الصباحية</span>
+            </button>
+            <button class="filter-btn" onclick="showGroup(event, 'g3')">
+                المجموعات (9 - 12) <span>الفترة المسائية</span>
+            </button>
+            <button class="filter-btn" onclick="showGroup(event, 'g4')">
+                المجموعات (13 - 16) <span>الفترة المسائية</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="schedule-view">
+
+        <!-- ============ جدول المجموعات 1 - 4 ============ -->
+        <div id="g1" class="group-timeline active">
+            <div class="timeline-card type-basket">
+                <div class="time-col"><span class="time-label">8:00 - 10:00</span><span class="time-value">الفترة 1</span></div>
+                <div class="subject-col"><span class="subject-name">كرة سلة</span></div>
+                <i class="fa-solid fa-basketball icon-bg"></i>
+            </div>
+            <div class="timeline-card type-defense">
+                <div class="time-col"><span class="time-label">10:00 - 12:00</span><span class="time-value">الفترة 2</span></div>
+                <div class="subject-col"><span class="subject-name">دفاع عن النفس</span></div>
+                <i class="fa-solid fa-hand-fist icon-bg"></i>
+            </div>
+            <div class="timeline-card type-weights">
+                <div class="time-col"><span class="time-label">12:00 - 2:00</span><span class="time-value">الفترة 3</span></div>
+                <div class="subject-col"><span class="subject-name">رفع أثقال</span></div>
+                <i class="fa-solid fa-dumbbell icon-bg"></i>
+            </div>
+            <div class="timeline-card type-gym">
+                <div class="time-col"><span class="time-label">2:00 - 4:00</span><span class="time-value">الفترة 4</span></div>
+                <div class="subject-col"><span class="subject-name">جمباز</span></div>
+                <i class="fa-solid fa-person-running icon-bg"></i>
+            </div>
+        </div>
+
+        <!-- ============ جدول المجموعات 5 - 8 ============ -->
+        <div id="g2" class="group-timeline">
+            <div class="timeline-card type-defense">
+                <div class="time-col"><span class="time-label">8:00 - 10:00</span><span class="time-value">الفترة 1</span></div>
+                <div class="subject-col"><span class="subject-name">دفاع عن النفس</span></div>
+                <i class="fa-solid fa-hand-fist icon-bg"></i>
+            </div>
+            <div class="timeline-card type-basket">
+                <div class="time-col"><span class="time-label">10:00 - 12:00</span><span class="time-value">الفترة 2</span></div>
+                <div class="subject-col"><span class="subject-name">كرة سلة</span></div>
+                <i class="fa-solid fa-basketball icon-bg"></i>
+            </div>
+            <div class="timeline-card type-gym">
+                <div class="time-col"><span class="time-label">12:00 - 2:00</span><span class="time-value">الفترة 3</span></div>
+                <div class="subject-col"><span class="subject-name">جمباز</span></div>
+                <i class="fa-solid fa-person-running icon-bg"></i>
+            </div>
+            <div class="timeline-card type-weights">
+                <div class="time-col"><span class="time-label">2:00 - 4:00</span><span class="time-value">الفترة 4</span></div>
+                <div class="subject-col"><span class="subject-name">رفع أثقال</span></div>
+                <i class="fa-solid fa-dumbbell icon-bg"></i>
+            </div>
+        </div>
+
+        <!-- ============ جدول المجموعات 9 - 12 ============ -->
+        <div id="g3" class="group-timeline">
+            <div class="timeline-card type-weights">
+                <div class="time-col"><span class="time-label">8:00 - 10:00</span><span class="time-value">الفترة 1</span></div>
+                <div class="subject-col"><span class="subject-name">رفع أثقال</span></div>
+                <i class="fa-solid fa-dumbbell icon-bg"></i>
+            </div>
+            <div class="timeline-card type-gym">
+                <div class="time-col"><span class="time-label">10:00 - 12:00</span><span class="time-value">الفترة 2</span></div>
+                <div class="subject-col"><span class="subject-name">جمباز</span></div>
+                <i class="fa-solid fa-person-running icon-bg"></i>
+            </div>
+            <div class="timeline-card type-basket">
+                <div class="time-col"><span class="time-label">12:00 - 2:00</span><span class="time-value">الفترة 3</span></div>
+                <div class="subject-col"><span class="subject-name">كرة سلة</span></div>
+                <i class="fa-solid fa-basketball icon-bg"></i>
+            </div>
+            <div class="timeline-card type-defense">
+                <div class="time-col"><span class="time-label">2:00 - 4:00</span><span class="time-value">الفترة 4</span></div>
+                <div class="subject-col"><span class="subject-name">دفاع عن النفس</span></div>
+                <i class="fa-solid fa-hand-fist icon-bg"></i>
+            </div>
+        </div>
+
+        <!-- ============ جدول المجموعات 13 - 16 ============ -->
+        <div id="g4" class="group-timeline">
+            <div class="timeline-card type-gym">
+                <div class="time-col"><span class="time-label">8:00 - 10:00</span><span class="time-value">الفترة 1</span></div>
+                <div class="subject-col"><span class="subject-name">جمباز</span></div>
+                <i class="fa-solid fa-person-running icon-bg"></i>
+            </div>
+            <div class="timeline-card type-weights">
+                <div class="time-col"><span class="time-label">10:00 - 12:00</span><span class="time-value">الفترة 2</span></div>
+                <div class="subject-col"><span class="subject-name">رفع أثقال</span></div>
+                <i class="fa-solid fa-dumbbell icon-bg"></i>
+            </div>
+            <div class="timeline-card type-defense">
+                <div class="time-col"><span class="time-label">12:00 - 2:00</span><span class="time-value">الفترة 3</span></div>
+                <div class="subject-col"><span class="subject-name">دفاع عن النفس</span></div>
+                <i class="fa-solid fa-hand-fist icon-bg"></i>
+            </div>
+            <div class="timeline-card type-basket">
+                <div class="time-col"><span class="time-label">2:00 - 4:00</span><span class="time-value">الفترة 4</span></div>
+                <div class="subject-col"><span class="subject-name">كرة سلة</span></div>
+                <i class="fa-solid fa-basketball icon-bg"></i>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- تعليمات هامة -->
+    <div class="instructions">
+        <div class="note-item">
+            <div class="note-icon"><i class="fa-solid fa-id-card"></i></div>
+            <div class="note-text">لن يسمح بدخول الامتحان إلا بالكارنية الجامعي (2025-2026).</div>
+        </div>
+        <div class="note-item">
+            <div class="note-icon"><i class="fa-solid fa-clock"></i></div>
+            <div class="note-text">يجب الحضور إلى مقر اللجان قبل الموعد بـ 30 دقيقة.</div>
+        </div>
+        <div class="note-item">
+            <div class="note-icon"><i class="fa-solid fa-shirt"></i></div>
+            <div class="note-text">ضرورة الالتزام التام بالزي الرياضي المناسب.</div>
+        </div>
+        <div class="note-item">
+            <div class="note-icon"><i class="fa-solid fa-location-dot"></i></div>
+            <div class="note-text">المكان: الملاعب الجديدة بالكلية.</div>
+        </div>
+    </div>
+
+    <script>
+        function showGroup(evt, groupId) {
+            // 1. إخفاء جميع الجداول
+            document.querySelectorAll('.group-timeline').forEach(el => {
+                el.classList.remove('active');
+            });
+
+            // 2. إزالة التحديد من جميع الأزرار
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // 3. إظهار الجدول المطلوب وتفعيل الزر
+            document.getElementById(groupId).classList.add('active');
+            evt.currentTarget.classList.add('active');
+        }
+    </script>
+
+</body>
+</html>
