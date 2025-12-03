@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الفصل الأول: ماهية الفسيولوجيا</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- نفس ثيم المادة (أزرق علمي) --- */
+        :root {
+            --primary: #00e1ff;
+            --primary-dark: #00b8d4;
+            --bg-dark: #050a10;
+            --card-bg: rgba(20, 30, 40, 0.6);
+            --text-main: #ffffff;
+            --text-gray: #b0c0d0;
+            --border: rgba(0, 225, 255, 0.2);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; scroll-behavior: smooth; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            line-height: 1.7;
+            background-image: radial-gradient(circle at 10% 10%, rgba(0, 225, 255, 0.05) 0%, transparent 40%);
+        }
+
+        /* --- Navbar --- */
+        nav {
+            padding: 15px 5%;
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(5, 10, 16, 0.9); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border);
+            position: sticky; top: 0; z-index: 100;
+        }
+        .back-btn { color: var(--text-gray); text-decoration: none; font-weight: 700; transition:0.3s; display:flex; align-items:center; gap:5px;}
+        .back-btn:hover { color: var(--primary); transform: translateX(-5px); }
+
+        /* --- Hero Section --- */
+        .hero {
+            text-align: center; padding: 60px 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        .hero h1 { font-size: 2.5rem; color: var(--primary); margin-bottom: 10px; }
+        .hero p { color: var(--text-gray); max-width: 600px; margin: 0 auto; }
+
+        /* --- Main Content --- */
+        .container { max-width: 900px; margin: 0 auto; padding: 40px 20px; }
+
+        /* Section Styling */
+        .section { margin-bottom: 60px; }
+        .section-title {
+            font-size: 1.8rem; color: white; margin-bottom: 20px;
+            border-right: 4px solid var(--primary); padding-right: 15px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        
+        /* Concept Cards */
+        .concept-card {
+            background: var(--card-bg); border: 1px solid var(--border);
+            border-radius: 15px; padding: 25px; margin-bottom: 20px;
+            transition: 0.3s;
+        }
+        .concept-card:hover { border-color: var(--primary); transform: translateY(-3px); }
+        .concept-title { color: var(--primary); font-size: 1.2rem; font-weight: 700; margin-bottom: 10px; }
+
+        /* Comparison Table */
+        .comparison-table {
+            width: 100%; border-collapse: collapse; margin-top: 20px;
+            background: rgba(255,255,255,0.02); border-radius: 10px; overflow: hidden;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px; text-align: right; border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th { background: rgba(0, 225, 255, 0.1); color: var(--primary); }
+        .comparison-table tr:last-child td { border-bottom: none; }
+
+        /* Highlight Box */
+        .note-box {
+            background: rgba(255, 193, 7, 0.1); border: 1px solid rgba(255, 193, 7, 0.3);
+            border-radius: 10px; padding: 20px; margin-top: 20px; color: #ffe082;
+        }
+        .note-box i { margin-left: 10px; }
+
+        /* Cell Diagram Placeholder */
+        .cell-diagram {
+            text-align: center; margin: 30px 0;
+            background: rgba(255,255,255,0.02); padding: 30px; border-radius: 20px;
+            border: 1px dashed var(--border);
+        }
+        .mitochondria {
+            color: #ff4757; font-size: 3rem; margin-bottom: 10px; animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.1); } 100% { transform: scale(1); } }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; color: var(--text-gray); border-top: 1px solid var(--border); }
+
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <div style="font-weight:900; color:white;">Physiology <span style="color:var(--primary)">Ch.1</span></div>
+        <a href="../index.html" class="back-btn">رجوع للمادة <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <header class="hero">
+        <i class="fa-solid fa-microscope" style="font-size:3rem; color:var(--primary); margin-bottom:20px;"></i>
+        <h1>ماهية فسيولوجيا الرياضة</h1>
+        <p>المدخل الرئيسي لفهم كيف يعمل الجسم البشري، وكيف يتأثر ويتكيف مع الجهد البدني والتدريب.</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. التعريفات -->
+        <div class="section">
+            <h2 class="section-title"><i class="fa-solid fa-book-open"></i> 1. المفاهيم الأساسية</h2>
+            
+            <div class="concept-card">
+                <div class="concept-title">علم الفسيولوجيا (Physiology)</div>
+                <p>هو العلم الذي يدرس <b>وظائف أعضاء الجسم</b> (كيف تعمل الأعضاء؟). يختلف عن التشريح الذي يدرس شكل وبناء الأعضاء.</p>
+            </div>
+
+            <div class="concept-card">
+                <div class="concept-title">فسيولوجيا الرياضة (Sports Physiology)</div>
+                <p>هو العلم الذي يدرس التغيرات التي تحدث في وظائف أجهزة الجسم نتيجة <b>ممارسة النشاط البدني</b>، سواء كانت تغيرات مؤقتة أو دائمة.</p>
+            </div>
+        </div>
+
+        <!-- 2. الخلية -->
+        <div class="section">
+            <h2 class="section-title"><i class="fa-solid fa-dna"></i> 2. الخلية (وحدة البناء)</h2>
+            <p>الجسم يتكون من تريليونات الخلايا. بالنسبة للرياضي، يهمنا جداً مكون واحد داخل الخلية:</p>
+            
+            <div class="cell-diagram">
+                <div class="mitochondria"><i class="fa-solid fa-bolt"></i></div>
+                <h3 style="color:white; margin-bottom:5px;">الميتوكوندريا (Mitochondria)</h3>
+                <p style="font-size:0.9rem; color:var(--text-gray);">"بيت الطاقة"</p>
+                <p style="margin-top:10px;">هي المصنع الذي يتم فيه حرق الغذاء وإنتاج الطاقة (ATP) في وجود الأكسجين.</p>
+            </div>
+        </div>
+
+        <!-- 3. الاتزان البدني -->
+        <div class="section">
+            <h2 class="section-title"><i class="fa-solid fa-scale-balanced"></i> 3. الاتزان البدني (Homeostasis)</h2>
+            <p>هو قدرة الجسم على الحفاظ على بيئته الداخلية <b>ثابتة ومستقرة</b> رغم التغيرات الخارجية.</p>
+            <ul>
+                <li>🔹 ثبات درجة الحرارة (37 درجة).</li>
+                <li>🔹 ثبات نسبة السكر في الدم.</li>
+                <li>🔹 ثبات ضغط الدم.</li>
+            </ul>
+            <div class="note-box">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+                <b>سؤال امتحان:</b> التدريب الرياضي يعتبر "إخلال" بالاتزان البدني، مما يجبر الجسم على التطور لاستعادة هذا الاتزان بمستوى كفاءة أعلى.
+            </div>
+        </div>
+
+        <!-- 4. الاستجابة والتكيف -->
+        <div class="section">
+            <h2 class="section-title"><i class="fa-solid fa-arrow-up-right-dots"></i> 4. الفرق بين الاستجابة والتكيف</h2>
+            <p>ده أهم جزء في الفصل، لازم تفرق بينهم:</p>
+
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>وجه المقارنة</th>
+                        <th>الاستجابة (Response) ⚡</th>
+                        <th>التكيف (Adaptation) 🏋️‍♂️</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><b>التعريف</b></td>
+                        <td>تغير مفاجئ ومؤقت أثناء التمرين.</td>
+                        <td>تغير ثابت ودائم نتيجة التدريب المستمر.</td>
+                    </tr>
+                    <tr>
+                        <td><b>المدة</b></td>
+                        <td>تزول بانتهاء التمرين.</td>
+                        <td>تستمر لفترات طويلة.</td>
+                    </tr>
+                    <tr>
+                        <td><b>مثال</b></td>
+                        <td>زيادة ضربات القلب أثناء الجري.</td>
+                        <td>تضخم عضلة القلب وانخفاض النبض وقت الراحة.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <footer>
+        <p>تم التلخيص بناءً على الكتاب الجامعي - قسم علوم الصحة الرياضية</p>
+        <p style="margin-top:10px; font-size:0.8rem;">Sports Science Hub &copy; 2024</p>
+    </footer>
+
+</body>
+</html>
