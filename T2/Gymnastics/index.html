@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أساسيات الجمباز | Gymnastics</title>
+    
+    <!-- الخطوط والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/gymnast.png">
+
+    <style>
+        /* --- الثيم الأزرق الأوليمبي --- */
+        :root {
+            --primary: #4facfe;       /* أزرق سماوي */
+            --secondary: #00f2ff;     /* سيان ساطع */
+            --bg-dark: #050a10;       /* كحلي غامق جداً */
+            --card-bg: rgba(20, 30, 45, 0.7);
+            --border-color: rgba(79, 172, 254, 0.3);
+            --text-main: #ffffff;
+            --text-gray: #b0c4de;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 0%, #4facfe15 0%, transparent 60%);
+            overflow-x: hidden;
+        }
+
+        /* --- Navbar --- */
+        nav {
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(5, 10, 16, 0.95);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo { font-weight: 900; font-size: 1.1rem; text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; }
+        .logo i { color: var(--primary); }
+        
+        .back-btn {
+            text-decoration: none; color: var(--text-gray); font-weight: 700; font-size: 0.9rem;
+            display: flex; align-items: center; gap: 8px; transition: 0.3s;
+        }
+        .back-btn:hover { color: var(--primary); transform: translateX(-5px); }
+
+        /* --- Header --- */
+        header { text-align: center; padding: 50px 20px 30px; }
+        
+        .badge {
+            background: rgba(79, 172, 254, 0.1); color: var(--primary);
+            padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; border: 1px solid var(--border-color);
+            display: inline-block; margin-bottom: 15px;
+        }
+
+        h1 { font-size: 2.8rem; margin-bottom: 10px; line-height: 1.2; background: linear-gradient(to right, #fff, #4facfe); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
+        .prof { color: var(--text-gray); margin-bottom: 40px; font-size: 1rem; }
+
+        /* --- Tabs --- */
+        .tabs-wrapper {
+            display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px;
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-gray);
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-size: 1rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s ease;
+            display: flex; align-items: center; gap: 10px;
+        }
+
+        .tab-btn:hover { background: rgba(79, 172, 254, 0.1); color: white; }
+
+        .tab-btn.active {
+            background: linear-gradient(45deg, var(--primary), #00c6fb);
+            color: #fff;
+            border-color: transparent;
+            box-shadow: 0 0 20px rgba(79, 172, 254, 0.4);
+        }
+
+        /* --- Grid & Content --- */
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5% 80px; }
+        
+        .tab-content { display: none; animation: fadeIn 0.5s ease; }
+        .tab-content.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+
+        .card {
+            display: block; text-decoration: none;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 25px;
+            transition: 0.3s; position: relative; overflow: hidden;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            border-color: var(--primary);
+            background: rgba(30, 45, 60, 0.8);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .icon-box {
+            width: 50px; height: 50px; background: rgba(79, 172, 254, 0.1);
+            border-radius: 12px; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; color: var(--primary); margin-bottom: 15px;
+        }
+
+        .card h3 { font-size: 1.3rem; color: white; margin-bottom: 10px; }
+        .card p { color: var(--text-gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
+
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; color: #ccc; }
+
+        .arrow {
+            position: absolute; bottom: 25px; left: 25px;
+            color: var(--primary); opacity: 0; transition: 0.3s;
+        }
+        .card:hover .arrow { opacity: 1; transform: translateX(-5px); }
+
+        /* List Items for Files */
+        .file-row {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.03);
+            padding: 20px; border-radius: 12px; margin-bottom: 15px;
+            text-decoration: none; border: 1px solid transparent; transition: 0.3s;
+        }
+        .file-row:hover { border-color: var(--primary); background: rgba(255,255,255,0.06); }
+        .file-info { display: flex; align-items: center; gap: 15px; }
+        .file-icon { font-size: 2rem; color: var(--primary); }
+        .file-data h4 { color: white; font-size: 1.1rem; margin-bottom: 4px; }
+        .file-data span { color: #888; font-size: 0.85rem; }
+
+        /* Footer */
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); color: #666; font-size: 0.9rem; margin-top: 40px; }
+
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo"><i class="fa-solid fa-person-running"></i> Gymnastics</a>
+        <a href="../index.html" class="back-btn">الفرقة الثانية <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <header>
+        <div class="badge">مادة عملية (4 ساعات)</div>
+        <h1>الأسس النظرية والتطبيقية<br>لرياضة الجمباز</h1>
+        <div class="prof">إعداد: د/ وليد صالح • د/ ناهد محمد</div>
+
+        <div class="tabs-wrapper">
+            <button class="tab-btn active" onclick="openTab(event, 'practical')">
+                <i class="fa-solid fa-person-falling"></i> المهارات العملية
+            </button>
+            <button class="tab-btn" onclick="openTab(event, 'theory')">
+                <i class="fa-solid fa-book-open"></i> المحاضرات النظرية
+            </button>
+            <a href="Books/Gymnastics-Foundations.pdf" target="_blank" class="tab-btn" style="border-color:var(--secondary); color:var(--secondary)">
+                <i class="fa-solid fa-file-pdf"></i> الكتاب كامل
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. تبويب العملي (Practical) -->
+        <div id="practical" class="tab-content active">
+            <div class="grid">
+                
+                <!-- المهارات الأرضية -->
+                <a href="Summaries/Floor-Skills.md" class="card">
+                    <div class="icon-box"><i class="fa-solid fa-layer-group"></i></div>
+                    <h3>الحركات الأرضية (Floor)</h3>
+                    <p>شرح فني للدحرجة الأمامية (المكورة، المنحنية، فتحاً) والخلفية، والوقوف على اليدين.</p>
+                    <div class="tags"><span class="tag">الفصل 9</span><span class="tag">دحرجات</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- مواصفات الأجهزة -->
+                <a href="Summaries/Apparatus-Specs.md" class="card">
+                    <div class="icon-box"><i class="fa-solid fa-ruler-combined"></i></div>
+                    <h3>مواصفات الأجهزة</h3>
+                    <p>المقاييس القانونية لارتفاع وأبعاد الأجهزة (حصان القفز، المتوازي، العقلة، الحلق).</p>
+                    <div class="tags"><span class="tag">الفصل 4</span><span class="tag">أرقام حفظ</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- السند والأمان -->
+                <a href="Summaries/Safety-Spotting.md" class="card">
+                    <div class="icon-box"><i class="fa-solid fa-hand-holding-hand"></i></div>
+                    <h3>السند والأمان (Spotting)</h3>
+                    <p>طرق المساعدة اليدوية وباستخدام الأجهزة لضمان سلامة اللاعب أثناء الأداء.</p>
+                    <div class="tags"><span class="tag">الفصل 8</span><span class="tag">طرق السند</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الإعداد البدني -->
+                <div class="card" style="cursor: default; border-color: #444; background:rgba(255,255,255,0.02)">
+                    <div class="icon-box" style="filter: grayscale(1);"><i class="fa-solid fa-dumbbell"></i></div>
+                    <h3>الإعداد البدني (قريباً)</h3>
+                    <p>تمرينات المرونة والقوة الخاصة بالجمباز.</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- 2. تبويب النظري (Theory) -->
+        <div id="theory" class="tab-content">
+            <h3 style="margin-bottom: 25px; color:white;">📥 ملفات المحاضرات</h3>
+
+            <a href="Summaries/History-Rules.md" class="file-row">
+                <div class="file-info">
+                    <i class="fa-brands fa-markdown file-icon"></i>
+                    <div class="file-data">
+                        <h4>تاريخ وماهية الجمباز</h4>
+                        <span>الفصل 1, 2: التطور التاريخي وأنواع الجمباز.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-eye" style="color:var(--primary)"></i>
+            </a>
+
+            <a href="Summaries/Talent-Selection.md" class="file-row">
+                <div class="file-info">
+                    <i class="fa-solid fa-file-lines file-icon"></i>
+                    <div class="file-data">
+                        <h4>انتقاء الموهوبين (Selection)</h4>
+                        <span>الفصل 6: المحددات الجسمية والبدنية والنفسية للانتقاء.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-eye" style="color:var(--primary)"></i>
+            </a>
+
+            <a href="Summaries/Training-Methods.md" class="file-row">
+                <div class="file-info">
+                    <i class="fa-solid fa-chalkboard-user file-icon"></i>
+                    <div class="file-data">
+                        <h4>الوسائل التدريبية (Training)</h4>
+                        <span>الفصل 5: الأجهزة المساعدة وطرق تعليم المهارات.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-eye" style="color:var(--primary)"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+    <footer>
+        Sports Science Hub &copy; 2024 | Assiut University
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+
+</body>
+</html>
