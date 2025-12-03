@@ -1,0 +1,226 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>فسيولوجيا الرياضة 1 | Physiology</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" type="image/png" href="https://img.icons8.com/fluency/48/heart-with-pulse.png">
+
+    <style>
+        /* --- ثيم طبي (أحمر ورمادي) --- */
+        :root {
+            --primary: #ff3366;       /* أحمر النبض */
+            --primary-dim: #ff336620;
+            --bg-dark: #0f080a;       /* خلفية داكنة */
+            --card-bg: rgba(30, 20, 22, 0.7);
+            --border-color: rgba(255, 51, 102, 0.2);
+            --text-main: #ffffff;
+            --text-gray: #b0b0b0;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Cairo', sans-serif; }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 0%, #ff336615 0%, transparent 60%);
+            overflow-x: hidden;
+        }
+
+        nav {
+            padding: 15px 5%; display: flex; justify-content: space-between; align-items: center;
+            background: rgba(15, 8, 10, 0.95); backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000;
+        }
+
+        .logo { font-weight: 900; font-size: 1.1rem; text-decoration: none; color: white; display: flex; align-items: center; gap: 8px; }
+        .logo i { color: var(--primary); animation: pulse 1.5s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+
+        .back-btn { text-decoration: none; color: var(--text-gray); font-weight: 700; display: flex; align-items: center; gap: 8px; transition: 0.3s; font-size: 0.9rem; }
+        .back-btn:hover { color: var(--primary); transform: translateX(-5px); }
+
+        header { text-align: center; padding: 50px 20px 30px; }
+        .badge { background: var(--primary-dim); color: var(--primary); padding: 5px 12px; border-radius: 50px; font-size: 0.8rem; border: 1px solid var(--border-color); display: inline-block; margin-bottom: 15px; }
+        h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .prof { color: var(--text-gray); margin-bottom: 40px; font-size: 1rem; }
+
+        .tabs-wrapper { display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; margin-bottom: 40px; }
+        .tab-btn { background: transparent; border: 1px solid var(--border-color); color: var(--text-gray); padding: 12px 25px; border-radius: 12px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 10px; }
+        .tab-btn:hover { background: var(--primary-dim); color: white; }
+        .tab-btn.active { background: var(--primary); color: #fff; border-color: var(--primary); box-shadow: 0 0 20px rgba(255, 51, 102, 0.4); }
+
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 5% 80px; }
+        .tab-content { display: none; animation: fadeIn 0.4s ease-in-out; }
+        .tab-content.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+        .card { display: block; text-decoration: none; background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 25px; transition: 0.3s; position: relative; }
+        .card:hover { transform: translateY(-5px); border-color: var(--primary); background: rgba(40, 20, 25, 0.8); }
+        .card-num { font-size: 0.8rem; color: var(--primary); margin-bottom: 10px; letter-spacing: 1px; }
+        .card h3 { font-size: 1.4rem; color: white; margin-bottom: 10px; }
+        .card p { color: var(--text-gray); font-size: 0.9rem; line-height: 1.6; margin-bottom: 20px; }
+        
+        .tags { display: flex; gap: 8px; flex-wrap: wrap; }
+        .tag { font-size: 0.75rem; background: rgba(255,255,255,0.05); padding: 4px 10px; border-radius: 6px; color: #ccc; }
+        .arrow { position: absolute; bottom: 25px; left: 25px; color: var(--primary); opacity: 0; transition: 0.3s; }
+        .card:hover .arrow { opacity: 1; transform: translateX(-5px); }
+
+        /* Highlight Energy System Chapter */
+        .highlight { border: 1px solid var(--primary); background: linear-gradient(160deg, rgba(255, 51, 102, 0.1) 0%, transparent 100%); }
+
+        .file-row { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.02); padding: 20px; border-radius: 12px; margin-bottom: 15px; text-decoration: none; border: 1px solid transparent; transition: 0.3s; }
+        .file-row:hover { border-color: var(--primary); background: rgba(255,255,255,0.05); }
+        .file-info { display: flex; align-items: center; gap: 15px; }
+        .file-icon { font-size: 1.8rem; width: 40px; text-align: center; color: var(--primary); }
+        .file-data h4 { color: white; font-size: 1.1rem; margin-bottom: 4px; }
+        .file-data span { color: #888; font-size: 0.85rem; }
+
+        footer { text-align: center; padding: 40px; border-top: 1px solid var(--border-color); color: #666; font-size: 0.9rem; margin-top: 40px; }
+        
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .tabs-wrapper { flex-direction: column; }
+            .tab-btn { width: 100%; justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav>
+        <a href="#" class="logo"><i class="fa-solid fa-heart-pulse"></i> Physiology</a>
+        <a href="../index.html" class="back-btn">الفرقة الثانية <i class="fa-solid fa-arrow-left"></i></a>
+    </nav>
+
+    <header>
+        <div class="badge">مادة أساسية (ساعتان)</div>
+        <h1>فسيولوجيا <span style="color:var(--primary)">الرياضة</span></h1>
+        <div class="prof"><i class="fa-solid fa-user-doctor"></i> قسم علوم الصحة الرياضية</div>
+
+        <div class="tabs-wrapper">
+            <button class="tab-btn active" onclick="openTab(event, 'chapters')"><i class="fa-solid fa-list-ul"></i> فصول المنهج</button>
+            <button class="tab-btn" onclick="openTab(event, 'files')"><i class="fa-solid fa-file-arrow-down"></i> التلخيصات</button>
+            <a href="Books/Sports-Physiology-1.pdf" target="_blank" class="tab-btn"><i class="fa-solid fa-book"></i> الكتاب الأصلي</a>
+        </div>
+    </header>
+
+    <div class="container">
+
+        <!-- تبويب الفصول -->
+        <div id="chapters" class="tab-content active">
+            <div class="grid">
+                
+                <!-- الفصل 1 -->
+                <a href="#" class="card">
+                    <div class="card-num">الفصل الأول</div>
+                    <h3>ماهية الفسيولوجيا</h3>
+                    <p>تعريف علم الفسيولوجي وأهميته في التدريب الرياضي والاستجابة والتكيف.</p>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 2 -->
+                <a href="#" class="card">
+                    <div class="card-num">الفصل الثاني</div>
+                    <h3>الجهاز الدوري والتنفسي</h3>
+                    <p>معدل القلب، ضغط الدم، الدفع القلبي، والسعة الحيوية للرئتين.</p>
+                    <div class="tags"><span class="tag">VO2 Max</span><span class="tag">القلب</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 3 (المميز) -->
+                <a href="Summaries/Energy-Systems.md" class="card highlight">
+                    <div class="card-num">الفصل الثالث 🔥</div>
+                    <h3>أنظمة إنتاج الطاقة</h3>
+                    <p>نظام الفوسفات (ATP-PC)، نظام اللاكتيك، والنظام الهوائي. (أهم فصل).</p>
+                    <div class="tags"><span class="tag" style="color:var(--primary)">ATP</span><span class="tag">لاكتيك</span></div>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 4 -->
+                <a href="#" class="card">
+                    <div class="card-num">الفصل الرابع</div>
+                    <h3>التقويم الفسيولوجي</h3>
+                    <p>طرق القياس الميدانية والمعملية (كوبر، هارفارد، قياس النبض).</p>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 5 -->
+                <a href="#" class="card">
+                    <div class="card-num">الفصل الخامس</div>
+                    <h3>الأساس الفسيولوجي للإحماء</h3>
+                    <p>تأثير التسخين على العضلات والإنزيمات والوقاية من الإصابات.</p>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+                <!-- الفصل 6 -->
+                <a href="#" class="card">
+                    <div class="card-num">الفصل السادس</div>
+                    <h3>الغدد الصماء والهرمونات</h3>
+                    <p>وظائف الهرمونات وتأثير التدريب على الغدد (النخامية، الكظرية).</p>
+                    <i class="fa-solid fa-arrow-left arrow"></i>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- تبويب الملفات -->
+        <div id="files" class="tab-content">
+            <h3 style="margin-bottom: 25px; color:white;">📥 مكتبة التلخيصات</h3>
+
+            <!-- ملف 1 -->
+            <a href="Summaries/Energy-Systems.md" class="file-row">
+                <div class="file-info">
+                    <i class="fa-brands fa-markdown file-icon"></i>
+                    <div class="file-data">
+                        <h4>ملخص أنظمة إنتاج الطاقة</h4>
+                        <span>شرح مبسط للأنظمة الثلاثة (الفوسفاتي، اللاكتيك، الهوائي).</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-download" style="color:var(--primary)"></i>
+            </a>
+
+            <!-- ملف 2 -->
+            <a href="Books/Sports-Physiology-1.pdf" target="_blank" class="file-row">
+                <div class="file-info">
+                    <i class="fa-solid fa-file-pdf file-icon" style="color:#e15f41"></i>
+                    <div class="file-data">
+                        <h4>كتاب فسيولوجيا الرياضة (كامل)</h4>
+                        <span>نسخة PDF الرسمية - الفرقة الثانية.</span>
+                    </div>
+                </div>
+                <i class="fa-solid fa-download" style="color:var(--primary)"></i>
+            </a>
+
+        </div>
+
+    </div>
+
+    <footer>
+        Sports Science Hub &copy; 2024 | Assiut University
+    </footer>
+
+    <script>
+        function openTab(evt, tabName) {
+            var i, tabcontent, tablinks;
+            tabcontent = document.getElementsByClassName("tab-content");
+            for (i = 0; i < tabcontent.length; i++) {
+                tabcontent[i].classList.remove("active");
+            }
+            tablinks = document.getElementsByClassName("tab-btn");
+            for (i = 0; i < tablinks.length; i++) {
+                tablinks[i].classList.remove("active");
+            }
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+    </script>
+
+</body>
+</html>
