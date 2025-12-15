@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الحركات القتالية | Martial Arts Guide</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-color: #1a1a1a;
+            --card-bg: #2d2d2d;
+            --text-color: #f0f0f0;
+            --karate-color: #ff4757;
+            --tkd-color: #2ed573;
+            --accent-glow: 0 0 15px rgba(255, 71, 87, 0.5);
+            --tkd-glow: 0 0 15px rgba(46, 213, 115, 0.5);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-image: radial-gradient(circle at 50% 50%, #333 0%, #000 100%);
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: rgba(45, 45, 45, 0.8);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 1px solid rgba(255,255,255,0.1);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.5s ease;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            font-weight: 800;
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #fff, #bbb);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p.subtitle {
+            color: #aaa;
+            font-size: 0.9rem;
+        }
+
+        /* Tabs Styling */
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            background: #222;
+            border-radius: 50px;
+            padding: 5px;
+            position: relative;
+        }
+
+        .tab-btn {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            background: transparent;
+            color: #888;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .tab-btn.active.karate {
+            background: var(--karate-color);
+            color: #fff;
+            box-shadow: var(--accent-glow);
+        }
+
+        .tab-btn.active.tkd {
+            background: var(--tkd-color);
+            color: #fff;
+            box-shadow: var(--tkd-glow);
+        }
+
+        /* Content Areas */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* List Styling */
+        .move-list {
+            list-style: none;
+        }
+
+        .move-item {
+            background: rgba(255,255,255,0.05);
+            margin-bottom: 12px;
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 4px solid transparent;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.2s, background 0.2s;
+            cursor: default;
+        }
+
+        .move-item:hover {
+            transform: translateX(-5px);
+            background: rgba(255,255,255,0.1);
+        }
+
+        .karate-section .move-item { border-right-color: var(--karate-color); }
+        .tkd-section .move-item { border-right-color: var(--tkd-color); }
+
+        .move-name {
+            font-weight: 500;
+            font-size: 1.1rem;
+        }
+
+        .move-command {
+            font-size: 0.85rem;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: bold;
+            opacity: 0.8;
+        }
+
+        .karate-section .move-command { color: var(--karate-color); border: 1px solid var(--karate-color); }
+        .tkd-section .move-command { color: var(--tkd-color); border: 1px solid var(--tkd-color); }
+
+        .section-title {
+            font-size: 1.2rem;
+            color: #fff;
+            margin: 20px 0 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .badge {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-left: 8px;
+        }
+        .bg-red { background-color: var(--karate-color); }
+        .bg-blue { background-color: var(--tkd-color); }
+
+        /* Footer */
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 0.8rem;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="mainContainer">
+        <header>
+            <h1>🥋 دليل الأبطال</h1>
+            <p class="subtitle">للرجالة اللي عايزة تحفظ الترتيب الصح</p>
+        </header>
+
+        <div class="tabs">
+            <button class="tab-btn active karate" onclick="switchTab('karate')">🔴 كاراتيه</button>
+            <button class="tab-btn tkd" onclick="switchTab('tkd')">🔵 تايكوندو</button>
+        </div>
+
+        <div id="karate" class="content-section karate-section active">
+            <h3 class="section-title">🎌 البداية والتحية</h3>
+            <ul class="move-list">
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-red"></span>هايسكوداتش</span>
+                    <span class="move-command">وقفة</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-red"></span>سنسريه + أوس</span>
+                    <span class="move-command">تحية</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-red"></span>إداري جيدان براي + إتش</span>
+                    <span class="move-command">استعداد</span>
+                </li>
+            </ul>
+
+            <h3 class="section-title">👊 الهجوم والصد</h3>
+            <ul class="move-list">
+                <li class="move-item">
+                    <span class="move-name">أوي زوكي (للأمام)</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">أوي زوكي (للخلف)</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">أجي أوكي (للأمام)</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">أجي أوكي (للخلف)</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+            </ul>
+
+            <h3 class="section-title">🦶 قتال وأرجل</h3>
+            <ul class="move-list">
+                <li class="move-item">
+                    <span class="move-name">فايت + ماي جيري</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+                <li class="move-item" style="background: rgba(255, 71, 87, 0.1);">
+                    <span class="move-name">🔄 موتيه (اعكس/دوران)</span>
+                    <span class="move-command">دوران</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">فايت + ماي جيري</span>
+                    <span class="move-command">هجمي!</span>
+                </li>
+            </ul>
+        </div>
+
+        <div id="tkd" class="content-section tkd-section">
+            <h3 class="section-title">🇰🇷 البداية الكورية</h3>
+            <ul class="move-list">
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-blue"></span>تشوريت</span>
+                    <span class="move-command">انتباه</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-blue"></span>كوني</span>
+                    <span class="move-command">تحية</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name"><span class="badge bg-blue"></span>تشوتشم سوقي + 3 بانش</span>
+                    <span class="move-command">شي جاك</span>
+                </li>
+            </ul>
+
+            <h3 class="section-title">💥 الركلات والحركة</h3>
+            <ul class="move-list">
+                <li class="move-item">
+                    <span class="move-name">تشوريت + كروجي جومبي</span>
+                    <span class="move-command">استعداد</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">أب بنش (للأمام)</span>
+                    <span class="move-command">شي جاك</span>
+                </li>
+                <li class="move-item" style="background: rgba(46, 213, 115, 0.1);">
+                    <span class="move-name">🔄 سيباغوا</span>
+                    <span class="move-command">دوران</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">نارا تشاجي (للأمام)</span>
+                    <span class="move-command">شي جاك</span>
+                </li>
+                <li class="move-item" style="background: rgba(46, 213, 115, 0.1);">
+                    <span class="move-name">🔄 سيباغوا</span>
+                    <span class="move-command">دوران</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">باك تشاجي (للأمام)</span>
+                    <span class="move-command">شي جاك</span>
+                </li>
+            </ul>
+        </div>
+
+        <footer>
+            <p>صنع للوحوش 💪 بالتوفيق</p>
+        </footer>
+    </div>
+
+    <script>
+        function switchTab(art) {
+            // Get all buttons and sections
+            const buttons = document.querySelectorAll('.tab-btn');
+            const sections = document.querySelectorAll('.content-section');
+            const container = document.getElementById('mainContainer');
+
+            // Remove active class from all
+            buttons.forEach(btn => {
+                btn.classList.remove('active');
+                // Ensure specific color class stays, just remove active
+            });
+            sections.forEach(sec => sec.classList.remove('active'));
+
+            // Add active class to clicked button and target section
+            if (art === 'karate') {
+                document.querySelector('.tab-btn.karate').classList.add('active');
+                document.getElementById('karate').classList.add('active');
+                container.style.border = "1px solid rgba(255, 71, 87, 0.3)";
+            } else {
+                document.querySelector('.tab-btn.tkd').classList.add('active');
+                document.getElementById('tkd').classList.add('active');
+                container.style.border = "1px solid rgba(46, 213, 115, 0.3)";
+            }
+        }
+    </script>
+</body>
+</html>
