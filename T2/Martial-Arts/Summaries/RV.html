@@ -6,23 +6,26 @@
     <title>دليل الحركات القتالية | Martial Arts Guide</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;800&display=swap" rel="stylesheet">
     <style>
+        /* Variables */
         :root {
-            --bg-color: #1a1a1a;
-            --card-bg: #2d2d2d;
+            --bg-color: #121212;
+            --card-bg: #1e1e1e;
             --text-color: #f0f0f0;
-            --karate-color: #ff4757;
-            --tkd-color: #2ed573;
-            --accent-glow: 0 0 15px rgba(255, 71, 87, 0.5);
-            --tkd-glow: 0 0 15px rgba(46, 213, 115, 0.5);
+            --karate-color: #e53935; /* Stronger Red */
+            --tkd-color: #00e676;   /* Stronger Green/Neon */
+            --accent-glow-karate: 0 0 10px rgba(229, 57, 53, 0.6), 0 0 20px rgba(229, 57, 53, 0.3);
+            --accent-glow-tkd: 0 0 10px rgba(0, 230, 118, 0.6), 0 0 20px rgba(0, 230, 118, 0.3);
         }
 
+        /* Base & Reset */
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -30,170 +33,234 @@
             color: var(--text-color);
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: flex-start; /* Adjust alignment for better view on desktop */
             min-height: 100vh;
-            background-image: radial-gradient(circle at 50% 50%, #333 0%, #000 100%);
-            padding: 20px;
+            background-image: radial-gradient(circle at 50% 50%, #222 0%, #000 100%);
+            padding: 40px 20px;
         }
 
+        /* Main Container */
         .container {
             width: 100%;
-            max-width: 600px;
-            background: rgba(45, 45, 45, 0.8);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
+            max-width: 650px; /* Slightly wider */
+            background: rgba(30, 30, 30, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            border: 2px solid rgba(255,255,255,0.05);
             transition: all 0.5s ease;
         }
 
+        /* Header */
         header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 35px;
         }
 
         h1 {
             font-weight: 800;
-            font-size: 2rem;
-            margin-bottom: 10px;
-            background: linear-gradient(45deg, #fff, #bbb);
+            font-size: 2.5rem;
+            margin-bottom: 5px;
+            background: linear-gradient(45deg, var(--text-color), #bbb);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 5px rgba(255,255,255,0.2);
         }
 
         p.subtitle {
             color: #aaa;
-            font-size: 0.9rem;
+            font-size: 1rem;
+            font-weight: 300;
         }
 
         /* Tabs Styling */
         .tabs {
             display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-            background: #222;
-            border-radius: 50px;
+            justify-content: space-between;
+            margin-bottom: 35px;
+            background: #282828;
+            border-radius: 15px;
             padding: 5px;
-            position: relative;
         }
 
         .tab-btn {
             flex: 1;
-            padding: 12px;
+            padding: 15px 10px;
             border: none;
             background: transparent;
             color: #888;
             font-weight: 700;
             cursor: pointer;
-            border-radius: 50px;
+            border-radius: 12px;
             transition: all 0.3s ease;
             font-size: 1.1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 10px;
+            text-shadow: none;
+        }
+
+        .tab-btn:hover:not(.active) {
+            color: #f0f0f0;
+            background: #333;
         }
 
         .tab-btn.active.karate {
             background: var(--karate-color);
             color: #fff;
-            box-shadow: var(--accent-glow);
+            box-shadow: var(--accent-glow-karate);
+            text-shadow: 0 0 5px #000;
         }
 
         .tab-btn.active.tkd {
             background: var(--tkd-color);
-            color: #fff;
-            box-shadow: var(--tkd-glow);
+            color: #1a1a1a;
+            box-shadow: var(--accent-glow-tkd);
+            text-shadow: 0 0 5px rgba(0,0,0,0.3);
         }
 
         /* Content Areas */
         .content-section {
             display: none;
-            animation: fadeIn 0.5s ease;
         }
 
         .content-section.active {
             display: block;
+            animation: fadeInContent 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
         }
+
+        @keyframes fadeInContent {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Section Title */
+        .section-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: var(--text-color);
+            margin: 25px 0 15px 0;
+            padding-bottom: 5px;
+            border-bottom: 2px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .karate-section .section-title { color: var(--karate-color); }
+        .tkd-section .section-title { color: var(--tkd-color); }
 
         /* List Styling */
         .move-list {
             list-style: none;
+            padding-left: 0;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
         .move-item {
-            background: rgba(255,255,255,0.05);
-            margin-bottom: 12px;
-            padding: 15px;
-            border-radius: 10px;
-            border-right: 4px solid transparent;
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.05);
             display: flex;
             justify-content: space-between;
             align-items: center;
-            transition: transform 0.2s, background 0.2s;
-            cursor: default;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            animation: itemFadeIn 0.5s ease forwards;
+            opacity: 0;
         }
+
+        .move-item:nth-child(1) { animation-delay: 0.1s; }
+        .move-item:nth-child(2) { animation-delay: 0.2s; }
+        .move-item:nth-child(3) { animation-delay: 0.3s; }
+        /* ... continue for more items if needed */
+
 
         .move-item:hover {
-            transform: translateX(-5px);
-            background: rgba(255,255,255,0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.4);
         }
 
-        .karate-section .move-item { border-right-color: var(--karate-color); }
-        .tkd-section .move-item { border-right-color: var(--tkd-color); }
+        .karate-section .move-item:hover {
+            border-left: 4px solid var(--karate-color);
+            box-shadow: 0 5px 15px rgba(229, 57, 53, 0.15);
+        }
+        .tkd-section .move-item:hover {
+            border-left: 4px solid var(--tkd-color);
+            box-shadow: 0 5px 15px rgba(0, 230, 118, 0.15);
+        }
 
         .move-name {
-            font-weight: 500;
-            font-size: 1.1rem;
+            font-weight: 700;
+            font-size: 1.15rem;
+            color: var(--text-color);
         }
 
         .move-command {
-            font-size: 0.85rem;
-            padding: 4px 8px;
-            border-radius: 4px;
-            font-weight: bold;
-            opacity: 0.8;
+            font-size: 0.9rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
-        .karate-section .move-command { color: var(--karate-color); border: 1px solid var(--karate-color); }
-        .tkd-section .move-command { color: var(--tkd-color); border: 1px solid var(--tkd-color); }
-
-        .section-title {
-            font-size: 1.2rem;
-            color: #fff;
-            margin: 20px 0 10px 0;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 5px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+        .karate-section .move-command {
+            background: rgba(229, 57, 53, 0.15);
+            color: var(--karate-color);
+        }
+        .tkd-section .move-command {
+            background: rgba(0, 230, 118, 0.15);
+            color: var(--tkd-color);
         }
 
-        /* Animations */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+        /* Rotation/Reverse Item Highlight */
+        .move-item.reverse {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255,255,255,0.1);
         }
-
-        .badge {
-            display: inline-block;
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            margin-left: 8px;
-        }
-        .bg-red { background-color: var(--karate-color); }
-        .bg-blue { background-color: var(--tkd-color); }
 
         /* Footer */
         footer {
-            margin-top: 30px;
+            margin-top: 40px;
             text-align: center;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             color: #666;
+            font-weight: 300;
+        }
+
+        /* Media Queries for Responsiveness */
+        @media (max-width: 600px) {
+            body {
+                padding: 20px 10px;
+                align-items: flex-start;
+            }
+            .container {
+                padding: 25px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .tab-btn {
+                font-size: 1rem;
+                padding: 12px 5px;
+            }
+            .move-name {
+                font-size: 1rem;
+            }
+            .move-command {
+                font-size: 0.8rem;
+                padding: 4px 8px;
+            }
+        }
+
+        /* Item Fade-in Animation */
+        @keyframes itemFadeIn {
+            0% { opacity: 0; transform: translateY(15px); }
+            100% { opacity: 1; transform: translateY(0); }
         }
     </style>
 </head>
@@ -201,8 +268,8 @@
 
     <div class="container" id="mainContainer">
         <header>
-            <h1>🥋 دليل الأبطال</h1>
-            <p class="subtitle">للرجالة اللي عايزة تحفظ الترتيب الصح</p>
+            <h1>🥋 دليل الحركات القتالية</h1>
+            <p class="subtitle">تجميعة الكاراتيه والتايكوندو بالترتيب الصحيح</p>
         </header>
 
         <div class="tabs">
@@ -211,23 +278,24 @@
         </div>
 
         <div id="karate" class="content-section karate-section active">
-            <h3 class="section-title">🎌 البداية والتحية</h3>
+            <h3 class="section-title">🎌 الكاراتيه (Karate)</h3>
+            
             <ul class="move-list">
                 <li class="move-item">
-                    <span class="move-name"><span class="badge bg-red"></span>هايسكوداتش</span>
-                    <span class="move-command">وقفة</span>
+                    <span class="move-name">هايسكوداتش</span>
+                    <span class="move-command">وقفة انتباه</span>
                 </li>
                 <li class="move-item">
-                    <span class="move-name"><span class="badge bg-red"></span>سنسريه + أوس</span>
+                    <span class="move-name">سنسريه + أوس</span>
                     <span class="move-command">تحية</span>
                 </li>
                 <li class="move-item">
-                    <span class="move-name"><span class="badge bg-red"></span>إداري جيدان براي + إتش</span>
-                    <span class="move-command">استعداد</span>
+                    <span class="move-name">إداري جيدان براي + إتش</span>
+                    <span class="move-command">استعداد أول</span>
                 </li>
             </ul>
 
-            <h3 class="section-title">👊 الهجوم والصد</h3>
+            <h3 class="section-title">👊 اللكمات و الصد</h3>
             <ul class="move-list">
                 <li class="move-item">
                     <span class="move-name">أوي زوكي (للأمام)</span>
@@ -247,15 +315,15 @@
                 </li>
             </ul>
 
-            <h3 class="section-title">🦶 قتال وأرجل</h3>
+            <h3 class="section-title">🦵 القتال والدوران</h3>
             <ul class="move-list">
                 <li class="move-item">
                     <span class="move-name">فايت + ماي جيري</span>
                     <span class="move-command">هجمي!</span>
                 </li>
-                <li class="move-item" style="background: rgba(255, 71, 87, 0.1);">
-                    <span class="move-name">🔄 موتيه (اعكس/دوران)</span>
-                    <span class="move-command">دوران</span>
+                <li class="move-item reverse">
+                    <span class="move-name">🔄 موتيه</span>
+                    <span class="move-command">اعكس / دوران</span>
                 </li>
                 <li class="move-item">
                     <span class="move-name">فايت + ماي جيري</span>
@@ -265,33 +333,29 @@
         </div>
 
         <div id="tkd" class="content-section tkd-section">
-            <h3 class="section-title">🇰🇷 البداية الكورية</h3>
+            <h3 class="section-title">🇰🇷 التايكوندو (Taekwondo)</h3>
             <ul class="move-list">
                 <li class="move-item">
-                    <span class="move-name"><span class="badge bg-blue"></span>تشوريت</span>
-                    <span class="move-command">انتباه</span>
+                    <span class="move-name">تشوريت - كوني</span>
+                    <span class="move-command">انتباه وتحية</span>
                 </li>
                 <li class="move-item">
-                    <span class="move-name"><span class="badge bg-blue"></span>كوني</span>
-                    <span class="move-command">تحية</span>
-                </li>
-                <li class="move-item">
-                    <span class="move-name"><span class="badge bg-blue"></span>تشوتشم سوقي + 3 بانش</span>
+                    <span class="move-name">تشوتشم سوقي + 3 بانش</span>
                     <span class="move-command">شي جاك</span>
+                </li>
+                <li class="move-item">
+                    <span class="move-name">كروجي جومبي</span>
+                    <span class="move-command">وقفة قتال</span>
                 </li>
             </ul>
 
-            <h3 class="section-title">💥 الركلات والحركة</h3>
+            <h3 class="section-title">🦶 اللكمات و الركلات</h3>
             <ul class="move-list">
-                <li class="move-item">
-                    <span class="move-name">تشوريت + كروجي جومبي</span>
-                    <span class="move-command">استعداد</span>
-                </li>
                 <li class="move-item">
                     <span class="move-name">أب بنش (للأمام)</span>
                     <span class="move-command">شي جاك</span>
                 </li>
-                <li class="move-item" style="background: rgba(46, 213, 115, 0.1);">
+                <li class="move-item reverse">
                     <span class="move-name">🔄 سيباغوا</span>
                     <span class="move-command">دوران</span>
                 </li>
@@ -299,7 +363,7 @@
                     <span class="move-name">نارا تشاجي (للأمام)</span>
                     <span class="move-command">شي جاك</span>
                 </li>
-                <li class="move-item" style="background: rgba(46, 213, 115, 0.1);">
+                <li class="move-item reverse">
                     <span class="move-name">🔄 سيباغوا</span>
                     <span class="move-command">دوران</span>
                 </li>
@@ -307,11 +371,15 @@
                     <span class="move-name">باك تشاجي (للأمام)</span>
                     <span class="move-command">شي جاك</span>
                 </li>
+                <li class="move-item">
+                    <span class="move-name">أب بنش (للأمام)</span>
+                    <span class="move-command">شي جاك</span>
+                </li>
             </ul>
         </div>
 
         <footer>
-            <p>صنع للوحوش 💪 بالتوفيق</p>
+            <p>Seif X DebiaN</p>
         </footer>
     </div>
 
@@ -320,24 +388,26 @@
             // Get all buttons and sections
             const buttons = document.querySelectorAll('.tab-btn');
             const sections = document.querySelectorAll('.content-section');
-            const container = document.getElementById('mainContainer');
 
-            // Remove active class from all
+            // Remove active class from all buttons and sections
             buttons.forEach(btn => {
                 btn.classList.remove('active');
-                // Ensure specific color class stays, just remove active
             });
             sections.forEach(sec => sec.classList.remove('active'));
 
             // Add active class to clicked button and target section
             if (art === 'karate') {
-                document.querySelector('.tab-btn.karate').classList.add('active');
-                document.getElementById('karate').classList.add('active');
-                container.style.border = "1px solid rgba(255, 71, 87, 0.3)";
+                const karateButton = document.querySelector('.tab-btn.karate');
+                const karateSection = document.getElementById('karate');
+                
+                karateButton.classList.add('active');
+                karateSection.classList.add('active');
             } else {
-                document.querySelector('.tab-btn.tkd').classList.add('active');
-                document.getElementById('tkd').classList.add('active');
-                container.style.border = "1px solid rgba(46, 213, 115, 0.3)";
+                const tkdButton = document.querySelector('.tab-btn.tkd');
+                const tkdSection = document.getElementById('tkd');
+
+                tkdButton.classList.add('active');
+                tkdSection.classList.add('active');
             }
         }
     </script>
