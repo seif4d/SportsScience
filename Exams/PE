@@ -1,0 +1,502 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار فسيولوجيا الرياضة - جامعة أسيوط</title>
+    <!-- استدعاء خط عربي جميل من Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --success-color: #27ae60;
+            --text-color: #ecf0f1;
+            --bg-gradient: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            width: 100%;
+            max-width: 700px;
+            overflow: hidden;
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header Section */
+        header {
+            background: #f8f9fa;
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #eee;
+        }
+
+        header h1 {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+            margin-bottom: 5px;
+        }
+
+        header p {
+            font-size: 0.9rem;
+            color: #7f8c8d;
+        }
+
+        /* Game Screens */
+        .screen {
+            padding: 30px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: opacity 0.4s ease;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Start Screen */
+        .btn-start, .btn-restart {
+            background: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, background 0.2s;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(52, 152, 219, 0.4);
+        }
+
+        .btn-start:hover, .btn-restart:hover {
+            transform: scale(1.05);
+            background: #2980b9;
+        }
+
+        /* Quiz Area */
+        .quiz-header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+
+        .timer-bar {
+            width: 100%;
+            height: 6px;
+            background: #eee;
+            border-radius: 3px;
+            margin-bottom: 25px;
+            overflow: hidden;
+        }
+
+        .time-left {
+            height: 100%;
+            background: var(--secondary-color);
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        .options-list {
+            width: 100%;
+            list-style: none;
+        }
+
+        .option {
+            background: #f1f2f6;
+            border: 2px solid transparent;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1.1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .option:hover:not(.disabled) {
+            background: #e1e4e8;
+            transform: translateX(-5px);
+        }
+
+        .option.correct {
+            background: #d4edda;
+            border-color: var(--success-color);
+            color: #155724;
+        }
+
+        .option.wrong {
+            background: #f8d7da;
+            border-color: var(--accent-color);
+            color: #721c24;
+        }
+
+        .option.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        /* Result Screen */
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            background: var(--secondary-color);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px auto;
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+
+        .result-message {
+            font-size: 1.4rem;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 10px;
+            font-size: 0.8rem;
+            color: #95a5a6;
+            background: #f8f9fa;
+        }
+
+        @media (max-width: 500px) {
+            .container {
+                min-height: 100vh;
+                border-radius: 0;
+            }
+            .question-text {
+                font-size: 1.1rem;
+            }
+            .option {
+                padding: 12px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>فسيولوجيا الرياضة</h1>
+            <p>كلية التربية الرياضية - جامعة أسيوط</p>
+        </header>
+
+        <!-- Start Screen -->
+        <div id="start-screen" class="screen">
+            <h2 style="margin-bottom: 15px;">هل أنت مستعد للاختبار؟</h2>
+            <p style="color: #666; margin-bottom: 20px;">يحتوي هذا الاختبار على أسئلة اختيار من متعدد وصح وخطأ تغطي المنهج كاملاً.</p>
+            <div style="font-size: 3rem; margin-bottom: 20px;">🧠🏃‍♂️</div>
+            <button class="btn-start" onclick="startQuiz()">بدء الاختبار</button>
+        </div>
+
+        <!-- Quiz Screen -->
+        <div id="quiz-screen" class="screen hidden" style="align-items: stretch; justify-content: flex-start;">
+            <div class="quiz-header">
+                <span id="question-count">سؤال 1 من 50</span>
+                <span id="score-display">النقاط: 0</span>
+            </div>
+            
+            <div class="timer-bar">
+                <div id="time-left" class="time-left"></div>
+            </div>
+
+            <div id="question-text" class="question-text">
+                <!-- Question goes here -->
+            </div>
+
+            <div id="options-container" class="options-list">
+                <!-- Options go here -->
+            </div>
+        </div>
+
+        <!-- Result Screen -->
+        <div id="result-screen" class="screen hidden">
+            <div class="result-icon" style="font-size: 4rem;">🏆</div>
+            <h2 class="result-message" id="result-message">مبروك!</h2>
+            <div class="score-circle">
+                <span id="final-score">0</span>%
+            </div>
+            <p id="result-details" style="margin-bottom: 20px; color: #555;">أجبت بشكل صحيح على X من Y</p>
+            <button class="btn-restart" onclick="restartQuiz()">إعادة الاختبار</button>
+        </div>
+
+        <footer>
+            <a href="https://www.facebook.com/profile.php?id=61577044333150">Seif X DebiaN</a>
+        </footer>
+    </div>
+
+    <script>
+        // Database of Questions
+        const questionsDB = [
+            // --- الفصل الأول ---
+            { q: "علم يهتم بدراسة وظائف الأعضاء والأجهزة الحيوية في جسم الإنسان:", options: ["التشريح", "الفسيولوجيا", "المورفولوجيا"], answer: 1 },
+            { q: "التغيرات 'المؤقتة' والمفاجئة التي تحدث للأجهزة نتيجة المجهود البدني تسمى:", options: ["الاستجابة", "التكيف", "الحالة الصحية"], answer: 0 },
+            { q: "التغيرات 'الدائمة' التي تحدث نتيجة التدريب المنتظم لفترة طويلة تسمى:", options: ["الاستجابة", "التكيف", "الإحماء"], answer: 1 },
+            { q: "الميل للحفاظ على ثبات البيئة الداخلية للجسم (مثل الحرارة والسكر) يسمى:", options: ["الاتزان البدني (Homeostasis)", "العتبة الفارقة", "الدين الأكسجيني"], answer: 0 },
+
+            // --- الفصل الثاني ---
+            { q: "الجزء المسئول في القلب عن ضخ الدم المؤكسج لجميع أجزاء الجسم هو:", options: ["الأذين الأيمن", "البطين الأيسر", "البطين الأيمن"], answer: 1 },
+            { q: "الأوعية الدموية التي تحمل الدم 'من' القلب إلى أجزاء الجسم هي:", options: ["الشرايين", "الأوردة", "الشعيرات"], answer: 0 },
+            { q: "حجم الدم المدفوع من القلب في 'الدقة الواحدة' يسمى:", options: ["الدفع القلبي", "حجم الضربة (SV)", "معدل النبض"], answer: 1 },
+            { q: "معادلة الدفع القلبي (Q) هي:", options: ["معدل القلب × حجم الضربة", "معدل القلب ÷ حجم الضربة", "الضغط × التنفس"], answer: 0 },
+            { q: "يتميز 'القلب الرياضي' في وقت الراحة بـ:", options: ["ارتفاع معدل النبض", "انخفاض معدل النبض (Bradycardia)", "ثبات النبض"], answer: 1 },
+            { q: "أقصى كمية من الأكسجين يستطيع الجسم استهلاكها أثناء المجهود تسمى:", options: ["السعة الحيوية", "VO2Max", "الدين الأكسجيني"], answer: 1 },
+            { q: "يحدث تبادل الغازات داخل الرئتين في:", options: ["القصبة الهوائية", "الحويصلات الهوائية", "الشعب الهوائية"], answer: 1 },
+            { q: "حمض اللاكتيك ينتج عن:", options: ["النشاط الهوائي", "النشاط اللاهوائي (نقص الأكسجين)", "حرق الدهون"], answer: 1 },
+
+            // --- الفصل الثالث ---
+            { q: "عملة الطاقة المباشرة التي تستخدمها العضلات للانقباض هي:", options: ["الجلوكوز", "ATP", "الدهون"], answer: 1 },
+            { q: "أسرع نظام لإنتاج الطاقة (للمجهود أقل من 10 ثواني) هو:", options: ["نظام الفوسفات (ATP-PC)", "نظام اللاكتيك", "النظام الهوائي"], answer: 0 },
+            { q: "نظام الطاقة الأساسي في سباق الماراثون (المسافات الطويلة):", options: ["الفوسفات", "اللاكتيك", "النظام الهوائي"], answer: 2 },
+            { q: "يتم إنتاج الطاقة الهوائية (Aerobic) داخل الخلية في:", options: ["النواة", "الميتوكوندريا", "السيتوبلازم"], answer: 1 },
+
+            // --- الفصل الرابع ---
+            { q: "اختبار 'كوبر' (جري 12 دقيقة) يستخدم لقياس:", options: ["السرعة القصوى", "اللياقة الهوائية (VO2Max)", "القوة العضلية"], answer: 1 },
+            { q: "اختبار الوثب العمودي (Vertical Jump) يقيس:", options: ["التحمل الدوري", "القدرة العضلية (Power)", "سرعة رد الفعل"], answer: 1 },
+            { q: "الاختبارات التي تجرى في الملاعب وتتميز بقلة التكلفة تسمى:", options: ["اختبارات ميدانية", "اختبارات معملية", "اختبارات نفسية"], answer: 0 },
+
+            // --- الفصل الخامس ---
+            { q: "الهدف الفسيولوجي الرئيسي من الإحماء هو:", options: ["رفع درجة حرارة الجسم", "تهدئة اللاعب", "تقليل العرق"], answer: 0 },
+            { q: "من فوائد الإحماء للعضلات:", options: ["زيادة اللزوجة", "تقليل اللزوجة وزيادة المطاطية", "تثبيط الإنزيمات"], answer: 1 },
+            { q: "الإحماء السلبي (Passive) يشمل:", options: ["الجري الخفيف", "التدليك والحمامات الساخنة", "تمرينات الإطالة"], answer: 1 },
+
+            // --- صح وخطأ (True/False) ---
+            { q: "الاستجابة (Response) هي تغير دائم في وظائف الأعضاء.", options: ["صح", "خطأ"], answer: 1 },
+            { q: "القلب الرياضي يتميز بكبر حجمه وزيادة سعة ضخ الدم.", options: ["صح", "خطأ"], answer: 0 },
+            { q: "نظام الطاقة (ATP-PC) يعمل في وجود الأكسجين.", options: ["صح", "خطأ"], answer: 1 },
+            { q: "الميتوكوندريا هي بيت الطاقة في الخلية حيث تتم الأكسدة الهوائية.", options: ["صح", "خطأ"], answer: 0 },
+            { q: "اختبار كوبر يقيس القدرة اللاهوائية.", options: ["صح", "خطأ"], answer: 1 },
+            { q: "الإحماء يساعد على زيادة سرعة توصيل الإشارات العصبية.", options: ["صح", "خطأ"], answer: 0 },
+            { q: "ضغط الدم الطبيعي للإنسان هو 120/80 ملم زئبق.", options: ["صح", "خطأ"], answer: 0 },
+            { q: "الأوردة تحمل الدم من القلب إلى الجسم.", options: ["صح", "خطأ"], answer: 1 },
+            { q: "حجم الضربة (SV) × معدل القلب (HR) = الدفع القلبي (Q).", options: ["صح", "خطأ"], answer: 0 },
+            { q: "التدخين يؤثر سلباً على السعة الحيوية وكفاءة الرئتين.", options: ["صح", "خطأ"], answer: 0 },
+
+            // --- أسئلة تصنيف ومفاهيم ---
+            { q: "نبض الراحة للرياضي المحترف قد يصل إلى:", options: ["70-80 نبضة/ق", "40-50 نبضة/ق", "100 نبضة/ق"], answer: 1 },
+            { q: "اختبار هارفارد للخطوة يصنف كاختبار:", options: ["هوائي - ميداني", "لاهوائي - معملي", "مرونة"], answer: 0 },
+            { q: "عند العدو بأقصى سرعة لمدة 5 ثواني، النظام المستخدم هو:", options: ["الهوائي", "اللاكتيك", "ATP-PC"], answer: 2 }
+        ];
+
+        // App Variables
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let timer;
+        const timePerQuestion = 15; // Seconds
+        let shuffledQuestions = [];
+
+        // DOM Elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const questionTextEl = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const countSpan = document.getElementById('question-count');
+        const scoreSpan = document.getElementById('score-display');
+        const timeLeftDiv = document.getElementById('time-left');
+
+        // Helper: Shuffle Array
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+            return array;
+        }
+
+        // Start Quiz
+        function startQuiz() {
+            shuffledQuestions = shuffleArray([...questionsDB]); // Create a shuffled copy
+            currentQuestionIndex = 0;
+            score = 0;
+            scoreSpan.innerText = `النقاط: 0`;
+            startScreen.classList.add('hidden');
+            resultScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            loadQuestion();
+        }
+
+        // Load Question
+        function loadQuestion() {
+            resetTimer();
+            const currentQ = shuffledQuestions[currentQuestionIndex];
+            
+            // Update UI
+            countSpan.innerText = `سؤال ${currentQuestionIndex + 1} من ${shuffledQuestions.length}`;
+            questionTextEl.innerText = currentQ.q;
+            optionsContainer.innerHTML = '';
+
+            // Create Options
+            currentQ.options.forEach((opt, index) => {
+                const div = document.createElement('div');
+                div.className = 'option';
+                div.innerText = opt;
+                div.onclick = () => checkAnswer(index, div);
+                optionsContainer.appendChild(div);
+            });
+
+            startTimer();
+        }
+
+        // Timer Logic
+        function startTimer() {
+            let width = 100;
+            timeLeftDiv.style.width = '100%';
+            timeLeftDiv.style.backgroundColor = '#3498db';
+            
+            let timeLeft = timePerQuestion;
+            
+            timer = setInterval(() => {
+                timeLeft--;
+                width = (timeLeft / timePerQuestion) * 100;
+                timeLeftDiv.style.width = width + '%';
+                
+                if (width < 30) timeLeftDiv.style.backgroundColor = '#e74c3c';
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    autoFail();
+                }
+            }, 1000);
+        }
+
+        function resetTimer() {
+            clearInterval(timer);
+        }
+
+        // Check Answer
+        function checkAnswer(selectedIndex, selectedElement) {
+            if (selectedElement.classList.contains('disabled')) return;
+            
+            resetTimer();
+            const currentQ = shuffledQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            
+            // Disable all options
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            if (selectedIndex === currentQ.answer) {
+                // Correct
+                selectedElement.classList.add('correct');
+                score++;
+                scoreSpan.innerText = `النقاط: ${score}`;
+            } else {
+                // Wrong
+                selectedElement.classList.add('wrong');
+                // Highlight correct one
+                options[currentQ.answer].classList.add('correct');
+            }
+
+            // Wait then next question
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < shuffledQuestions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        // Auto Fail (Time Out)
+        function autoFail() {
+            const currentQ = shuffledQuestions[currentQuestionIndex];
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => opt.classList.add('disabled'));
+            
+            // Highlight correct one
+            options[currentQ.answer].classList.add('correct');
+            options[currentQ.answer].style.border = "2px solid #e74c3c"; // Indicate time out alert
+
+            setTimeout(() => {
+                currentQuestionIndex++;
+                if (currentQuestionIndex < shuffledQuestions.length) {
+                    loadQuestion();
+                } else {
+                    showResult();
+                }
+            }, 1500);
+        }
+
+        // Show Result
+        function showResult() {
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            
+            const percentage = Math.round((score / shuffledQuestions.length) * 100);
+            document.getElementById('final-score').innerText = percentage;
+            document.getElementById('result-details').innerText = `أجبت بشكل صحيح على ${score} من ${shuffledQuestions.length}`;
+
+            const msgEl = document.getElementById('result-message');
+            if (percentage >= 90) {
+                msgEl.innerText = "ممتاز يا بطل! 🥇";
+                msgEl.style.color = "#27ae60";
+            } else if (percentage >= 70) {
+                msgEl.innerText = "جيد جداً! 🥈";
+                msgEl.style.color = "#2980b9";
+            } else if (percentage >= 50) {
+                msgEl.innerText = "مقبول، تحتاج للمراجعة 📚";
+                msgEl.style.color = "#f39c12";
+            } else {
+                msgEl.innerText = "حاول مرة أخرى! 💪";
+                msgEl.style.color = "#c0392b";
+            }
+        }
+
+        // Restart
+        function restartQuiz() {
+            startQuiz();
+        }
+
+    </script>
+</body>
+</html>
