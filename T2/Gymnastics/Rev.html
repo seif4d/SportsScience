@@ -1,0 +1,714 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>شفرة الجمباز: المنهج كاملاً</title>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #1a237e; /* أزرق عميق */
+            --accent: #ff6d00; /* برتقالي حيوي */
+            --bg-body: #f0f2f5;
+            --bg-card: #ffffff;
+            --text-main: #263238;
+            --text-light: #546e7a;
+            --success: #00c853;
+            --error: #d50000;
+            --shadow: 0 8px 30px rgba(0,0,0,0.08);
+            --radius: 16px;
+        }
+
+        /* Dark Mode Variables */
+        [data-theme="dark"] {
+            --primary: #3949ab;
+            --accent: #ff9100;
+            --bg-body: #121212;
+            --bg-card: #1e1e1e;
+            --text-main: #eceff1;
+            --text-light: #b0bec5;
+            --shadow: 0 8px 30px rgba(0,0,0,0.3);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            padding-bottom: 80px;
+        }
+
+        /* --- Header & Hero --- */
+        header {
+            background: linear-gradient(135deg, var(--primary), #0d47a1);
+            color: white;
+            padding: 2rem 1.5rem;
+            border-bottom-left-radius: 30px;
+            border-bottom-right-radius: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 900;
+            margin-bottom: 0.5rem;
+            animation: slideDown 0.8s ease;
+        }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1.5rem;
+        }
+
+        .theme-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.2rem;
+        }
+
+        /* --- Layout Components --- */
+        .container {
+            max-width: 900px;
+            margin: -30px auto 0;
+            padding: 0 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .section-card {
+            background: var(--bg-card);
+            border-radius: var(--radius);
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow);
+            animation: fadeIn 0.6s ease;
+        }
+
+        h2 {
+            color: var(--primary);
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-bottom: 2px solid var(--bg-body);
+            padding-bottom: 10px;
+        }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            background: var(--bg-body);
+            padding: 5px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .tab-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            color: var(--text-light);
+            cursor: pointer;
+            border-radius: 8px;
+            font-family: inherit;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        .tab-btn.active {
+            background: var(--bg-card);
+            color: var(--primary);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-content { display: none; animation: fadeIn 0.4s; }
+        .tab-content.active { display: block; }
+
+        /* --- History Timeline --- */
+        .timeline-item {
+            position: relative;
+            padding-right: 20px;
+            margin-bottom: 20px;
+            border-right: 3px solid var(--accent);
+        }
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            right: -9px;
+            top: 0;
+            width: 15px;
+            height: 15px;
+            background: var(--accent);
+            border-radius: 50%;
+            border: 3px solid var(--bg-card);
+        }
+        .timeline-year {
+            font-weight: 900;
+            color: var(--accent);
+            font-size: 1.2rem;
+        }
+
+        /* --- Apparatus Grid --- */
+        .grid-apparatus {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+            gap: 15px;
+        }
+        .app-box {
+            background: var(--bg-body);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 2px solid transparent;
+            transition: all 0.3s;
+        }
+        .app-box:hover {
+            border-color: var(--accent);
+            transform: translateY(-5px);
+        }
+        .app-icon { font-size: 2.5rem; display: block; margin-bottom: 10px; }
+        .app-name { font-weight: bold; font-size: 0.9rem; }
+        .app-tag {
+            font-size: 0.7rem;
+            padding: 3px 8px;
+            border-radius: 10px;
+            background: #e0e0e0;
+            color: #333;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .tag-push { background: #ffebee; color: #c62828; }
+        .tag-hang { background: #e3f2fd; color: #1565c0; }
+        .tag-support { background: #e8f5e9; color: #2e7d32; }
+
+        /* --- Measurements Table --- */
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 0.9rem;
+        }
+        .specs-table th, .specs-table td {
+            padding: 10px;
+            border-bottom: 1px solid var(--bg-body);
+            text-align: right;
+        }
+        .specs-table th { color: var(--primary); }
+
+        /* --- Calculator --- */
+        .calc-wrapper {
+            background: linear-gradient(135deg, #e3f2fd, #bbdefb);
+            padding: 20px;
+            border-radius: 20px;
+            text-align: center;
+        }
+        [data-theme="dark"] .calc-wrapper { background: #263238; }
+        
+        .calc-select, .calc-input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 10px 0;
+            font-family: inherit;
+            font-size: 1rem;
+        }
+        .btn-action {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 15px rgba(255, 109, 0, 0.3);
+        }
+        .btn-action:active { transform: scale(0.98); }
+        .result-box {
+            margin-top: 20px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            min-height: 40px;
+        }
+
+        /* --- Quiz Styling --- */
+        .quiz-option {
+            width: 100%;
+            text-align: right;
+            padding: 15px;
+            margin: 8px 0;
+            background: var(--bg-body);
+            border: 2px solid transparent;
+            border-radius: 12px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 1rem;
+            color: var(--text-main);
+            transition: all 0.3s;
+        }
+        .quiz-option.correct {
+            background: #e8f5e9;
+            border-color: var(--success);
+            color: var(--success);
+        }
+        .quiz-option.wrong {
+            background: #ffebee;
+            border-color: var(--error);
+            color: var(--error);
+        }
+        .quiz-score {
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent);
+            margin-top: 20px;
+        }
+
+        /* --- Info Cards (Zatona) --- */
+        .info-card {
+            border-right: 4px solid var(--primary);
+            background: rgba(26, 35, 126, 0.05);
+            padding: 15px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+        }
+        .info-card h4 { color: var(--primary); margin-bottom: 5px; }
+
+        /* --- Bottom Nav --- */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: var(--bg-card);
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -5px 20px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+        .nav-item {
+            background: none;
+            border: none;
+            color: var(--text-light);
+            font-family: inherit;
+            font-size: 0.8rem;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            cursor: pointer;
+        }
+        .nav-item.active { color: var(--accent); }
+        .nav-icon { font-size: 1.4rem; margin-bottom: 3px; }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+
+<header>
+    <button class="theme-toggle" onclick="toggleTheme()">🌓</button>
+    <div class="hero-title">شفرة الجمباز 🤸‍♂️</div>
+    <div class="hero-subtitle">الزتونة وخلاصة المنهج (PDF + شرح)</div>
+</header>
+
+<div class="container">
+
+    <!-- المقدمة والزتونة -->
+    <section id="intro" class="section-card">
+        <h2>💡 كبسولات سريعة (الزتونة)</h2>
+        <div class="info-card">
+            <h4>تعريف الجمباز</h4>
+            <p>رياضة تشكل "ليفل الوحش" تعتمد على القوة، المرونة، الرشاقة، والتوافق. هدفه تنمية الجسم كلياً.</p>
+        </div>
+        <div class="info-card">
+            <h4>أنواع الجمباز</h4>
+            <p>فني (الأولمبي)، إيقاعي (آنسات فقط)، ترامبولين، أيروبكس، جمباز للجميع، أكروبات.</p>
+        </div>
+        <div class="info-card">
+            <h4>القانون والتحكيم</h4>
+            <p>لجنة D (للصعوبة - مفتوحة الدرجة)، لجنة E (للأداء والخصومات - من 10).</p>
+        </div>
+    </section>
+
+    <!-- التواريخ -->
+    <section id="history" class="section-card">
+        <h2>📅 التواريخ (عقدة العقد)</h2>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'world-hist')">عالمياً 🌍</button>
+            <button class="tab-btn" onclick="switchTab(event, 'egypt-hist')">مصر 🇪🇬</button>
+        </div>
+
+        <div id="world-hist" class="tab-content active">
+            <div class="timeline-item">
+                <span class="timeline-year">1891</span>
+                <p>تأسس الاتحاد الدولي (FIG). <span style="color:var(--accent); font-weight:bold">(تاريخ مقدس)</span></p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1896</span>
+                <p>أول دورة أولمبية للرجال (أثينا).</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1928</span>
+                <p>دخول السيدات الأولمبياد (أمستردام).</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1949</span>
+                <p>أول قانون تحكيم دولي (نظم اللعبة).</p>
+            </div>
+        </div>
+
+        <div id="egypt-hist" class="tab-content">
+            <div class="timeline-item">
+                <span class="timeline-year">1910</span>
+                <p>البداية في المدارس المصرية.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1920</span>
+                <p>أول مشاركة لمصر في الأولمبياد (أنفيرس).</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1934</span>
+                <p>تأسيس أول اتحاد مصري رسمي.</p>
+            </div>
+            <div class="timeline-item">
+                <span class="timeline-year">1946</span>
+                <p>انضمام مصر للاتحاد الدولي.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- الأجهزة -->
+    <section id="apparatus" class="section-card">
+        <h2>🤸‍♂️ الأجهزة والقياسات</h2>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'men-app')">رجال (6)</button>
+            <button class="tab-btn" onclick="switchTab(event, 'women-app')">سيدات (4)</button>
+        </div>
+
+        <!-- أجهزة الرجال -->
+        <div id="men-app" class="tab-content active">
+            <p style="text-align:center; margin-bottom:15px; color:var(--error); font-weight:bold;">⚠️ هذا الترتيب حفظ صم لمسائل الروتيشن</p>
+            <div class="grid-apparatus">
+                <div class="app-box">
+                    <span class="app-icon">🤸</span>
+                    <div class="app-name">1. الأرضي</div>
+                    <div class="app-tag tag-push">دفع Push</div>
+                </div>
+                <div class="app-box">
+                    <span class="app-icon">🐎</span>
+                    <div class="app-name">2. حصان حلق</div>
+                    <div class="app-tag tag-support">ارتكاز Support</div>
+                </div>
+                <div class="app-box">
+                    <span class="app-icon">💍</span>
+                    <div class="app-name">3. الحلق</div>
+                    <div class="app-tag tag-hang">تعلق Hang</div>
+                </div>
+                <div class="app-box">
+                    <span class="app-icon">🏃</span>
+                    <div class="app-name">4. القفز</div>
+                    <div class="app-tag tag-push">دفع Push</div>
+                </div>
+                <div class="app-box">
+                    <span class="app-icon">⏸️</span>
+                    <div class="app-name">5. المتوازي</div>
+                    <div class="app-tag tag-support">ارتكاز Support</div>
+                </div>
+                <div class="app-box">
+                    <span class="app-icon">➖</span>
+                    <div class="app-name">6. العقلة</div>
+                    <div class="app-tag tag-hang">تعلق Hang</div>
+                </div>
+            </div>
+
+            <h3 style="margin-top:20px; color:var(--accent)">📏 أهم الأرقام (تسريب)</h3>
+            <table class="specs-table">
+                <tr><th>الجهاز</th><th>المواصفات</th></tr>
+                <tr><td>الأرضي</td><td>12×12 متر (المنطقة الفعلية) | زمن: 70ث</td></tr>
+                <tr><td>حصان القفز</td><td>ارتفاع: 135 سم</td></tr>
+                <tr><td>الحلق والعقلة</td><td>ارتفاع: 280 سم</td></tr>
+                <tr><td>المتوازي</td><td>ارتفاع: 200 سم | طول: 350 سم</td></tr>
+                <tr><td>حصان الحلق</td><td>ارتفاع: 115 سم</td></tr>
+            </table>
+        </div>
+
+        <!-- أجهزة السيدات -->
+        <div id="women-app" class="tab-content">
+            <div class="grid-apparatus">
+                <div class="app-box"><span class="app-icon">🏃‍♀️</span><div class="app-name">1. القفز</div><span class="app-tag">125 سم</span></div>
+                <div class="app-box"><span class="app-icon">⏸️</span><div class="app-name">2. متوازي مختلف</div></div>
+                <div class="app-box"><span class="app-icon">🪜</span><div class="app-name">3. عارضة توازن</div><span class="app-tag">عرض 10 سم!</span></div>
+                <div class="app-box"><span class="app-icon">💃</span><div class="app-name">4. أرضي (موسيقى)</div><span class="app-tag">90ث</span></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- حاسبة الروتيشن -->
+    <section id="rotation" class="section-card">
+        <h2>🧮 حاسبة الروتيشن (المنقذ)</h2>
+        <div class="calc-wrapper">
+            <p>حل أي مسألة روتيشن في ثانية!</p>
+            <label style="display:block; text-align:right; margin-top:10px;">اللاعب بدأ بجهاز إيه؟</label>
+            <select id="startDevice" class="calc-select">
+                <option value="0">1. الحركات الأرضية</option>
+                <option value="1">2. حصان الحلق</option>
+                <option value="2">3. الحلق</option>
+                <option value="3">4. طاولة القفز</option>
+                <option value="4">5. المتوازي</option>
+                <option value="5">6. العقلة</option>
+            </select>
+
+            <label style="display:block; text-align:right;">عايز ترتيبه الكام؟</label>
+            <input type="number" id="targetOrder" class="calc-input" placeholder="مثلاً: الجهاز الخامس (اكتب 5)" min="1" max="6">
+
+            <button class="btn-action" onclick="calculateRotation()">احسب الحل 🚀</button>
+            <div id="rotationResult" class="result-box"></div>
+        </div>
+    </section>
+
+    <!-- الأمن والسلامة والانتقاء (إضافات من ال PDF) -->
+    <section id="safety" class="section-card">
+        <h2>🛡️ الأمن والسلامة والإعداد</h2>
+        <div class="tabs">
+            <button class="tab-btn active" onclick="switchTab(event, 'safety-tab')">الأمان</button>
+            <button class="tab-btn" onclick="switchTab(event, 'prep-tab')">الإعداد والانتقاء</button>
+        </div>
+
+        <div id="safety-tab" class="tab-content active">
+            <ul style="list-style-type: none; padding:0;">
+                <li style="margin-bottom:10px;">✅ <strong>السند (Spotting):</strong> حماية اللاعب من السقوط، ويقسم لسند كلي وجزئي.</li>
+                <li style="margin-bottom:10px;">✅ <strong>أدوات مساعدة:</strong> الحفر الإسفنجية (Pit)، حزام الأمان (اللونجا)، المراتب.</li>
+                <li style="margin-bottom:10px;">✅ <strong>المانيزيا:</strong> تستخدم لامتصاص العرق وزيادة التماسك.</li>
+            </ul>
+        </div>
+
+        <div id="prep-tab" class="tab-content">
+            <p><strong>مراحل الانتقاء:</strong></p>
+            <ol style="margin-right:20px;">
+                <li>انتقاء مبدئي (مواصفات جسمية عامة).</li>
+                <li>انتقاء خاص (اختبارات بدنية ومهارية).</li>
+                <li>انتقاء عالي المستوى (للبطولات).</li>
+            </ol>
+            <p style="margin-top:10px;"><strong>عناصر اللياقة:</strong> القوة، المرونة (إيجابية وسلبية)، الرشاقة، التوافق.</p>
+        </div>
+    </section>
+
+    <!-- بنك الأسئلة -->
+    <section id="quiz" class="section-card">
+        <h2>📝 امتحان (Simulated Exam)</h2>
+        <div id="quiz-container"></div>
+        <div id="quiz-feedback" class="quiz-score"></div>
+    </section>
+
+</div>
+
+<!-- القائمة السفلية -->
+<nav class="bottom-nav">
+    <button class="nav-item active" onclick="scrollToSection('intro')">
+        <span class="nav-icon">🏠</span>
+        <span>الرئيسية</span>
+    </button>
+    <button class="nav-item" onclick="scrollToSection('history')">
+        <span class="nav-icon">📅</span>
+        <span>التاريخ</span>
+    </button>
+    <button class="nav-item" onclick="scrollToSection('apparatus')">
+        <span class="nav-icon">🤸</span>
+        <span>الأجهزة</span>
+    </button>
+    <button class="nav-item" onclick="scrollToSection('rotation')">
+        <span class="nav-icon">🧮</span>
+        <span>حاسبة</span>
+    </button>
+    <button class="nav-item" onclick="scrollToSection('quiz')">
+        <span class="nav-icon">✍️</span>
+        <span>امتحان</span>
+    </button>
+</nav>
+
+<script>
+    // --- Dark Mode Logic ---
+    function toggleTheme() {
+        const body = document.body;
+        if (body.getAttribute('data-theme') === 'dark') {
+            body.removeAttribute('data-theme');
+        } else {
+            body.setAttribute('data-theme', 'dark');
+        }
+    }
+
+    // --- Navigation Logic ---
+    function scrollToSection(id) {
+        document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
+        
+        // Update Active Nav Icon
+        document.querySelectorAll('.nav-item').forEach(btn => btn.classList.remove('active'));
+        event.currentTarget.classList.add('active');
+    }
+
+    // --- Tabs Logic ---
+    function switchTab(evt, tabName) {
+        // Find parent section
+        const section = evt.currentTarget.closest('section');
+        
+        // Hide all tab contents in this section
+        section.querySelectorAll('.tab-content').forEach(content => {
+            content.classList.remove('active');
+        });
+        
+        // Remove active class from buttons
+        section.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+
+        // Show current tab and activate button
+        section.querySelector(`#${tabName}`).classList.add('active');
+        evt.currentTarget.classList.add('active');
+    }
+
+    // --- Rotation Calculator Logic ---
+    const menDevices = [
+        "الحركات الأرضية 🤸",
+        "حصان الحلق 🐎",
+        "الحلق 💍",
+        "طاولة القفز 🏃",
+        "المتوازي ⏸️",
+        "العقلة ➖"
+    ];
+
+    function calculateRotation() {
+        const start = parseInt(document.getElementById('startDevice').value);
+        const order = parseInt(document.getElementById('targetOrder').value);
+        const display = document.getElementById('rotationResult');
+
+        if (!order || order < 1 || order > 6) {
+            display.innerHTML = "<span style='color:var(--error)'>أدخل رقم ترتيب صحيح (1-6)!</span>";
+            return;
+        }
+
+        // Logic: (Start Index + (Order - 1)) Modulo 6
+        let resultIndex = (start + (order - 1)) % 6;
+        
+        display.innerHTML = `الجهاز هو: <span style="color:var(--success); font-size:1.5rem">${menDevices[resultIndex]}</span>`;
+        display.style.animation = "none";
+        setTimeout(() => display.style.animation = "slideDown 0.3s ease", 10);
+    }
+
+    // --- Quiz Engine ---
+    const questions = [
+        {
+            q: "بدأ لاعب بجهاز (حصان الحلق)، ما هو الجهاز الخامس في الترتيب؟",
+            options: ["المتوازي", "العقلة", "طاولة القفز", "الأرضي"],
+            ans: 1
+        },
+        {
+            q: "الجهاز المشترك بين الرجال والسيدات هو؟",
+            options: ["حصان الحلق", "المتوازي", "طاولة القفز", "العقلة"],
+            ans: 2
+        },
+        {
+            q: "ارتفاع جهاز العقلة عن الأرض هو؟",
+            options: ["260 سم", "280 سم", "255 سم", "300 سم"],
+            ans: 1
+        },
+        {
+            q: "تأسس الاتحاد الدولي للجمباز (FIG) عام؟",
+            options: ["1896", "1910", "1891", "1934"],
+            ans: 2
+        },
+        {
+            q: "أي الأجهزة التالية يعتبر من أجهزة (التعلق)؟",
+            options: ["حصان الحلق", "الحركات الأرضية", "الحلق", "طاولة القفز"],
+            ans: 2
+        },
+        {
+            q: "مساحة منطقة اللعب الفعلية للأرضي هي؟",
+            options: ["14×14 م", "12×12 م", "10×10 م", "13×13 م"],
+            ans: 1
+        },
+        {
+            q: "عرض عارضة التوازن للسيدات هو؟",
+            options: ["10 سم", "15 سم", "20 سم", "25 سم"],
+            ans: 0
+        },
+        {
+            q: "لجنة التحكيم المسؤولة عن احتساب (صعوبة) الحركات هي؟",
+            options: ["لجنة E", "لجنة R", "لجنة D", "لجنة A"],
+            ans: 2
+        }
+    ];
+
+    let currentScore = 0;
+    const answeredQs = new Set();
+
+    function initQuiz() {
+        const container = document.getElementById('quiz-container');
+        let html = '';
+        questions.forEach((q, idx) => {
+            html += `
+                <div class="quiz-block" style="margin-bottom:20px; border-bottom:1px solid #ddd; padding-bottom:15px;">
+                    <p style="font-weight:bold; margin-bottom:10px;">${idx + 1}. ${q.q}</p>
+                    ${q.options.map((opt, optIdx) => `
+                        <button class="quiz-option" id="q${idx}-opt${optIdx}" onclick="checkAnswer(${idx}, ${optIdx})">
+                            ${opt}
+                        </button>
+                    `).join('')}
+                    <div id="feedback-${idx}" style="font-weight:bold; margin-top:5px;"></div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    function checkAnswer(qIdx, optIdx) {
+        if (answeredQs.has(qIdx)) return;
+
+        const correct = questions[qIdx].ans;
+        const feedback = document.getElementById(`feedback-${qIdx}`);
+        
+        if (optIdx === correct) {
+            document.getElementById(`q${qIdx}-opt${optIdx}`).classList.add('correct');
+            feedback.innerHTML = "<span style='color:var(--success)'>إجابة صحيحة! أحسنت 🦁</span>";
+            currentScore++;
+        } else {
+            document.getElementById(`q${qIdx}-opt${optIdx}`).classList.add('wrong');
+            document.getElementById(`q${qIdx}-opt${correct}`).classList.add('correct');
+            feedback.innerHTML = "<span style='color:var(--error)'>خطأ! الإجابة الصحيحة ملونة بالأخضر</span>";
+        }
+        
+        answeredQs.add(qIdx);
+        document.getElementById('quiz-feedback').innerText = `النتيجة: ${currentScore} من ${questions.length}`;
+        
+        if (answeredQs.size === questions.length && currentScore === questions.length) {
+            document.getElementById('quiz-feedback').innerHTML += "<br>🎉 مبروك الامتياز يا بطل! 🎉";
+        }
+    }
+
+    // Initialize
+    window.onload = initQuiz;
+
+</script>
+
+</body>
+</html>
