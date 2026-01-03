@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>اختبار أساسيات المناهج - المتوقع</title>
+    <!-- استيراد خط عربي جميل -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --accent-color: #4cc9f0;
+            --success-color: #2a9d8f;
+            --error-color: #e63946;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #2b2d42;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #4361ee 0%, #4cc9f0 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            color: var(--text-color);
+        }
+
+        .container {
+            background: var(--card-bg);
+            width: 100%;
+            max-width: 800px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            overflow: hidden;
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(67, 97, 238, 0.1);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .logo {
+            font-weight: 800;
+            font-size: 1.2rem;
+            color: var(--primary-color);
+        }
+
+        .score-box {
+            background: var(--primary-color);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        /* Progress Bar */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #e9ecef;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--success-color);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Screens */
+        .screen {
+            padding: 40px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            display: none; /* Hidden by default */
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Start Screen */
+        .start-screen h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 20px;
+        }
+
+        .start-screen p {
+            font-size: 1.1rem;
+            color: #6c757d;
+            margin-bottom: 30px;
+            line-height: 1.6;
+        }
+
+        /* Quiz Screen */
+        .quiz-screen {
+            align-items: stretch;
+            text-align: right;
+        }
+
+        .question-text {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            line-height: 1.5;
+            color: var(--text-color);
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option-btn {
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            padding: 15px 20px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: right;
+            position: relative;
+            font-weight: 600;
+        }
+
+        .option-btn:hover:not([disabled]) {
+            background: #e7f5ff;
+            border-color: var(--primary-color);
+            transform: translateY(-2px);
+        }
+
+        .option-btn.correct {
+            background: #d4edda;
+            border-color: var(--success-color);
+            color: #155724;
+        }
+
+        .option-btn.wrong {
+            background: #f8d7da;
+            border-color: var(--error-color);
+            color: #721c24;
+        }
+
+        .next-btn {
+            margin-top: 30px;
+            padding: 12px 30px;
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            align-self: flex-end;
+            display: none; /* Hidden until answer selected */
+        }
+
+        /* Result Screen */
+        .result-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+
+        .final-score {
+            font-size: 3rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin: 10px 0;
+        }
+
+        .result-message {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            color: #495057;
+        }
+
+        /* Main Button Style */
+        .btn-main {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.4);
+            transition: transform 0.2s;
+        }
+
+        .btn-main:hover {
+            transform: scale(1.05);
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive */
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                height: 100vh;
+                max-height: 100vh;
+            }
+            .screen {
+                padding: 20px;
+            }
+            .question-text {
+                font-size: 1.2rem;
+            }
+            .start-screen h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+    
+    <div class="header">
+        <div class="logo">كويز المناهج 🥋</div>
+        <div class="score-box">النقاط: <span id="currentScore">0</span></div>
+    </div>
+
+    <!-- Start Screen -->
+    <div class="screen start-screen active" id="startScreen">
+        <h1>تحدي أساسيات المناهج</h1>
+        <p>مرحباً يا بطل! 📝🔥<br>
+        هذا الاختبار يحتوي على أهم الأسئلة المتوقعة (صح/خطأ واختياري).<br>
+        راجع معلوماتك واستعد للامتحان.<br>
+        عدد الأسئلة: <span id="totalQuestionsCount"></span> سؤال</p>
+        <button class="btn-main" onclick="startQuiz()">ابدأ التحدي 🚀</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div class="screen quiz-screen" id="quizScreen">
+        <div class="question-count" style="margin-bottom: 10px; color: #888; font-size: 0.9rem;">
+            سؤال <span id="qIndex">1</span> من <span id="qTotal">100</span>
+        </div>
+        <div class="question-text" id="questionText">
+            نص السؤال سيظهر هنا...
+        </div>
+        <div class="options-grid" id="optionsGrid">
+            <!-- Options will be injected here -->
+        </div>
+        <button class="next-btn" id="nextBtn" onclick="nextQuestion()">السؤال التالي ⬅️</button>
+    </div>
+
+    <!-- Result Screen -->
+    <div class="screen result-screen" id="resultScreen">
+        <div class="result-icon" id="resultIcon">🏆</div>
+        <h2>النتيجة النهائية</h2>
+        <div class="final-score" id="finalScoreDisplay">0 / 0</div>
+        <p class="result-message" id="resultMessage">أداء رائع!</p>
+        <button class="btn-main" onclick="restartQuiz()">إعادة الاختبار 🔄</button>
+    </div>
+</div>
+
+<script>
+    // Database of Questions
+    // تم دمج وتنسيق جميع الأسئلة الواردة في الطلب
+    const questionsDB = [
+        // --- صح وخطأ (محولة لصيغة اختيارات) ---
+        { q: "المنهج بمفهومه الحديث يركز على حشو عقول التلاميذ بالمعلومات فقط؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الخبرات المباشرة هي أقل أنواع الخبرات تأثيراً وبقاءً في الذهن؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الوقت الكافي لدرس التربية الرياضية في المرحلة الابتدائية هو 150 دقيقة أسبوعياً؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يعد 'التوازن' و'التتابع' و'المدى' من محددات تخطيط المنهج؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يعتبر 'الفراغ' (Space) أحد أبعاد العلاقات في تحليل الحركة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "المنهج المحوري ينقسم إلى جزء عام (إجباري) وجزء خاص (اختياري)؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يقتصر التقويم في المنهج الحديث على اختبارات آخر العام فقط؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "حركات 'المشي والجري والوثب' تندرج تحت بُعد 'الجهد'؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الفلسفة التربوية ثابتة ولا تتغير بتغير الزمان والمكان؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يتميز منهج 'المجالات الواسعة' بإزالة الحواجز تماماً بين المواد المتشابهة؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "كلمة 'منهج' (Curriculum) في الأصل اللاتيني تعني 'مجموعة الكتب الدراسية'؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "حركات 'الثني والمد واللف' تعتبر من حركات الانتقال (Locomotion)؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "العاملان الرئيسيان في بُعد 'الجهد' هما الوقت (الزمن) والقوة (الوزن) فقط؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "جون ديوي (John Dewey) هو الفيلسوف الذي ارتبط اسمه بـ 'منهج النشاط'؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "عند التخطيط للوحدة التعليمية، نبدأ باختيار الأنشطة والألعاب قبل تحديد الأهداف؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يُراعي برنامج علاج السمنة الجانب النفسي للطالب بجانب الجانب البدني؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "المجال 'الوجداني' في الأهداف يختص بتنمية العضلات والأجهزة الحيوية؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الانسياب المقيد (Bound Flow) هو الحركة التي يصعب إيقافها فجأة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "دور المعلم في المنهج الحديث هو ملقن للمعلومات فقط؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "من عيوب المنهج التقليدي تفتيت المعرفة وعدم الترابط بين المواد؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "ممارسة التربية البدنية حق أساسي للجميع بموجب الميثاق الدولي؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "'الجسم' هو الأداة الرئيسية للحركة؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "المنهج التقليدي يركز على المتعلم (الطالب) ويعتبره محور العملية التعليمية؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الخبرات المباشرة هي التي يمر بها الفرد نتيجة قيامه بعمل أو نشاط بنفسه؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "المنهج الحديث يراعي الفروق الفردية بين التلاميذ؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "التنمية الشاملة (عقلي، بدني، نفسي) هي جوهر التربية الرياضية الحديثة؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يجب أن تتاح الأنشطة الرياضية للموهوبين فقط؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "'الجهد' يجيب عن سؤال: 'كيف يتحرك الجسم؟'؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "الانسياب الحر (Free Flow) هو الحركة التي يمكن إيقافها في أي لحظة بسهولة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "المستويات (عالي، متوسط، منخفض) تتبع بُعد 'الفراغ/المساحة'؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "التحرك 'مع الزميل' أو 'ضد الزميل' يتبع بُعد 'العلاقات'؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "حركات 'الثبات' (مثل الثني والمد) تتم دون انتقال الجسم من مكانه؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "التخطيط هو عملية تسبق التنفيذ وتعتبر أساس النجاح؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يجب أن يبنى المنهج على أساس فلسفي واضح؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "التخطيط طويل المدى يغطي فترة زمنية قصيرة مثل حصة واحدة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "خطة 'الوحدة التعليمية' أكبر وأشمل من 'الخطة السنوية'؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "الأهداف السلوكية (ماجر) يجب أن تكون قابلة للملاحظة والقياس؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "البرامج التكميلية هي بديل عن حصة التربية الرياضية الأساسية؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "منهج 'المواد المنفصلة' هو أقدم أنواع المناهج وأكثرها انتشاراً؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "منهج 'النشاط' يدور حول ميول واهتمامات التلاميذ؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "منهج 'المواد المترابطة' يدمج المواد في مادة واحدة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يعاب على منهج 'النشاط' صعوبة تنفيذه وحاجته لإمكانيات كبيرة؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "المنهج التقليدي يركز على 'نقل التراث الثقافي' (المعلومات) أكثر من تنمية التفكير؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "المنهج المندمج (Integrated) يزيل الفواصل بين مادتين أو أكثر؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "نجاح المنهج يعتمد فقط على الكتاب المدرسي؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "المنهج بمفهومه الشامل (الحديث) يقتصر على ما يدور داخل جدران الفصل الدراسي؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "'التكامل' (Integration) هو السمة المميزة لمنهج المواد المنفصلة؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يُفضل استخدام 'الخبرات غير المباشرة' عندما تكون الخبرة المباشرة خطرة أو مستحيلة؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "'التعلم عن طريق العمل' هو مبدأ أساسي في المنهج التقليدي؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يجب أن تكون الأهداف التربوية 'جامدة' وغير قابلة للتعديل؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "تعتبر 'الاستمرارية' شرطاً أساسياً لنجاح الخبرة المربية؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "يعتمد المنهج التقليدي على 'سلطة المعلم'؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "التقويم في المنهج الحديث يهتم بقياس الحفظ والتذكر؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "يمكن اعتبار 'المعسكرات' نوعاً من المنهج الدراسي الحديث؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "الفلسفة المثالية تركز على العقل وتهمل الجسد (تاريخياً)؟", options: ["صح", "خطأ"], answer: 0 },
+        { q: "'المدى' في التخطيط يشير إلى الفترة الزمنية؟", options: ["صح", "خطأ"], answer: 1 },
+        { q: "المنهج هو 'الغاية' وليس 'الوسيلة'؟", options: ["صح", "خطأ"], answer: 1 },
+
+        // --- الاختيار من متعدد MCQ ---
+        { q: "أي مما يلي يُعد من مكونات بُعد 'الجهد' (Effort)؟", options: ["المستويات (عالي/منخفض)", "الجري والوثب", "الزمن والانسياب", "التحرك مع الزميل"], answer: 2 },
+        { q: "المنهج الذي يدور محتواه حول ميول واهتمامات التلاميذ هو:", options: ["منهج المواد المنفصلة", "منهج النشاط", "المنهج المحوري", "منهج المجالات الواسعة"], answer: 1 },
+        { q: "الوقت المخصص للتربية الرياضية في المرحلة الإعدادية والثانوية لا يقل عن:", options: ["150 دقيقة", "200 دقيقة", "225 دقيقة", "90 دقيقة"], answer: 2 },
+        { q: "مصطلح 'المدى' (Scope) في تخطيط المنهج يشير إلى:", options: ["ترتيب الموضوعات", "محتوى المنهج والمقرر", "توزيع الحصص", "طرق التدريس"], answer: 1 },
+        { q: "التحرك في مستوى 'عالي' أو 'منخفض' يتبع بُعد:", options: ["الجسم", "الجهد", "الفراغ (المساحة)", "العلاقات"], answer: 2 },
+        { q: "أي مما يلي ليس من عيوب المنهج التقليدي؟", options: ["سلبية الطالب", "إهمال النمو الشامل", "ربط المدرسة بالحياة", "تفتيت المعرفة"], answer: 2 },
+        { q: "'أن يؤدي الطالب مهارة التمرير بدقة 4 مرات' .. هذا مثال لـ:", options: ["هدف عام", "هدف سلوكي (إجرائي)", "محتوى المنهج", "فلسفة المنهج"], answer: 1 },
+        { q: "العلاقة بين 'التاريخ والجغرافيا' في منهج المواد المترابطة تكون:", options: ["دمج كامل", "إظهار العلاقات بين المواد مع بقائها منفصلة", "إلغاء المواد تماماً", "لا توجد علاقة"], answer: 1 },
+        { q: "أي من المصطلحات التالية يُعبر عن 'تنظيم المحتوى وترتيبه من السهل للصعب'؟", options: ["المدى (Scope)", "التتابع (Sequence)", "التوازن (Balance)", "التكامل"], answer: 1 },
+        { q: "'التحرك في مسار متعرج أو لولبي' يندرج تحت بُعد:", options: ["الجسم", "الجهد", "الفراغ (المسارات)", "العلاقات"], answer: 2 },
+        { q: "المنهج الذي يقسم الدراسة إلى 'جزء عام إجباري' و 'جزء خاص اختياري' هو:", options: ["المنهج المحوري", "منهج النشاط", "المنهج التقليدي", "منهج المواد المترابطة"], answer: 0 },
+        { q: "يتطلب الميثاق الدولي للتربية البدنية أن يكون القائمون بالتدريس:", options: ["لاعبين سابقين فقط", "مؤهلين علمياً وتربوياً", "من المتطوعين", "أولياء أمور"], answer: 1 },
+        { q: "'الخبرة المعدلة' أو البديلة (مثل النماذج والمجسمات) تعتبر خبرة:", options: ["مباشرة", "غير مباشرة", "مجردة", "واقعية"], answer: 1 },
+        { q: "المنهج الذي يعتبر 'المادة الدراسية' هي الغاية في حد ذاتها هو:", options: ["المنهج الحديث", "منهج النشاط", "المنهج التقليدي", "المنهج المحوري"], answer: 2 },
+        { q: "أي مما يلي يُعد من مميزات الخبرات المباشرة؟", options: ["سهولة الحصول عليها", "قلة التكاليف", "قوة التأثير والبقاء في الذاكرة", "تغطية أحداث الماضي"], answer: 2 },
+        { q: "المادة (1) من الميثاق الدولي تنص على أن ممارسة التربية البدنية:", options: ["حق أساسي للجميع", "للموهوبين فقط", "اختيارية للمدارس", "غير ضرورية"], answer: 0 },
+        { q: "أي مما يلي يتبع بُعد 'الجسم' (Body)؟", options: ["الجري", "السرعة", "المستوى العالي", "التحرك مع الزميل"], answer: 0 },
+        { q: "الحركات التي تتم دون الانتقال من المكان تسمى:", options: ["حركات النقل", "حركات الثبات", "حركات المعالجة", "المسارات"], answer: 1 },
+        { q: "يتكون بُعد 'الجهد' (Effort) من عوامل:", options: ["الزمن، الوزن، الانسياب، الفضاء", "الاتجاهات، المستويات", "الشريك، الأداة", "الثني، المد"], answer: 0 },
+        { q: "'الحركة القوية' (Strong) تتبع عامل:", options: ["الزمن", "الوزن (القوة)", "الانسياب", "العلاقات"], answer: 1 },
+        { q: "عندما يتحرك الطالب 'فوق' أو 'تحت' الأداة، فهذا يتبع بُعد:", options: ["العلاقات", "الجسم", "الفراغ", "الجهد"], answer: 0 },
+        { q: "الانسياب الذي يصعب إيقافه فجأة يسمى:", options: ["انسياب مقيد", "انسياب حر", "انسياب مباشر", "انسياب مرن"], answer: 1 },
+        { q: "ترتيب الخبرات التعليمية لتبنى فوق بعضها البعض يسمى:", options: ["المدى", "التتابع", "التكامل", "المرونة"], answer: 1 },
+        { q: "التخطيط الذي يغطي 'موضوعاً واحداً' لفترة زمنية محددة هو:", options: ["الخطة طويلة المدى", "خطة الدرس", "خطة الوحدة", "البرنامج التكميلي"], answer: 2 },
+        { q: "برنامج يهدف لعلاج تشوهات القوام يسمى:", options: ["برنامج الموهوبين", "برنامج القوام", "برنامج اللياقة", "اليوم الرياضي"], answer: 1 },
+        { q: "عند صياغة الهدف السلوكي (ماجر)، يجب أن يبدأ بـ:", options: ["أن + فعل ماضي", "أن + فعل مضارع", "اسم الطالب", "وصف النشاط"], answer: 1 },
+        { q: "المنهج الذي يفصل بين التاريخ والجغرافيا والعلوم هو:", options: ["المواد المنفصلة", "المندمج", "المحوري", "النشاط"], answer: 0 },
+        { q: "منهج 'جون ديوي' الذي يعتمد على فاعلية المتعلم هو:", options: ["المواد المترابطة", "منهج النشاط", "المجالات الواسعة", "المواد المنفصلة"], answer: 1 },
+        { q: "المنهج الذي يربط الدراسة بمشكلات الحياة الواقعية هو:", options: ["المنهج المحوري", "المواد المنفصلة", "المنهج التقليدي", "المنهج الأكاديمي"], answer: 0 },
+        { q: "تقسيم المنهج إلى 'وحدات دراسية' يساعد على:", options: ["تفتيت المعرفة", "تكامل المعرفة", "الحفظ والتلقين", "إهمال الأنشطة"], answer: 1 },
+        { q: "'النظام' (System) يتكون من:", options: ["مدخلات ومخرجات فقط", "عمليات فقط", "مدخلات، عمليات، مخرجات", "كتب دراسية فقط"], answer: 2 },
+        { q: "الفراغ الذي يحيط بالفرد وهو ثابت في مكانه يسمى:", options: ["الفراغ العام", "الفراغ الشخصي", "الفراغ الكلي", "المسار"], answer: 1 },
+        { q: "أي مما يلي يعد هدفاً 'وجدانياً'؟", options: ["تنمية القوة العضلية", "معرفة قانون اللعبة", "التحلي بالروح الرياضية", "الجري لمسافة 50 متر"], answer: 2 },
+        { q: "(سريع - مفاجئ) من صفات عامل:", options: ["الوزن", "الزمن", "الانسياب", "الفراغ"], answer: 1 },
+        { q: "(أمام - خلف - يمين - يسار) تتبع:", options: ["المستويات", "الاتجاهات", "المسارات", "العلاقات"], answer: 1 },
+        { q: "الوقت المخصص للتربية الرياضية في الابتدائي (150 دقيقة) يعادل:", options: ["حصتين", "3 حصص (تقريباً)", "5 حصص", "حصة واحدة"], answer: 1 },
+        { q: "'تقويم البرنامج' يجب أن يكون:", options: ["في نهاية العام فقط", "مستمراً وشاملاً", "للطالب فقط", "للمعلومات فقط"], answer: 1 },
+        { q: "المنهج كـ 'نظام' يتأثر بـ:", options: ["الطالب فقط", "المعلم فقط", "البيئة والمجتمع", "المدرسة فقط"], answer: 2 },
+        { q: "تعتبر 'الرحلات الميدانية' نوعاً من:", options: ["الخبرات المباشرة (أو شبه المباشرة)", "الخبرات المجردة", "التعليم النظري", "تضييع الوقت"], answer: 0 },
+        { q: "الهدف من 'التوازن' في التخطيط:", options: ["إعطاء كل نشاط حقه دون طغيان", "التركيز على كرة القدم", "إلغاء الأنشطة الفردية", "تقليل وقت الحصة"], answer: 0 },
+        { q: "العلاقة 'قائد وتابع' تندرج تحت:", options: ["الجسم", "العلاقات (بين الأفراد)", "الجهد", "الفراغ"], answer: 1 },
+        { q: "يركز المنهج التقليدي في التقييم على:", options: ["الامتحانات التحريرية والحفظ", "الأداء العملي", "السلوك", "الميول"], answer: 0 },
+        { q: "المنهج الذي يناسب المرحلة الابتدائية أكثر لعدم تشتت التلاميذ:", options: ["المواد المنفصلة", "المجالات الواسعة / المندمج", "المحوري", "الأكاديمي البحت"], answer: 1 },
+        { q: "'التوافق العضلي العصبي' يندرج تحت الأهداف:", options: ["المعرفية", "الوجدانية", "المهارية / الحركية", "الاجتماعية"], answer: 2 },
+        { q: "أي مما يلي لا يعد من إجراءات تخطيط الوحدة؟", options: ["تحديد الأهداف", "اختيار المحتوى", "تجاهل الإمكانيات", "تحديد طرق التدريس"], answer: 2 },
+        { q: "من عيوب 'منهج المجالات الواسعة':", options: ["السطحية في المعرفة (عدم التعمق)", "صعوبة الربط", "التفكك", "التركيز على التفاصيل الدقيقة"], answer: 0 },
+        { q: "'الوثب العالي' يتطلب حركة في المستوى:", options: ["المنخفض", "المتوسط", "العالي", "الأرضي"], answer: 2 },
+        { q: "'الزحف' يتم غالباً في المستوى:", options: ["العالي", "المنخفض", "المتوسط", "الهوائي"], answer: 1 },
+        { q: "يعتمد نجاح منهج النشاط بشكل كبير على:", options: ["الكتاب المدرسي", "كفاءة المعلم وتوفر الإمكانيات", "الحفظ", "الامتحانات"], answer: 1 },
+        { q: "الهدف النهائي للتربية الرياضية المدرسية هو:", options: ["إعداد بطل أوليمبي فقط", "إعداد مواطن صالح متكامل", "قضاء وقت فراغ", "شغل جدول الحصص"], answer: 1 },
+        { q: "أي من الأبعاد التالية يجيب عن سؤال 'أين يتحرك الجسم؟'", options: ["الجسم", "الجهد", "العلاقات", "الفراغ (المساحة)"], answer: 3 },
+        { q: "الحركة التي تتم 'ببطء شديد' تتبع عامل:", options: ["القوة", "الزمن", "الانسياب", "الفراغ"], answer: 1 },
+        { q: "'ضرب الكرة بالمضرب' يعتبر من حركات:", options: ["الانتقال", "الثبات", "المعالجة (Manipulation)", "التوازن"], answer: 2 },
+        { q: "العلاقة بين الطالب وزميله 'كالمرايا' تسمى:", options: ["تضاد", "تطابق (Mirroring)", "قيادة", "تبعية"], answer: 1 },
+        { q: "أي مما يلي يُعد من 'العمليات' في نظام المنهج؟", options: ["الأهداف", "طرق التدريس والأنشطة", "الطالب المتخرج", "الكتاب المدرسي"], answer: 1 },
+        { q: "المنهج الذي يواجه صعوبة في 'الجدول المدرسي' التقليدي هو:", options: ["المواد المنفصلة", "منهج النشاط", "المجالات الواسعة", "المنهج الأكاديمي"], answer: 1 },
+        { q: "خطة 'الدرس اليومي' تعتبر تخطيطاً:", options: ["طويل المدى", "متوسط المدى", "قصير المدى", "استراتيجياً"], answer: 2 },
+        { q: "أي مما يلي ليس من خصائص الأهداف الجيدة؟", options: ["الواقعية", "القابلية للقياس", "الغموض والعمومية", "الارتباط بفلسفة المجتمع"], answer: 2 },
+        { q: "العالم 'بلوم' (Bloom) صنف الأهداف إلى:", options: ["معرفية، وجدانية، مهارية", "نظرية، عملية", "فردية، جماعية", "سهلة، صعبة"], answer: 0 },
+        { q: "يهدف 'برنامج الموهوبين' إلى:", options: ["شغل وقت الفراغ", "الوصول للمستويات العليا (البطولة)", "علاج السمنة", "تعليم المهارات الأساسية"], answer: 1 },
+        { q: "'الحجل' (Hopping) هو حركة انتقال تتم على:", options: ["قدم واحدة", "قدمين", "اليدين", "الركبتين"], answer: 0 },
+        { q: "'الوثب' (Jumping) هو حركة انتقال تتم:", options: ["من قدم لقدم", "بالدفع والهبوط بقدمين", "بالزحف", "بالدوران"], answer: 1 },
+        { q: "العامل الذي يحدد 'جودة' أو 'ديناميكية' الحركة هو:", options: ["الجسم", "الفراغ", "الجهد", "العلاقات"], answer: 2 },
+        { q: "'التركيز المباشر' (Direct Focus) في الحركة يعني:", options: ["التحرك نحو هدف محدد بخط مستقيم", "التحرك بعشوائية", "التحرك ببطء", "التحرك للخلف"], answer: 0 },
+        { q: "دور 'الموجه الفني' في تطوير المنهج:", options: ["تصيد الأخطاء", "المساعدة والتوجيه ونقل الخبرات", "وضع الامتحانات فقط", "معاقبة المعلم"], answer: 1 },
+        { q: "يعتبر 'تقييم الزملاء' (Peer Assessment) أسلوباً:", options: ["تقليدياً", "حديثاً ومشاركاً", "ممنوعاً", "غير دقيق"], answer: 1 },
+        { q: "الهدف من 'تحليل الحركة' (لابان) هو:", options: ["تعقيد المنهج", "فهم وتطوير وتنويع الحركة", "إلغاء الألعاب", "تقليل الجهد"], answer: 1 },
+        { q: "'الوعي بالجسم' (Body Awareness) يعني:", options: ["معرفة أسماء العضلات", "إدراك الفرد لأجزاء جسمه وما يمكنها فعله", "النظر في المرآة", "قياس الوزن"], answer: 1 },
+        { q: "يجب أن تتسم 'خطة المنهج' بـ:", options: ["الجمود", "المرونة والقابلية للتعديل", "التعقيد", "السرية"], answer: 1 },
+        { q: "'التربية الرياضية' هي تربية:", options: ["للبدن (للجسم فقط)", "عن طريق البدن (للإنسان ككل)", "للعضلات", "للملاعب"], answer: 1 },
+        
+        // --- أسئلة تصنيف وتكملة (محولة لاختياري) ---
+        { q: "تصنيف الكلمات (سريع - بطيء - قوي - انسيابي) تتبع أي بُعد؟", options: ["الجهد", "الفراغ", "الجسم", "العلاقات"], answer: 0 },
+        { q: "تصنيف الكلمات (أمام - خلف - متعرج - مستقيم - عالي) تتبع أي بُعد؟", options: ["الجهد", "الفراغ", "الجسم", "العلاقات"], answer: 1 },
+        { q: "تصنيف الكلمات (ثني - مد - جري - ضرب الكرة) تتبع أي بُعد؟", options: ["الجهد", "الفراغ", "الجسم", "العلاقات"], answer: 2 },
+        { q: "تصنيف الكلمات (فوق الأداة - بجانب الزميل - قائد وتابع) تتبع أي بُعد؟", options: ["الجهد", "الفراغ", "الجسم", "العلاقات"], answer: 3 },
+        { q: "المصطلح اللاتيني (Curriculum) يعني في الأصل اللغوي:", options: ["مضمار السباق", "الكتاب المدرسي", "قاعة الدراسة", "خطة الدرس"], answer: 0 },
+        { q: "الفراغ الذي يشغله الفرد وهو ثابت في مكانه يسمى:", options: ["الفراغ العام", "الفراغ الشخصي", "فراغ الحركة", "فراغ الملعب"], answer: 1 },
+        { q: "أفضل أنواع الخبرات هي الخبرة:", options: ["المباشرة", "المعدلة", "المجردة", "النظرية"], answer: 0 }
+    ];
+
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let userAnswers = [];
+
+    // DOM Elements
+    const startScreen = document.getElementById('startScreen');
+    const quizScreen = document.getElementById('quizScreen');
+    const resultScreen = document.getElementById('resultScreen');
+    const questionText = document.getElementById('questionText');
+    const optionsGrid = document.getElementById('optionsGrid');
+    const nextBtn = document.getElementById('nextBtn');
+    const qIndexSpan = document.getElementById('qIndex');
+    const qTotalSpan = document.getElementById('qTotal');
+    const currentScoreSpan = document.getElementById('currentScore');
+    const progressBar = document.getElementById('progressBar');
+    const finalScoreDisplay = document.getElementById('finalScoreDisplay');
+    const resultMessage = document.getElementById('resultMessage');
+    const resultIcon = document.getElementById('resultIcon');
+
+    // Display total questions count on start screen
+    document.getElementById('totalQuestionsCount').textContent = questionsDB.length;
+
+    function startQuiz() {
+        startScreen.classList.remove('active');
+        quizScreen.classList.add('active');
+        currentQuestionIndex = 0;
+        score = 0;
+        currentScoreSpan.textContent = 0;
+        qTotalSpan.textContent = questionsDB.length;
+        
+        // Shuffle questions for randomness (Optional - can be removed to keep order)
+        // questionsDB.sort(() => Math.random() - 0.5);
+        
+        showQuestion();
+    }
+
+    function showQuestion() {
+        const question = questionsDB[currentQuestionIndex];
+        questionText.textContent = question.q;
+        qIndexSpan.textContent = currentQuestionIndex + 1;
+        
+        // Update Progress Bar
+        const progressPercent = ((currentQuestionIndex) / questionsDB.length) * 100;
+        progressBar.style.width = `${progressPercent}%`;
+
+        // Clear previous options
+        optionsGrid.innerHTML = '';
+        nextBtn.style.display = 'none';
+
+        // Create option buttons
+        question.options.forEach((option, index) => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.textContent = option;
+            btn.onclick = () => selectAnswer(index, btn);
+            optionsGrid.appendChild(btn);
+        });
+    }
+
+    function selectAnswer(selectedIndex, selectedBtn) {
+        // Prevent changing answer
+        const allOptions = optionsGrid.querySelectorAll('.option-btn');
+        allOptions.forEach(btn => btn.style.pointerEvents = 'none');
+
+        const currentQuestion = questionsDB[currentQuestionIndex];
+        const correctIndex = currentQuestion.answer;
+
+        // Visual feedback
+        if (selectedIndex === correctIndex) {
+            selectedBtn.classList.add('correct');
+            score++;
+            currentScoreSpan.textContent = score;
+            playFeedback(true);
+        } else {
+            selectedBtn.classList.add('wrong');
+            // Highlight the correct one
+            allOptions[correctIndex].classList.add('correct');
+            playFeedback(false);
+        }
+
+        // Show Next Button
+        nextBtn.style.display = 'block';
+        
+        // Auto scroll to next button on mobile
+        nextBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function nextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questionsDB.length) {
+            showQuestion();
+        } else {
+            showResults();
+        }
+    }
+
+    function showResults() {
+        quizScreen.classList.remove('active');
+        resultScreen.classList.add('active');
+        progressBar.style.width = '100%';
+
+        finalScoreDisplay.textContent = `${score} / ${questionsDB.length}`;
+        
+        const percentage = (score / questionsDB.length) * 100;
+        
+        if (percentage >= 90) {
+            resultMessage.textContent = "أنت أسطورة! 🥋 امتياز يا كوتش";
+            resultIcon.textContent = "👑";
+        } else if (percentage >= 75) {
+            resultMessage.textContent = "ممتاز جداً! 🔥 استمر";
+            resultIcon.textContent = "🤩";
+        } else if (percentage >= 50) {
+            resultMessage.textContent = "جيد، لكن تحتاج للمراجعة 📚";
+            resultIcon.textContent = "🤔";
+        } else {
+            resultMessage.textContent = "محتاج تذاكر بضمير يا بطل! 😅";
+            resultIcon.textContent = "🤕";
+        }
+    }
+
+    function restartQuiz() {
+        resultScreen.classList.remove('active');
+        startQuiz();
+    }
+
+    // Optional: Add simple visual shake/pulse via CSS class adding
+    function playFeedback(isCorrect) {
+        const container = document.querySelector('.container');
+        if(!isCorrect) {
+            container.style.animation = "shake 0.5s";
+            setTimeout(() => container.style.animation = "none", 500);
+        }
+    }
+
+    // Add Keyframe for shake dynamically
+    const styleSheet = document.createElement("style");
+    styleSheet.innerText = `
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            50% { transform: translateX(5px); }
+            75% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    `;
+    document.head.appendChild(styleSheet);
+
+</script>
+
+</body>
+</html>
