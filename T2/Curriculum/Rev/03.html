@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المختبر الحركي: الفصل الثالث</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Changa:wght@300;400;700&display=swap');
+
+        :root {
+            --bg-color: #050505;
+            --panel-bg: #111111;
+            --accent-color: #ff0055; /* Neon Pink */
+            --secondary-color: #00e5ff; /* Cyan */
+            --text-color: #ffffff;
+            --success: #00ff00;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Changa', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            overflow-x: hidden;
+            background-image: linear-gradient(0deg, transparent 24%, rgba(255, 0, 85, .05) 25%, rgba(255, 0, 85, .05) 26%, transparent 27%, transparent 74%, rgba(255, 0, 85, .05) 75%, rgba(255, 0, 85, .05) 76%, transparent 77%, transparent), linear-gradient(90deg, transparent 24%, rgba(0, 229, 255, .05) 25%, rgba(0, 229, 255, .05) 26%, transparent 27%, transparent 74%, rgba(0, 229, 255, .05) 75%, rgba(0, 229, 255, .05) 76%, transparent 77%, transparent);
+            background-size: 50px 50px;
+        }
+
+        .lab-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            padding-bottom: 100px;
+        }
+
+        /* --- Header --- */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 2px solid var(--accent-color);
+            padding-bottom: 20px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-color);
+            text-shadow: 2px 2px 0px var(--accent-color);
+        }
+
+        .header p {
+            color: var(--secondary-color);
+            font-size: 1.2rem;
+        }
+
+        /* --- Progress Bar --- */
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #333;
+            border-radius: 5px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--accent-color), var(--secondary-color));
+            transition: width 0.5s ease;
+        }
+
+        /* --- Cards --- */
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid #333;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.7);
+            animation: fadeIn 0.5s ease-in-out;
+            position: relative;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            top: -1px; left: -1px; right: -1px; bottom: -1px;
+            border-radius: 15px;
+            background: linear-gradient(45deg, var(--accent-color), transparent, var(--secondary-color));
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        .section-title {
+            color: var(--secondary-color);
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .content-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #ddd;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .info-box {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid var(--accent-color);
+        }
+
+        .info-title {
+            color: var(--accent-color);
+            font-weight: bold;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* --- Analysis Tool (Quiz) --- */
+        .analysis-tool {
+            background: rgba(0, 229, 255, 0.05);
+            border: 1px dashed var(--secondary-color);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+
+        .tool-header {
+            color: var(--secondary-color);
+            font-weight: bold;
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+        }
+
+        .options-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option-btn {
+            background: #222;
+            color: white;
+            border: 1px solid #444;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: right;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        .option-btn:hover {
+            background: #333;
+            border-color: var(--secondary-color);
+        }
+
+        .option-btn.correct {
+            background: rgba(0, 255, 0, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(255, 0, 85, 0.2);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        .next-btn {
+            background: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            display: none;
+            box-shadow: 0 0 15px var(--accent-color);
+        }
+
+        /* --- Start Overlay --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .glitch-text {
+            font-size: 3rem;
+            font-weight: bold;
+            color: white;
+            text-shadow: 2px 2px var(--accent-color), -2px -2px var(--secondary-color);
+            margin-bottom: 20px;
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 2px solid var(--secondary-color);
+            color: var(--secondary-color);
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border-radius: 5px;
+        }
+
+        .start-btn:hover {
+            background: var(--secondary-color);
+            color: black;
+            box-shadow: 0 0 20px var(--secondary-color);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div class="overlay" id="start-screen">
+        <h1 class="glitch-text">الفصل الثالث<br>المختبر الحركي</h1>
+        <p style="margin-bottom: 30px; font-size: 1.2rem;">تحليل الحركة وفقاً لنظرية رودلف لابان (Laban)</p>
+        <button class="start-btn" onclick="startLab()">ابدأ التحليل 🧬</button>
+    </div>
+
+    <!-- Main Lab UI -->
+    <div class="lab-container" id="lab-ui" style="display: none;">
+        <div class="header">
+            <h1>LABAN ANALYSIS</h1>
+            <p id="level-indicator">المرحلة 1: الجسم</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progress-bar"></div>
+        </div>
+
+        <div id="content-area"></div>
+    </div>
+
+    <!-- End Screen -->
+    <div class="overlay" id="end-screen" style="display: none;">
+        <h1 class="glitch-text" style="color: var(--success); text-shadow: none;">تمت المهمة!</h1>
+        <p style="font-size: 1.5rem;">لقد أتقنت تحليل الحركة</p>
+        <div style="margin: 20px; font-size: 2rem; border: 2px solid var(--success); padding: 20px; border-radius: 10px;">
+            Score: <span id="final-score">0</span>
+        </div>
+        <button class="start-btn" onclick="location.reload()">إعادة المختبر 🔄</button>
+    </div>
+
+    <script>
+        const labData = [
+            {
+                title: "1️⃣ البعد الأول: الجسم (Body)",
+                desc: "السؤال الأساسي: <strong>ماذا يفعل الجسم؟</strong>",
+                content: `
+                    <p class="content-text">في هذا البعد نركز على الفعل الحركي نفسه. وينقسم إلى:</p>
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <span class="info-title">أفعال الانتقال (Locomotion)</span>
+                            تحريك الجسم من مكان لآخر (مثل: المشي، الجري، الحجل، الزحف، الوثب).
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">أفعال الثبات (Non-Locomotion)</span>
+                            حركة في نفس المكان (مثل: التوازن، الثني، المد، الالتفاف، الارتكاز).
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">أفعال المعالجة (Manipulation)</span>
+                            التعامل مع الأدوات (رمي الكرة، ركل، استلام، ضرب بالمضرب).
+                        </div>
+                    </div>
+                `,
+                question: "أي من الحركات التالية يعتبر حركة 'انتقال' (Locomotion)؟",
+                options: ["التوازن على قدم واحدة", "ثني الجذع", "الحجل (Hopping)", "رمي الكرة"],
+                correct: 2,
+                score: 100
+            },
+            {
+                title: "2️⃣ البعد الثاني: الجهد (Effort)",
+                desc: "السؤال الأساسي: <strong>كيف يتحرك الجسم؟</strong> (الجودة)",
+                content: `
+                    <p class="content-text">هنا نتحدث عن "نكهة" الحركة وديناميكيتها. يتكون من 4 عوامل:</p>
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <span class="info-title">⏰ الزمن (Time)</span>
+                            هل الحركة سريعة (مفاجئة) أم بطيئة (مستمرة)؟
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">💪 الوزن/القوة (Weight)</span>
+                            هل الحركة قوية (شديدة) أم خفيفة؟
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">🌊 الانسياب (Flow)</span>
+                            - <strong>حر (Free):</strong> منطلق، صعب إيقافه (جري سريع).<br>
+                            - <strong>مقيد (Bound):</strong> حذر، يمكن إيقافه (مشي على حبل).
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">🎯 الفضاء (Space Focus)</span>
+                            حركة مباشرة (خط مستقيم) أو غير مباشرة (مرنة/متموجة).
+                        </div>
+                    </div>
+                `,
+                question: "حركة 'الجري السريع جداً' الذي يصعب إيقافه فجأة، تتميز بـ انسياب...؟",
+                options: ["مقيد (Bound)", "حر (Free)", "متقطع", "ضعيف"],
+                correct: 1,
+                score: 150
+            },
+            {
+                title: "3️⃣ البعد الثالث: الفراغ (Space)",
+                desc: "السؤال الأساسي: <strong>أين يتحرك الجسم؟</strong>",
+                content: `
+                    <p class="content-text">يحدد المكان والمسار الذي تسلكه الحركة:</p>
+                    <ul class="content-text" style="list-style: inside; margin-bottom: 15px;">
+                        <li><strong>المستويات (Levels):</strong> عالي (وثب)، متوسط (مشي)، منخفض (زحف).</li>
+                        <li><strong>الاتجاهات (Directions):</strong> أمام، خلف، يمين، يسار، قطري.</li>
+                        <li><strong>المسارات (Pathways):</strong> مستقيم، متعرج، دائري، لولبي.</li>
+                    </ul>
+                    <div class="info-box" style="border-left-color: var(--secondary-color);">
+                        💡 <strong>فرق مهم:</strong><br>
+                        <strong>الفراغ الشخصي:</strong> المساحة المحيطة بك وأنت ثابت (فقاعتك).<br>
+                        <strong>الفراغ العام:</strong> الملعب أو الصالة التي تتحرك فيها.
+                    </div>
+                `,
+                question: "التحرك في 'مسار متعرج' يندرج تحت أي بُعد؟",
+                options: ["الجسم", "الجهد", "الفراغ (المساحة)", "العلاقات"],
+                correct: 2,
+                score: 200
+            },
+            {
+                title: "4️⃣ البعد الرابع: العلاقات (Relationships)",
+                desc: "السؤال الأساسي: <strong>مع من/ماذا أتحرك؟</strong>",
+                content: `
+                    <p class="content-text">يصف تفاعلك مع البيئة والأشخاص:</p>
+                    <div class="info-grid">
+                        <div class="info-box">
+                            <span class="info-title">مع الأداة (Objects)</span>
+                            فوق الأداة، تحت الأداة، بجانب الأداة، حمل الأداة.
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">مع الزملاء (Partners)</span>
+                            - <strong>تطابق (Mirroring):</strong> كالمرآة.<br>
+                            - <strong>تضاد (Contrast):</strong> عكس الحركة.<br>
+                            - <strong>قيادة وتبعية:</strong> قائد وتابع.<br>
+                            - <strong>لقاء وافتراق.</strong>
+                        </div>
+                        <div class="info-box">
+                            <span class="info-title">مع أجزاء الجسم</span>
+                            اقتراب اليد من الركبة، تباعد القدمين.
+                        </div>
+                    </div>
+                `,
+                question: "عندما يقوم طالب بتقليد حركة زميله تماماً (كالمرآة)، تسمى هذه العلاقة:",
+                options: ["تضاد", "قيادة", "تطابق (Mirroring)", "معالجة"],
+                correct: 2,
+                score: 250
+            },
+            {
+                title: "🔬 الاختبار النهائي للمختبر",
+                desc: "هل استوعبت النظرية؟ أجب عن السؤال الشامل.",
+                content: `
+                    <p class="content-text">لقد مررت بكل الأبعاد: الجسم (ماذا)، الجهد (كيف)، الفراغ (أين)، العلاقات (مع من).</p>
+                    <p class="content-text">هذا السؤال يتكرر كثيراً في الامتحانات للتفريق بين الأبعاد.</p>
+                `,
+                question: "تصنيف الحركة إلى (قوية / خفيفة) يتبع بُعد ..... ، بينما تصنيفها إلى (عالي / منخفض) يتبع بُعد .....؟",
+                options: [
+                    "الجهد - الجسم",
+                    "الفراغ - العلاقات",
+                    "الجهد - الفراغ",
+                    "الجسم - الجهد"
+                ],
+                correct: 2,
+                score: 300
+            }
+        ];
+
+        let currentStep = 0;
+        let totalScore = 0;
+
+        function startLab() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('lab-ui').style.display = 'block';
+            loadStep();
+        }
+
+        function loadStep() {
+            if (currentStep >= labData.length) {
+                endLab();
+                return;
+            }
+
+            const data = labData[currentStep];
+            
+            // Update UI
+            document.getElementById('level-indicator').innerText = `المرحلة ${currentStep + 1}: ${data.title.split(':')[1] || ''}`;
+            document.getElementById('progress-bar').style.width = `${((currentStep) / labData.length) * 100}%`;
+
+            // Build Content
+            const contentHTML = `
+                <div class="card">
+                    <div class="section-title">
+                        <span>🧬</span> ${data.title}
+                    </div>
+                    <p style="color:#aaa; margin-bottom:15px;">${data.desc}</p>
+                    ${data.content}
+                </div>
+
+                <div class="analysis-tool">
+                    <div class="tool-header">⚡ تحليل العينة: ${data.question}</div>
+                    <div class="options-container">
+                        ${data.options.map((opt, idx) => `
+                            <button class="option-btn" onclick="checkAnswer(this, ${idx}, ${data.correct})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <button class="next-btn" id="next-btn" onclick="nextStep()">التالي >></button>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = contentHTML;
+            window.scrollTo(0, 0);
+        }
+
+        function checkAnswer(btn, idx, correctIdx) {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => {
+                b.style.pointerEvents = 'none';
+                if(b !== btn) b.style.opacity = '0.5';
+            });
+
+            if (idx === correctIdx) {
+                btn.classList.add('correct');
+                totalScore += labData[currentStep].score;
+            } else {
+                btn.classList.add('wrong');
+                btns[correctIdx].classList.add('correct');
+            }
+
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextStep() {
+            currentStep++;
+            loadStep();
+        }
+
+        function endLab() {
+            document.getElementById('lab-ui').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'flex';
+            document.getElementById('final-score').innerText = totalScore;
+            document.getElementById('progress-bar').style.width = '100%';
+        }
+
+    </script>
+</body>
+</html>

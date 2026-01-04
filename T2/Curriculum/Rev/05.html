@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>قائد التخطيط: الفصل الخامس 🚀</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg-deep: #05070a;
+            --surface-panel: #0d121b;
+            --neon-gold: #ffce00;
+            --neon-blue: #00d2ff;
+            --neon-red: #ff3e3e;
+            --text-silver: #c4c4c4;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-deep);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 15px;
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(255, 206, 0, 0.05) 0%, transparent 50%);
+        }
+
+        .hq-container {
+            width: 100%;
+            max-width: 800px;
+        }
+
+        /* --- Stats HUD --- */
+        .hud {
+            background: rgba(13, 18, 27, 0.9);
+            padding: 15px 25px;
+            border-radius: 12px;
+            border: 1px solid var(--neon-gold);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+            box-shadow: 0 0 15px rgba(255, 206, 0, 0.2);
+        }
+
+        .stat-group { text-align: center; }
+        .label { font-size: 0.7rem; color: var(--text-silver); text-transform: uppercase; }
+        .value { font-size: 1.2rem; font-weight: 900; color: var(--neon-gold); }
+
+        .progress-bar-wrapper {
+            position: absolute; bottom: -5px; left: 0; width: 100%; height: 5px;
+            background: #222; overflow: hidden; border-radius: 0 0 12px 12px;
+        }
+        .progress-fill {
+            height: 100%; width: 0%; background: var(--neon-gold);
+            transition: width 0.4s ease; box-shadow: 0 0 10px var(--neon-gold);
+        }
+
+        /* --- Content Layout --- */
+        .mission-card {
+            background: var(--surface-panel);
+            border-radius: 20px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease;
+        }
+
+        .mission-tag {
+            background: rgba(255, 206, 0, 0.1);
+            color: var(--neon-gold);
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        h2 { font-size: 1.6rem; color: #fff; margin-bottom: 20px; }
+        p { line-height: 1.8; color: var(--text-silver); font-size: 1.05rem; margin-bottom: 15px; }
+
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .data-item {
+            background: rgba(255,255,255,0.03);
+            padding: 15px;
+            border-radius: 10px;
+            border-right: 3px solid var(--neon-blue);
+        }
+        .data-item strong { color: var(--neon-blue); display: block; margin-bottom: 5px; }
+
+        /* Accordion */
+        details { background: #151b26; border-radius: 8px; margin-bottom: 10px; }
+        summary { padding: 15px; cursor: pointer; color: white; font-weight: bold; list-style: none; display: flex; justify-content: space-between; }
+        summary::after { content: '▼'; font-size: 0.8rem; color: var(--neon-gold); }
+        .details-body { padding: 15px; border-top: 1px solid #222; }
+
+        /* --- Quiz Area --- */
+        .quiz-box {
+            background: #090c12;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed rgba(255, 206, 0, 0.3);
+            margin-top: 20px;
+        }
+        .option-btn {
+            display: block; width: 100%; padding: 16px; margin-bottom: 10px;
+            background: #1a222e; border: 1px solid #333; border-radius: 10px;
+            color: white; text-align: right; cursor: pointer; transition: 0.2s;
+        }
+        .option-btn:hover { border-color: var(--neon-gold); }
+        .option-btn.correct { background: rgba(0, 210, 255, 0.2); border-color: var(--neon-blue); color: var(--neon-blue); }
+        .option-btn.wrong { background: rgba(255, 62, 62, 0.2); border-color: var(--neon-red); color: var(--neon-red); }
+
+        .continue-btn {
+            width: 100%; padding: 18px; background: var(--neon-gold); color: #000;
+            border: none; border-radius: 50px; font-weight: 900; font-size: 1.2rem;
+            margin-top: 20px; cursor: pointer; display: none;
+        }
+
+        /* --- Overlays --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-deep); z-index: 2000; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px; text-align: center;
+        }
+        .action-btn {
+            background: var(--neon-gold); color: black; padding: 15px 50px;
+            border-radius: 50px; font-size: 1.3rem; font-weight: 800; border: none;
+            cursor: pointer; margin-top: 30px; box-shadow: 0 0 20px rgba(255, 206, 0, 0.4);
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            h2 { font-size: 1.3rem; }
+            .data-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start -->
+    <div class="overlay" id="start-screen">
+        <div style="font-size: 4rem;">🚀📋</div>
+        <h1 style="font-size: 2.5rem; color: var(--neon-gold);">غرفة عمليات التخطيط<br>الفصل الخامس</h1>
+        <p style="color: var(--text-silver); margin-top: 15px;">تصميم الوحدات، كتابة الأهداف، والبرامج التكميلية بالتفصيل الممل</p>
+        <button class="action-btn" onclick="initApp()">بدء التخطيط ⚔️</button>
+    </div>
+
+    <!-- UI -->
+    <div class="hq-container" id="main-ui" style="display: none;">
+        <div class="hud">
+            <div class="stat-group">
+                <span class="label">المهمة</span>
+                <div class="value" id="current-m">1</div>
+            </div>
+            <div class="stat-group">
+                <span class="label">نقاط القيادة</span>
+                <div class="value" id="score-val">0</div>
+            </div>
+            <div class="progress-bar-wrapper">
+                <div class="progress-fill" id="pb"></div>
+            </div>
+        </div>
+        <div id="content-slot"></div>
+    </div>
+
+    <!-- End -->
+    <div class="overlay" id="final-screen" style="display: none;">
+        <div style="font-size: 5rem;">🏆🏅</div>
+        <h1 style="color: var(--neon-gold);">أنت مخطط داهية!</h1>
+        <p>لقد استوعبت تفاصيل الفصل الخامس بالكامل</p>
+        <h2 id="final-xp" style="font-size: 3rem; margin: 20px 0;">0</h2>
+        <button class="action-btn" onclick="location.reload()">مراجعة الخطة 🔄</button>
+    </div>
+
+    <script>
+        const chapterData = [
+            {
+                tag: "هرم التخطيط",
+                title: "مستويات التخطيط الثلاثة 📶",
+                content: `
+                    <p>التخطيط عملية منظمة تبدأ من العام وتنتهي بالحصة اليومية:</p>
+                    <div class="data-grid">
+                        <div class="data-item">
+                            <strong>1. الخطة طويلة المدى (السنوية):</strong>
+                            توزع المحتوى على مدار العام الدراسي بالكامل، وتحدد "المدى والتتابع".
+                        </div>
+                        <div class="data-item">
+                            <strong>2. خطة الوحدة التعليمية:</strong>
+                            أهم مستوى تخطيطي، تدور حول موضوع واحد (مثل وحدة الجمباز) لعدة أسابيع.
+                        </div>
+                        <div class="data-item">
+                            <strong>3. خطة الدرس (الحصة):</strong>
+                            المخطط التفصيلي لـ 45 دقيقة، وهو أصغر وحدة تنفيذية.
+                        </div>
+                    </div>
+                `,
+                question: "أي مستوى تخطيطي يعتبر 'البلوك' الأساسي للتدريس ويدور حول مهارة واحدة لعدة أسابيع؟",
+                options: ["الخطة السنوية", "خطة الدرس اليومي", "خطة الوحدة التعليمية", "الخطة الخمسية"],
+                correct: 2,
+                xp: 150
+            },
+            {
+                tag: "تشريح الوحدة",
+                title: "مكونات الوحدة التعليمية بالتفصيل 📦",
+                content: `
+                    <p>لكي تبني وحدة تعليمية ناجحة، يجب أن تتضمن العناصر التالية بالترتيب:</p>
+                    <details open>
+                        <summary>العناوين والأهداف</summary>
+                        <div class="details-body">
+                            عنوان الوحدة، الصف الدراسي، والأهداف (ماذا سيتعلم الطلاب؟).
+                        </div>
+                    </details>
+                    <details>
+                        <summary>المحتوى والأدوات</summary>
+                        <div class="details-body">
+                            المهارات الحركية المختارة، والأجهزة المطلوبة (مراتب، كرات، أقماع).
+                        </div>
+                    </details>
+                    <details>
+                        <summary>التنفيذ والتقويم</summary>
+                        <div class="details-body">
+                            طرق التدريس المستخدمة، وطرق تقييم أداء الطلاب في نهاية الوحدة.
+                        </div>
+                    </details>
+                `,
+                question: "ما هي الخطوة الأولى والأساسية عند البدء في تخطيط الوحدة التعليمية؟",
+                options: ["اختيار الألعاب والأنشطة", "تحديد الأهداف التعليمية", "تجهيز الملاعب", "كتابة جدول الحصص"],
+                correct: 1,
+                xp: 200
+            },
+            {
+                tag: "فنيات الأهداف",
+                title: "طريقة 'ماجر' (Mager) لصياغة الأهداف 🎯",
+                content: `
+                    <p>الكتاب يركز على صياغة الأهداف بشكل "سلوكي" يمكن ملاحظته وقياسه. المعادلة هي:</p>
+                    <div class="hq-box" style="background:#1a222e; padding:15px; border-radius:10px; border-left:4px solid var(--neon-gold); text-align:center;">
+                        <span style="color:var(--neon-gold)">أن</span> + <span style="color:var(--neon-blue)">فعل مضارع</span> + <span style="color:var(--neon-gold)">الطالب</span> + <span style="color:var(--neon-blue)">المحتوى</span> + <span style="color:var(--neon-gold)">شرط الأداء</span>
+                    </div>
+                    <p style="margin-top:15px;"><strong>مثال:</strong> أن يؤدي الطالب (تمريرة الصدر) بدقة 4 مرات من 5 محاولات.</p>
+                `,
+                question: "أي من الأهداف التالية مصاغ بشكل سلوكي صحيح؟",
+                options: [
+                    "أن يحب الطالب كرة القدم",
+                    "أن يفهم الطالب معنى اللياقة",
+                    "أن ينطط الطالب الكرة 10 مرات دون وقوعها",
+                    "أن يكون الطالب سعيداً في الحصة"
+                ],
+                correct: 2,
+                xp: 200
+            },
+            {
+                tag: "البرامج الخاصة",
+                title: "علاج السمنة والقوام 🍎🦴",
+                content: `
+                    <p>الرياضة المدرسية لها أدوار علاجية إضافية تسمى 'البرامج التكميلية':</p>
+                    <div class="data-grid">
+                        <div class="data-item" style="border-color:var(--neon-red)">
+                            <strong>برنامج علاج السمنة:</strong>
+                            يجب أن يركز على <u>الجانب النفسي</u> أولاً. الطفل السمين يحتاج تشجيعاً لا إحراجاً.
+                        </div>
+                        <div class="data-item">
+                            <strong>برنامج إصلاح القوام:</strong>
+                            يهدف لتصحيح الانحرافات (مثل تقوس الظهر أو تفلطح القدم) الناتجة عن الجلوس الخاطئ.
+                        </div>
+                    </div>
+                    <p>⚠️ <strong>تنبيه:</strong> البرامج التكميلية ليست بديلاً للحصة، بل هي "زيادة" لخدمة حالات خاصة.</p>
+                `,
+                question: "ما هو أهم جانب يجب مراعاته عند تصميم برنامج رياضي للطلاب الذين يعانون من السمنة؟",
+                options: ["زيادة شدة التمارين لأقصى حد", "الجانب النفسي وتجنب الإحراج", "منعهم من المشاركة مع زملائهم", "التركيز على الفوز بالبطولات"],
+                correct: 1,
+                xp: 250
+            },
+            {
+                tag: "التحدي النهائي",
+                title: "مواجهة الزعيم 👹",
+                content: `
+                    <p>أنت الآن جاهز لتقفيل الفصل الخامس.</p>
+                    <p>تذكر: التخطيط يبدأ بالأهداف، والوحدة هي قلب العملية، والبرامج التكميلية تخدم ذوي الاحتياجات والسمنة.</p>
+                `,
+                question: "أي العبارات التالية صحيحة حول 'البرامج التكميلية' في المنهج؟",
+                options: [
+                    "هي حصص الألعاب العادية الموجودة بالجدول.",
+                    "برامج موجهة لحالات خاصة (موهوبين، سمنة، قوام) بجانب المنهج الأساسي.",
+                    "برامج نظرية تدرس داخل الفصل فقط.",
+                    "تهدف فقط إلى قضاء وقت الفراغ دون أهداف تربوية."
+                ],
+                correct: 1,
+                xp: 500
+            }
+        ];
+
+        let currentM = 0;
+        let score = 0;
+
+        function initApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            renderStep();
+        }
+
+        function renderStep() {
+            if (currentM >= chapterData.length) {
+                showFinal();
+                return;
+            }
+            const data = chapterData[currentM];
+            const slot = document.getElementById('content-slot');
+            
+            document.getElementById('current-m').innerText = currentM + 1;
+            document.getElementById('pb').style.width = (currentM / chapterData.length) * 100 + "%";
+
+            slot.innerHTML = `
+                <div class="mission-card">
+                    <span class="mission-tag">${data.tag}</span>
+                    <h2>${data.title}</h2>
+                    <div>${data.content}</div>
+                </div>
+
+                <div class="quiz-box">
+                    <p style="color:var(--neon-gold); font-weight:bold; margin-bottom:15px;">❓ سؤال القائد: ${data.question}</p>
+                    <div>
+                        ${data.options.map((opt, i) => `
+                            <button class="option-btn" onclick="handleAns(this, ${i}, ${data.correct})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <button class="continue-btn" id="cb" onclick="nextM()">المهمة التالية >> </button>
+                </div>
+            `;
+            window.scrollTo(0,0);
+        }
+
+        function handleAns(btn, i, correct) {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (i === correct) {
+                btn.classList.add('correct');
+                score += chapterData[currentM].xp;
+            } else {
+                btn.classList.add('wrong');
+                btns[correct].classList.add('correct');
+                score = Math.max(0, score - 50);
+            }
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('cb').style.display = 'block';
+        }
+
+        function nextM() { currentM++; renderStep(); }
+
+        function showFinal() {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'flex';
+            document.getElementById('final-xp').innerText = score + " XP";
+            document.getElementById('pb').style.width = "100%";
+        }
+    </script>
+</body>
+</html>

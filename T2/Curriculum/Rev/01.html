@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>رحلة المنهج: الفصل الأول بالكامل</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg-dark: #0f0f13;
+            --card-dark: #18181f;
+            --primary: #00f260; /* Neon Green */
+            --secondary: #0575e6; /* Electric Blue */
+            --accent: #f83600; /* Hot Orange */
+            --text: #ffffff;
+            --text-gray: #a0a0a0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: 
+                radial-gradient(circle at 10% 10%, rgba(5, 117, 230, 0.1) 0%, transparent 40%),
+                radial-gradient(circle at 90% 90%, rgba(0, 242, 96, 0.1) 0%, transparent 40%);
+            overflow-x: hidden;
+            padding: 10px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 700px;
+            position: relative;
+            padding-bottom: 80px; /* Space for bottom nav if needed */
+        }
+
+        /* --- Header & HUD --- */
+        .hud-bar {
+            background: rgba(24, 24, 31, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.08);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 10px;
+            z-index: 100;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            margin-bottom: 20px;
+        }
+
+        .stat-box {
+            text-align: center;
+        }
+
+        .stat-label {
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            display: block;
+        }
+
+        .stat-value {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--primary);
+            text-shadow: 0 0 10px rgba(0, 242, 96, 0.4);
+        }
+
+        .xp-badge {
+            background: linear-gradient(45deg, #f83600, #fe8c00);
+            padding: 5px 12px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 0.9rem;
+            box-shadow: 0 0 15px rgba(248, 54, 0, 0.4);
+        }
+
+        .progress-track {
+            position: absolute;
+            bottom: 0;
+            left: 20px;
+            right: 20px;
+            height: 4px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            width: 0%;
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px var(--primary);
+        }
+
+        /* --- Content Cards --- */
+        .content-card {
+            background: var(--card-dark);
+            border-radius: 25px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            animation: slideUp 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .lesson-tag {
+            background: rgba(5, 117, 230, 0.2);
+            color: var(--secondary);
+            padding: 5px 15px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .lesson-title {
+            font-size: 1.6rem;
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .text-body {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #dcdcdc;
+            margin-bottom: 20px;
+        }
+
+        .highlight {
+            color: var(--primary);
+            font-weight: bold;
+            border-bottom: 2px solid rgba(0, 242, 96, 0.3);
+        }
+
+        .concept-box {
+            background: rgba(255, 255, 255, 0.05);
+            border-right: 4px solid var(--secondary);
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+
+        .vs-box {
+            display: flex;
+            gap: 10px;
+            margin: 20px 0;
+            flex-direction: column;
+        }
+
+        .vs-item {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+        }
+
+        .vs-bad { background: rgba(248, 54, 0, 0.1); border: 1px solid rgba(248, 54, 0, 0.3); }
+        .vs-good { background: rgba(0, 242, 96, 0.1); border: 1px solid rgba(0, 242, 96, 0.3); }
+
+        /* --- Quiz UI --- */
+        .quiz-container {
+            background: #121216;
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px dashed rgba(255,255,255,0.1);
+            margin-top: 30px;
+        }
+
+        .quiz-title {
+            color: var(--secondary);
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: #25252f;
+            border: none;
+            padding: 18px;
+            border-radius: 12px;
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:active {
+            transform: scale(0.98);
+        }
+
+        .option-btn.correct {
+            background: rgba(0, 242, 96, 0.2);
+            box-shadow: 0 0 0 2px var(--primary);
+            color: var(--primary);
+        }
+
+        .option-btn.wrong {
+            background: rgba(248, 54, 0, 0.2);
+            box-shadow: 0 0 0 2px var(--accent);
+            color: var(--accent);
+            opacity: 0.7;
+        }
+
+        .continue-btn {
+            background: linear-gradient(90deg, var(--secondary), #00c6ff);
+            color: white;
+            width: 100%;
+            padding: 18px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 25px;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(5, 117, 230, 0.4);
+            display: none;
+            animation: pulse 1.5s infinite;
+        }
+
+        /* --- Start & End Screens --- */
+        .full-screen {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-dark);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+        }
+
+        .btn-main {
+            background: var(--text);
+            color: var(--bg-dark);
+            padding: 15px 50px;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            border: none;
+            margin-top: 40px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        /* Animations */
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- Responsive Tweaks --- */
+        @media (max-width: 600px) {
+            .lesson-title { font-size: 1.4rem; }
+            .text-body { font-size: 1rem; }
+            .hud-bar { top: 0; border-radius: 0 0 20px 20px; }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div class="full-screen" id="start-screen">
+        <div style="font-size: 4rem; margin-bottom: 20px;">🎓🔥</div>
+        <h1 class="hero-title">أساسيات المناهج<br>الفصل الأول</h1>
+        <p style="color: var(--text-gray); margin-top: 10px;">الشرح الشامل + التحديات الذكية</p>
+        
+        <div style="margin-top: 40px; text-align: right; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; width: 100%;">
+            <p>✅ شرح يغني عن الكتاب</p>
+            <p>✅ نظام مهام وتحديات</p>
+            <p>✅ متوافق مع الموبايل</p>
+        </div>
+
+        <button class="btn-main" onclick="startGame()">ابدأ الرحلة 🚀</button>
+    </div>
+
+    <!-- Game Interface -->
+    <div class="app-container" id="game-ui" style="display: none;">
+        
+        <!-- HUD -->
+        <div class="hud-bar">
+            <div class="stat-box">
+                <span class="stat-label">المرحلة</span>
+                <span class="stat-value" id="level-num">1</span>
+            </div>
+            
+            <div class="xp-badge">
+                <span id="xp-score">0</span> XP ⚡
+            </div>
+
+            <div class="progress-track">
+                <div class="progress-fill" id="progress-bar"></div>
+            </div>
+        </div>
+
+        <!-- Dynamic Content Area -->
+        <div id="content-area"></div>
+
+    </div>
+
+    <!-- End Screen -->
+    <div class="full-screen" id="end-screen" style="display: none;">
+        <div style="font-size: 5rem;">🏆</div>
+        <h1 class="hero-title">مبروك يا كوتش!</h1>
+        <p>لقد أتممت الفصل الأول بنجاح</p>
+        
+        <div style="background: #1e1e24; padding: 30px; border-radius: 20px; margin: 30px 0; width: 100%; border: 1px solid var(--primary);">
+            <p style="color:var(--text-gray)">مجموع نقاط الخبرة</p>
+            <h2 style="font-size: 3rem; color: var(--primary);" id="final-xp">0</h2>
+            <p id="rank-text" style="font-weight: bold; margin-top: 10px; color: var(--secondary);"></p>
+        </div>
+
+        <button class="btn-main" onclick="location.reload()">إعادة التحدي 🔄</button>
+    </div>
+
+    <script>
+        const curriculumData = [
+            {
+                tag: "المفهوم اللغوي",
+                title: "ما معنى كلمة (منهج)؟ 🤔",
+                content: `
+                    <p class="text-body">كلمة منهج بالإنجليزية <strong>Curriculum</strong> أصلها لاتيني، ومعناها الحرفي <span class="highlight">"مضمار السباق" (Racecourse)</span>.</p>
+                    <div class="concept-box">
+                        🏃‍♂️ <strong>تخيل معي:</strong><br>
+                        الطالب هو العداء، والمنهج هو الطريق المحدد الذي يجب أن يجريه ليصل إلى خط النهاية (النجاح والشهادة).
+                    </div>
+                    <p class="text-body">لذلك، المنهج ليس مجرد كتاب، بل هو <strong>خطة وطريق</strong>.</p>
+                `,
+                question: "ما هو المعنى اللغوي لكلمة Curriculum؟",
+                options: ["مكتبة الكتب", "مضمار السباق", "قاعة الدرس", "طاولة الاجتماعات"],
+                correct: 1,
+                xp: 100
+            },
+            {
+                tag: "المفهوم التقليدي",
+                title: "المنهج القديم: عصر الحفظ 👴",
+                content: `
+                    <p class="text-body">قديماً، كانت المدرسة ترى أن عقل الطالب مثل "الوعاء الفارغ" ويجب ملؤه بالمعلومات.</p>
+                    <div class="vs-box">
+                        <div class="vs-bad">
+                            ❌ <strong>المنهج التقليدي (القديم):</strong><br>
+                            • يركز على <strong>المادة الدراسية</strong> (المعلومات) فقط.<br>
+                            • الطالب سلبي (يسمع ويحفظ).<br>
+                            • المعلم هو المسيطر والملقن.<br>
+                            • الامتحانات تقيس الحفظ فقط.
+                        </div>
+                    </div>
+                    <p class="text-body">هذا النظام "فاشل" لأنه أهمل جسم الطالب، ونفسيته، وميوله.</p>
+                `,
+                question: "على ماذا يركز المنهج بمفهومه التقليدي (القديم)؟",
+                options: ["ميول الطالب", "الأنشطة والمهارات", "المعلومات والمادة الدراسية", "الرحلات الميدانية"],
+                correct: 2,
+                xp: 150
+            },
+            {
+                tag: "المفهوم الحديث",
+                title: "المنهج الحديث: الطالب هو النجم 🌟",
+                content: `
+                    <p class="text-body">بسبب عيوب النظام القديم، ظهر المنهج الحديث. هنا <strong>الطالب هو المحور</strong>.</p>
+                    <div class="concept-box">
+                        📖 <strong>التعريف الحديث للمنهج:</strong><br>
+                        هو "مجموعة الخبرات التربوية" (أنشطة، مهارات، قيم، معلومات) التي تقدمها المدرسة للطالب لمساعدته على <strong>النمو الشامل</strong>.
+                    </div>
+                    <p class="text-body">
+                        ✅ <strong>مميزاته:</strong><br>
+                        - يهتم بالنمو (العقلي + البدني + النفسي + الاجتماعي).<br>
+                        - الطالب مشارك وإيجابي.<br>
+                        - المعلم "موجه ومرشد" (Coach).
+                    </p>
+                `,
+                question: "ما هو دور المعلم في المنهج الحديث؟",
+                options: ["ملقن للمعلومات", "مسيطر على الفصل", "مرشد وموجه", "كاتب للامتحانات"],
+                correct: 2,
+                xp: 200
+            },
+            {
+                tag: "أساس المنهج",
+                title: "الخبرة: قلب المنهج الحديث ❤️",
+                content: `
+                    <p class="text-body">المنهج الحديث لا يعتمد على "الكتاب" فقط، بل يعتمد على <strong>"الخبرة"</strong>.</p>
+                    <p class="text-body">الخبرة هي التفاعل بين الطالب والبيئة. وتنقسم لنوعين:</p>
+                    <div class="vs-box">
+                        <div class="vs-good">
+                            🔥 <strong>1. الخبرة المباشرة:</strong><br>
+                            أن تفعل الشيء بنفسك (تلعب مباراة، تزرع شجرة).<br>
+                            - هي <strong>الأقوى</strong> والأكثر بقاءً في الذاكرة.
+                        </div>
+                        <div class="vs-bad" style="background:rgba(255,255,255,0.05); border-color:#fff;">
+                            📺 <strong>2. الخبرة غير المباشرة:</strong><br>
+                            أن تتعلم عن طريق وسيط (كتاب، فيديو، شرح).<br>
+                            - نستخدمها كبديل لما تكون المباشرة صعبة.
+                        </div>
+                    </div>
+                `,
+                question: "أي نوع من الخبرات يعتبر الأقوى والأكثر تأثيراً؟",
+                options: ["الخبرة غير المباشرة", "الخبرة المباشرة", "الخبرة النظرية", "الخبرة السمعية"],
+                correct: 1,
+                xp: 250
+            },
+            {
+                tag: "مقارنة هامة",
+                title: "متى نستخدم الخبرة غير المباشرة؟ 🤔",
+                content: `
+                    <p class="text-body">رغم أن "الخبرة المباشرة" (التطبيق العملي) هي الأفضل، لكننا لا نستطيع استخدامها دائماً. لماذا؟</p>
+                    <ul class="text-body" style="list-style-type: none;">
+                        <li>⚠️ <strong>الخطورة:</strong> (مثل دراسة البراكين أو الحيوانات المفترسة).</li>
+                        <li>💰 <strong>التكلفة:</strong> (مثل السفر للفضاء).</li>
+                        <li>⏳ <strong>الوقت:</strong> (تستغرق وقتاً طويلاً).</li>
+                        <li>🕰️ <strong>الماضي:</strong> (دراسة التاريخ والأحداث السابقة).</li>
+                    </ul>
+                    <p class="text-body">في هذه الحالات، تكون <strong>الخبرة غير المباشرة</strong> (صور، فيديوهات، نماذج) هي الحل الأمثل.</p>
+                `,
+                question: "لماذا نلجأ للخبرة غير المباشرة في دراسة الأحداث التاريخية؟",
+                options: ["لأنها مملة", "لأنها أرخص", "لاستحالة معايشة الماضي مباشرة", "لأن الطلاب يفضلونها"],
+                correct: 2,
+                xp: 300
+            },
+            {
+                tag: "ملخص الفصل",
+                title: "الخلاصة: الزتونة 🫒",
+                content: `
+                    <p class="text-body">أحسنت يا بطل! لقد جمعت أهم نقاط الفصل الأول.</p>
+                    <div class="concept-box">
+                        📌 <strong>تذكر للامتحان:</strong><br>
+                        1. المنهج = مضمار سباق.<br>
+                        2. التقليدي = حفظ ومعلومات (طالب سلبي).<br>
+                        3. الحديث = خبرات ونمو شامل (طالب إيجابي).<br>
+                        4. الخبرة المباشرة = فعل الشيء (الأفضل).<br>
+                        5. الخبرة غير المباشرة = بديل (عند الخطر أو الصعوبة).
+                    </div>
+                `,
+                question: "سؤال شامل: المنهج الذي يراعي الفروق الفردية ويربط الدراسة بالحياة هو...",
+                options: ["المنهج التقليدي", "منهج المواد المنفصلة", "المنهج الحديث", "منهج التلقين"],
+                correct: 2,
+                xp: 500
+            }
+        ];
+
+        let currentStep = 0;
+        let totalXP = 0;
+
+        // UI Elements
+        const ui = {
+            start: document.getElementById('start-screen'),
+            game: document.getElementById('game-ui'),
+            end: document.getElementById('end-screen'),
+            content: document.getElementById('content-area'),
+            levelNum: document.getElementById('level-num'),
+            xpScore: document.getElementById('xp-score'),
+            progressBar: document.getElementById('progress-bar'),
+            finalXP: document.getElementById('final-xp'),
+            rankText: document.getElementById('rank-text')
+        };
+
+        function startGame() {
+            ui.start.style.display = 'none';
+            ui.game.style.display = 'block';
+            loadLevel();
+        }
+
+        function loadLevel() {
+            if (currentStep >= curriculumData.length) {
+                endGame();
+                return;
+            }
+
+            const data = curriculumData[currentStep];
+            
+            // Update Stats
+            ui.levelNum.innerText = currentStep + 1;
+            ui.progressBar.style.width = `${((currentStep) / curriculumData.length) * 100}%`;
+
+            // Build HTML
+            let html = `
+                <div class="content-card">
+                    <span class="lesson-tag">${data.tag}</span>
+                    <h2 class="lesson-title">${data.title}</h2>
+                    ${data.content}
+                </div>
+
+                <div class="quiz-container">
+                    <div class="quiz-title">
+                        <span>🎯</span> التحدي: ${data.question}
+                    </div>
+                    <div class="options-grid">
+            `;
+
+            data.options.forEach((opt, index) => {
+                html += `<button class="option-btn" onclick="checkAnswer(this, ${index})">${opt}</button>`;
+            });
+
+            html += `
+                    </div>
+                    <button id="next-btn" class="continue-btn" onclick="nextStep()">استمرار ➡️</button>
+                </div>
+            `;
+
+            ui.content.innerHTML = html;
+            window.scrollTo(0, 0);
+        }
+
+        function checkAnswer(btn, index) {
+            const data = curriculumData[currentStep];
+            const allBtns = document.querySelectorAll('.option-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            // Disable all buttons
+            allBtns.forEach(b => {
+                b.style.pointerEvents = 'none';
+                if(b !== btn) b.style.opacity = '0.5';
+            });
+
+            if (index === data.correct) {
+                // Correct
+                btn.classList.add('correct');
+                btn.innerHTML += ' ✅';
+                totalXP += data.xp;
+                animateXP(data.xp);
+            } else {
+                // Wrong
+                btn.classList.add('wrong');
+                btn.innerHTML += ' ❌';
+                // Highlight correct
+                allBtns[data.correct].classList.add('correct');
+                // Penalty
+                totalXP = Math.max(0, totalXP - 50);
+            }
+
+            ui.xpScore.innerText = totalXP;
+            nextBtn.style.display = 'block';
+        }
+
+        function nextStep() {
+            currentStep++;
+            loadLevel();
+        }
+
+        function animateXP(amount) {
+            const badge = document.querySelector('.xp-badge');
+            badge.style.transform = 'scale(1.2)';
+            setTimeout(() => badge.style.transform = 'scale(1)', 200);
+        }
+
+        function endGame() {
+            ui.game.style.display = 'none';
+            ui.end.style.display = 'flex';
+            ui.finalXP.innerText = totalXP;
+            
+            // Determine Rank
+            let rank = "";
+            if (totalXP >= 1400) rank = "👑 الأسطورة (الدرجة النهائية)";
+            else if (totalXP >= 1000) rank = "🔥 كوتش محترف";
+            else rank = "📚 طالب مجتهد";
+            
+            ui.rankText.innerText = rank;
+        }
+
+    </script>
+</body>
+</html>

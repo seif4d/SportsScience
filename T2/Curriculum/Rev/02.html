@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الدورة الكاملة: حيثيات الرياضة المدرسية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+
+        :root {
+            --bg: #0b0c10;
+            --surface: #1f2833;
+            --primary: #66fcf1; /* Neon Cyan */
+            --secondary: #45a29e; /* Dim Cyan */
+            --accent: #c5c6c7; /* Light Gray */
+            --gold: #ffd700;
+            --danger: #ff4b5c;
+            --success: #00b894;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Almarai', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--accent);
+            min-height: 100vh;
+            padding: 15px;
+            padding-bottom: 80px;
+            background-image: 
+                linear-gradient(rgba(102, 252, 241, 0.03) 1px, transparent 1px), 
+                linear-gradient(90deg, rgba(102, 252, 241, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+        }
+
+        /* --- UI Components --- */
+        .header-bar {
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            background: rgba(31, 40, 51, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 10px 20px;
+            border: 1px solid rgba(102, 252, 241, 0.2);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .level-badge {
+            background: var(--primary);
+            color: var(--bg);
+            font-weight: 800;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.9rem;
+        }
+
+        .xp-display {
+            color: var(--primary);
+            font-weight: bold;
+            font-size: 1.1rem;
+            text-shadow: 0 0 10px rgba(102, 252, 241, 0.5);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Content Styling --- */
+        .card {
+            background: var(--surface);
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border-left: 5px solid var(--primary);
+            animation: slideIn 0.5s ease-out;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        h3 {
+            color: white;
+            margin: 15px 0 10px 0;
+            font-size: 1.2rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 5px;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+            color: #e0e0e0;
+        }
+
+        ul {
+            margin-right: 20px;
+            margin-bottom: 15px;
+        }
+
+        li {
+            margin-bottom: 8px;
+            line-height: 1.6;
+        }
+
+        .highlight-box {
+            background: rgba(102, 252, 241, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px dashed var(--primary);
+            margin: 15px 0;
+        }
+
+        .important-note {
+            background: rgba(255, 75, 92, 0.1);
+            border-right: 4px solid var(--danger);
+            padding: 15px;
+            border-radius: 8px;
+            color: #ffdad9;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+
+        /* Accordion for Details */
+        details {
+            background: rgba(0,0,0,0.2);
+            margin-bottom: 10px;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        summary {
+            padding: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            color: white;
+            list-style: none;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        summary::after {
+            content: '+';
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        details[open] summary::after {
+            content: '-';
+        }
+
+        details[open] {
+            background: rgba(0,0,0,0.4);
+        }
+
+        .details-content {
+            padding: 15px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+            color: #ccc;
+        }
+
+        /* --- Quiz --- */
+        .quiz-section {
+            margin-top: 30px;
+            background: #14161d;
+            padding: 20px;
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .question {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 10px;
+            background: #252f3d;
+            border: 2px solid transparent;
+            border-radius: 10px;
+            color: white;
+            text-align: right;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .option-btn:hover {
+            border-color: var(--primary);
+            background: #2d3848;
+        }
+
+        .option-btn.correct {
+            background: rgba(0, 184, 148, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(255, 75, 92, 0.2);
+            border-color: var(--danger);
+            color: var(--danger);
+        }
+
+        .nav-btn {
+            background: var(--primary);
+            color: var(--bg);
+            border: none;
+            width: 100%;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            border-radius: 50px;
+            margin-top: 20px;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(102, 252, 241, 0.4);
+            display: none;
+        }
+
+        /* --- Start & End Screens --- */
+        .fullscreen-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .hero-text {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 0 0 20px rgba(102, 252, 241, 0.3);
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            border-radius: 50px;
+            margin-top: 30px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .start-btn:hover {
+            background: var(--primary);
+            color: var(--bg);
+            box-shadow: 0 0 30px var(--primary);
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div class="fullscreen-overlay" id="start-screen">
+        <h1 class="hero-text">الفصل الثاني<br>المرجع الشامل</h1>
+        <p style="font-size:1.2rem; color:white;">حيثيات الرياضة المدرسية</p>
+        <div style="margin-top:30px; color:#aaa;">
+            <p>✅ الميثاق الدولي بالتفصيل</p>
+            <p>✅ المعتقدات الفلسفية والمبادئ</p>
+            <p>✅ الأرقام والجداول الزمنية</p>
+        </div>
+        <button class="start-btn" onclick="startCourse()">ابدأ المذاكرة 📚</button>
+    </div>
+
+    <!-- Game UI -->
+    <div class="container" id="game-ui" style="display: none;">
+        <div class="header-bar">
+            <div class="level-badge" id="level-title">المحطة 1</div>
+            <div class="xp-display">XP: <span id="xp-score">0</span></div>
+        </div>
+        <div id="content-area"></div>
+    </div>
+
+    <!-- End Screen -->
+    <div class="fullscreen-overlay" id="end-screen" style="display: none;">
+        <h1 class="hero-text" style="color:var(--gold)">أتممت الفصل بنجاح!</h1>
+        <p style="color:white; font-size:1.2rem;">أنت الآن جاهز للامتحان بنسبة 100%</p>
+        <h2 style="margin: 20px 0; font-size:3rem;" id="final-score">0</h2>
+        <button class="start-btn" onclick="location.reload()">مراجعة مرة أخرى</button>
+    </div>
+
+    <script>
+        const courseContent = [
+            {
+                title: "الميثاق الدولي للتربية البدنية (1)",
+                content: `
+                    <p>هذا هو "الدستور" الذي يحكم الرياضة في العالم، وضعته اليونسكو. يجب أن تفهم المواد التالية جيداً:</p>
+                    
+                    <details open>
+                        <summary>المادة الأولى: حق أساسي</summary>
+                        <div class="details-content">
+                            <p>تنص على أن "ممارسة التربية البدنية والرياضة حق أساسي للجميع".</p>
+                            <ul>
+                                <li>لا يجوز حرمان أحد منها (أطفال، كبار، معاقين).</li>
+                                <li>يجب توفير ظروف خاصة لصغار السن، المسنين، والمعوقين.</li>
+                            </ul>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>المادة الثانية: جزء من التعليم</summary>
+                        <div class="details-content">
+                            <p>التربية البدنية ليست ترفيهاً، بل هي "عنصر أساسي من عناصر التربية المستديمة".</p>
+                            <p>يجب أن تكون جزءاً من النظام التعليمي الشامل (مدرسة، جامعة).</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>المادة الثالثة: تلبية الاحتياجات</summary>
+                        <div class="details-content">
+                            <p>يجب أن تلبي البرامج احتياجات الأفراد والمجتمع.</p>
+                            <div class="important-note">⚠️ يجب مراعاة العادات والتقاليد والظروف المناخية لكل بلد. (لا يوجد نموذج موحد للعالم كله).</div>
+                        </div>
+                    </details>
+                `,
+                question: "وفقاً للمادة الثالثة، هل يجب تطبيق نموذج رياضي موحد في كل دول العالم؟",
+                options: ["نعم، لتوحيد المعايير", "لا، يجب مراعاة العادات والظروف المحلية", "نعم، ولكن في أوروبا فقط", "لا، الرياضة لا تحتاج لتخطيط"],
+                correct: 1,
+                xp: 150
+            },
+            {
+                title: "الميثاق الدولي (2) - الكوادر والمرافق",
+                content: `
+                    <p>الميثاق لم يهتم فقط بالطالب، بل اهتم بمن يُدرس وأين نلعب:</p>
+                    
+                    <details open>
+                        <summary>المادة الرابعة: المعلم المؤهل</summary>
+                        <div class="details-content">
+                            <p>يجب أن يناط (يوكل) تعليم التربية البدنية إلى <strong>أشخاص مؤهلين علمياً وتربوياً</strong>.</p>
+                            <p>لا يكفي أن تكون لاعباً سابقاً، يجب أن تكون مؤهلاً تربوياً.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>المادة الخامسة: المرافق والتجهيزات</summary>
+                        <div class="details-content">
+                            <p>يجب توفير "المرافق والتجهيزات الملائمة" (ملاعب، أدوات). لا غنى عنها للتربية البدنية.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>المادة العاشرة: التعاون الدولي</summary>
+                        <div class="details-content">
+                            <p>يجب أن تتعاون الدول والمنظمات العالمية لتنمية الرياضة بشكل متوازن.</p>
+                        </div>
+                    </details>
+                `,
+                question: "حسب المادة الرابعة، من يحق له تدريس التربية الرياضية؟",
+                options: ["أي شخص رياضي", "اللاعبون المعتزلون فقط", "الأشخاص المؤهلون علمياً وتربوياً", "المتطوعون"],
+                correct: 2,
+                xp: 150
+            },
+            {
+                title: "ضمان الجودة والزمن (أرقام هامة 🚨)",
+                content: `
+                    <div class="highlight-box">
+                        هذا الجزء موضع أسئلة امتحانات دائمة. ركز في الأرقام!
+                    </div>
+                    <p>لكي يكون برنامج الرياضة فعالاً، حدد الخبراء (ميثاق اليونسكو) الحد الأدنى للوقت:</p>
+                    
+                    <div style="display:flex; gap:10px; margin-bottom:20px;">
+                        <div style="background:#2c3e50; padding:15px; border-radius:10px; flex:1; text-align:center; border:1px solid var(--primary);">
+                            <div style="font-size:2rem; color:var(--primary); font-weight:bold;">150</div>
+                            <div style="font-size:0.9rem;">دقيقة أسبوعياً<br>للمرحلة الابتدائية</div>
+                        </div>
+                        <div style="background:#2c3e50; padding:15px; border-radius:10px; flex:1; text-align:center; border:1px solid var(--gold);">
+                            <div style="font-size:2rem; color:var(--gold); font-weight:bold;">225</div>
+                            <div style="font-size:0.9rem;">دقيقة أسبوعياً<br>للإعدادي والثانوي</div>
+                        </div>
+                    </div>
+
+                    <h3>لماذا يختلف الوقت؟</h3>
+                    <p>لأن طلاب الإعدادي والثانوي يحتاجون لجهد بدني أكبر وتنمية مهارات أعقد.</p>
+                `,
+                question: "ما هو الزمن المخصص للتربية الرياضية في المرحلة الابتدائية؟",
+                options: ["90 دقيقة", "225 دقيقة", "150 دقيقة", "300 دقيقة"],
+                correct: 2,
+                xp: 200
+            },
+            {
+                title: "المعتقدات الفلسفية (The Mindset) 🧠",
+                content: `
+                    <p>المنهج لا يوضع عشوائياً، بل يستند لفلسفة (مبادئ) محددة:</p>
+                    
+                    <details open>
+                        <summary>1. النقد والتطوير المستمر</summary>
+                        <div class="details-content">
+                            <p>الفلسفة ليست جامدة. يجب نقد المنهج القديم وتطويره ليواكب العصر.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>2. الشمولية (وحدة الإنسان)</summary>
+                        <div class="details-content">
+                            <p>الطالب ليس جسداً فقط، ولا عقلاً فقط. المنهج يجب أن يخاطب (الجسم + العقل + النفس) معاً.</p>
+                        </div>
+                    </details>
+
+                    <details>
+                        <summary>3. مراعاة الفروق الفردية</summary>
+                        <div class="details-content">
+                            <p>الطلاب ليسوا "نسخة واحدة". يجب تصميم برامج تناسب الموهوب، والضعيف، وذوي الاحتياجات الخاصة.</p>
+                            <div class="important-note">الهدف هو "النجاح للجميع"، وليس للموهوبين فقط.</div>
+                        </div>
+                    </details>
+                `,
+                question: "أي العبارات التالية تصف الفلسفة الصحيحة للتربية الرياضية؟",
+                options: ["التركيز على الموهوبين فقط", "الفلسفة ثابتة لا تتغير", "النجاح متاح للجميع والفرد وحدة متكاملة", "الاهتمام بالجسم فقط"],
+                correct: 2,
+                xp: 200
+            },
+            {
+                title: "أهداف الرياضة المدرسية (المجالات) 🎯",
+                content: `
+                    <p>تهدف التربية الرياضية لتحقيق أهداف في 3 مجالات رئيسية (يجب التمييز بينهم):</p>
+
+                    <h3>1. المجال الحركي (المهاري) 🏃</h3>
+                    <ul>
+                        <li>تنمية اللياقة البدنية (قوة، سرعة، مرونة).</li>
+                        <li>إتقان المهارات الرياضية (تصويب، تمرير).</li>
+                        <li>تحسين القوام.</li>
+                    </ul>
+
+                    <h3>2. المجال المعرفي (العقلي) 🧠</h3>
+                    <ul>
+                        <li>فهم قوانين الألعاب.</li>
+                        <li>معرفة فوائد الرياضة للجسم.</li>
+                        <li>فهم الخطط والاستراتيجيات.</li>
+                    </ul>
+
+                    <h3>3. المجال الوجداني (النفسي/الاجتماعي) ❤️</h3>
+                    <ul>
+                        <li>القيم: التعاون، الروح الرياضية، القيادة.</li>
+                        <li>النفس: الثقة بالنفس، المتعة، التخلص من التوتر.</li>
+                    </ul>
+                `,
+                question: "تحت أي مجال يندرج هدف: (التحلي بالروح الرياضية واحترام المنافس)؟",
+                options: ["المجال الحركي", "المجال المعرفي", "المجال الوجداني", "المجال البدني"],
+                correct: 2,
+                xp: 250
+            },
+            {
+                title: "المبادئ المنهجية للتطبيق 🛠️",
+                content: `
+                    <p>كيف نطبق هذا الكلام عملياً في المدرسة؟</p>
+                    <ul>
+                        <li><strong>التوازن:</strong> لا نركز على لعبة واحدة ونهمل الباقي.</li>
+                        <li><strong>الواقعية:</strong> نختار أنشطة تناسب إمكانيات المدرسة والبيئة.</li>
+                        <li><strong>المعلم الميسر:</strong> دور المعلم ليس "إصدار أوامر"، بل مساعدة الطالب على التعلم والاكتشاف.</li>
+                        <li><strong>التقييم المستمر:</strong> لا ننتظر لآخر العام، التقييم يكون مستمراً لقياس التقدم.</li>
+                    </ul>
+                `,
+                question: "ما هو الدور الحديث للمعلم في درس التربية الرياضية؟",
+                options: ["ملقن ومسيطر", "حكم للمباريات فقط", "ميسر ومرشد وموجه", "مسجل للحضور والانصراف"],
+                correct: 2,
+                xp: 200
+            },
+            {
+                title: "الامتحان النهائي للفصل الثاني 📝",
+                content: `
+                    <p>لقد راجعت كل تفاصيل الفصل الثاني.</p>
+                    <p>استعد لسؤال شامل يربط الأفكار ببعضها.</p>
+                    <div class="highlight-box">
+                        تذكر:<br>
+                        - الميثاق الدولي = حق للجميع.<br>
+                        - الوقت = 150 ابتدائي / 225 ثانوي.<br>
+                        - الهدف = نمو شامل (عقلي بدني نفسي).
+                    </div>
+                `,
+                question: "أي مما يلي يُعد مخالفاً لمبادئ التربية الرياضية الحديثة والميثاق الدولي؟",
+                options: [
+                    "توفير برامج خاصة للطلاب المعاقين.",
+                    "تخصيص 90 دقيقة فقط أسبوعياً للمرحلة الابتدائية.",
+                    "الاهتمام بالقيم التربوية بجانب المهارات.",
+                    "ربط الرياضة بالمواد الدراسية الأخرى."
+                ],
+                correct: 1,
+                xp: 500
+            }
+        ];
+
+        let currentStep = 0;
+        let totalXP = 0;
+
+        function startCourse() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('game-ui').style.display = 'block';
+            loadStep();
+        }
+
+        function loadStep() {
+            if (currentStep >= courseContent.length) {
+                finishCourse();
+                return;
+            }
+
+            const data = courseContent[currentStep];
+            document.getElementById('level-title').innerText = `المحطة ${currentStep + 1} من ${courseContent.length}`;
+            
+            const contentHTML = `
+                <div class="card">
+                    <span style="color:var(--text-gray); font-size:0.9rem;">${data.tag}</span>
+                    <h2>${data.title}</h2>
+                    <div>${data.content}</div>
+                </div>
+
+                <div class="quiz-section">
+                    <div class="question">⚡ ${data.question}</div>
+                    ${data.options.map((opt, idx) => `
+                        <button class="option-btn" onclick="checkAnswer(this, ${idx}, ${data.correct})">${opt}</button>
+                    `).join('')}
+                    <button class="nav-btn" id="next-btn" onclick="nextStep()">التالي ➡️</button>
+                </div>
+            `;
+
+            document.getElementById('content-area').innerHTML = contentHTML;
+            window.scrollTo(0, 0);
+        }
+
+        function checkAnswer(btn, idx, correctIdx) {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => {
+                b.style.pointerEvents = 'none';
+                if(b !== btn) b.style.opacity = '0.5';
+            });
+
+            if(idx === correctIdx) {
+                btn.classList.add('correct');
+                btn.innerHTML += ' ✅';
+                totalXP += courseContent[currentStep].xp;
+            } else {
+                btn.classList.add('wrong');
+                btn.innerHTML += ' ❌';
+                btns[correctIdx].classList.add('correct');
+                totalXP = Math.max(0, totalXP - 50);
+            }
+
+            document.getElementById('xp-score').innerText = totalXP;
+            document.getElementById('next-btn').style.display = 'block';
+        }
+
+        function nextStep() {
+            currentStep++;
+            loadStep();
+        }
+
+        function finishCourse() {
+            document.getElementById('game-ui').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'flex';
+            document.getElementById('final-score').innerText = totalXP;
+        }
+
+    </script>
+</body>
+</html>

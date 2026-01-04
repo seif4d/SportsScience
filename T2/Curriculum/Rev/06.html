@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>المصمم الأعظم: الفصل السادس 🏁</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg: #050505;
+            --panel: #11111b;
+            --neon-purple: #bc13fe;
+            --neon-blue: #4d4dff;
+            --neon-green: #39ff14;
+            --neon-red: #ff3131;
+            --text: #f0f0f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0; padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: 15px;
+            background-image: 
+                linear-gradient(rgba(188, 19, 254, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(188, 19, 254, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+        }
+
+        .matrix-container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* --- Stats HUD --- */
+        .hud {
+            background: rgba(17, 17, 27, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            border: 2px solid var(--neon-purple);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            margin-bottom: 30px;
+            box-shadow: 0 0 20px rgba(188, 19, 254, 0.3);
+        }
+
+        .stat-box { text-align: center; }
+        .stat-label { font-size: 0.7rem; color: #888; text-transform: uppercase; }
+        .stat-val { font-size: 1.3rem; font-weight: 900; color: var(--neon-purple); }
+
+        .progress-bar {
+            position: absolute; bottom: 0; left: 0; height: 4px;
+            background: var(--neon-purple); width: 0%; transition: 0.5s;
+        }
+
+        /* --- Content Layout --- */
+        .org-card {
+            background: var(--panel);
+            border-radius: 25px;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 20px;
+            animation: zoomIn 0.5s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .type-badge {
+            background: var(--neon-blue);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: inline-block;
+        }
+
+        h2 { font-size: 1.8rem; margin-bottom: 20px; text-shadow: 0 0 10px var(--neon-blue); }
+        h3 { color: var(--neon-purple); margin: 15px 0 10px 0; }
+        p { line-height: 1.8; color: #ccc; font-size: 1.1rem; margin-bottom: 15px; }
+
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: rgba(255,255,255,0.02);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .comparison-table td {
+            padding: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+            font-size: 0.95rem;
+        }
+        .pro { color: var(--neon-green); }
+        .con { color: var(--neon-red); }
+
+        /* --- Quiz UI --- */
+        .quiz-container {
+            background: #0a0a0f;
+            padding: 25px;
+            border-radius: 20px;
+            border: 2px dashed var(--neon-blue);
+            margin-top: 30px;
+        }
+        .opt-btn {
+            display: block; width: 100%; padding: 18px; margin-bottom: 12px;
+            background: #1a1a2e; border: 1px solid #333; border-radius: 12px;
+            color: white; text-align: right; cursor: pointer; transition: 0.3s;
+            font-size: 1rem; font-weight: bold;
+        }
+        .opt-btn:hover { background: #252545; border-color: var(--neon-blue); }
+        .opt-btn.correct { background: rgba(57, 255, 20, 0.2); border-color: var(--neon-green); color: var(--neon-green); }
+        .opt-btn.wrong { background: rgba(255, 49, 49, 0.2); border-color: var(--neon-red); color: var(--neon-red); }
+
+        .nav-btn {
+            width: 100%; padding: 18px; background: var(--neon-purple); color: #fff;
+            border: none; border-radius: 50px; font-weight: 900; font-size: 1.2rem;
+            margin-top: 20px; cursor: pointer; display: none;
+        }
+
+        /* --- Overlays --- */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 2000; display: flex;
+            flex-direction: column; justify-content: center; align-items: center;
+            padding: 30px; text-align: center;
+        }
+        .start-btn {
+            background: transparent; border: 2px solid var(--neon-purple);
+            color: var(--neon-purple); padding: 15px 60px; border-radius: 10px;
+            font-size: 1.5rem; cursor: pointer; margin-top: 40px;
+        }
+        .start-btn:hover { background: var(--neon-purple); color: #000; box-shadow: 0 0 30px var(--neon-purple); }
+
+        @keyframes zoomIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
+
+        @media (max-width: 600px) {
+            h2 { font-size: 1.4rem; }
+            .hud { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div class="overlay" id="start-screen">
+        <div style="font-size: 5rem;">🧬🧩</div>
+        <h1 style="font-size: 3rem; color: var(--neon-purple);">المصمم الأعظم<br>الفصل السادس والأخير</h1>
+        <p style="color: #888; margin-top: 15px;">إتقان تنظيمات المناهج والمقارنات النهائية</p>
+        <button class="start-btn" onclick="initMatrix()">تفعيل المصفوفة 🚀</button>
+    </div>
+
+    <!-- UI -->
+    <div class="matrix-container" id="main-ui" style="display: none;">
+        <div class="hud">
+            <div class="stat-box">
+                <span class="stat-label">النظام</span>
+                <div class="stat-val" id="curr-lvl">1</div>
+            </div>
+            <div class="stat-box">
+                <span class="stat-label">رصيد الذكاء</span>
+                <div class="stat-val" id="xp-val">0</div>
+            </div>
+            <div class="progress-bar" id="pb"></div>
+        </div>
+        <div id="content-area"></div>
+    </div>
+
+    <!-- End -->
+    <div class="overlay" id="end-screen" style="display: none;">
+        <div style="font-size: 6rem;">🎓🔥</div>
+        <h1 style="color: var(--neon-green);">تهانينا يا كوتش!</h1>
+        <p style="font-size: 1.3rem;">لقد أتممت شرح المادة بالكامل بنجاح</p>
+        <div style="margin: 30px 0; font-size: 3rem; border: 2px solid var(--neon-purple); padding: 20px; border-radius: 20px;">
+            Total Score: <span id="final-xp">0</span>
+        </div>
+        <p style="color: var(--neon-blue); font-weight: bold;">أنت الآن مستعد للامتحان 100%</p>
+        <button class="start-btn" onclick="location.reload()">مراجعة المنهج مرة أخرى</button>
+    </div>
+
+    <script>
+        const matrixData = [
+            {
+                tag: "المجموعة الأولى: المادة الدراسية",
+                title: "1. منهج المواد المنفصلة 🧱",
+                content: `
+                    <p>هذا هو النظام التقليدي الأقدم (The Old School). المنهج مقسم لمواد لا علاقة بينها.</p>
+                    <table class="comparison-table">
+                        <tr><td class="pro">✅ سهل التخطيط والتنفيذ</td><td class="con">❌ يجزأ المعرفة (تفتيت)</td></tr>
+                        <tr><td class="pro">✅ سهل في الاختبارات</td><td class="con">❌ يهمل ميول الطالب تماماً</td></tr>
+                        <tr><td class="pro">✅ ينقل التراث الثقافي بدقة</td><td class="con">❌ يركز على الحفظ والتلقين</td></tr>
+                    </table>
+                    <p>💡 <strong>خلاصة:</strong> المادة هي الملك، والطالب مجرد مستوعب.</p>
+                `,
+                question: "ما هو العيب الرئيسي لمنهج المواد الدراسية المنفصلة؟",
+                options: ["سهولة الاختبارات", "تفتيت المعرفة وانفصال المواد", "مراعاة الفروق الفردية", "التركيز على الأنشطة الحرة"],
+                correct: 1,
+                xp: 150
+            },
+            {
+                tag: "محاولات التطوير",
+                title: "2. المناهج المترابطة والمندمجة 🔗🧪",
+                content: `
+                    <p>محاولات لربط المواد ببعضها لتقليل التفتيت:</p>
+                    <h3>• المنهج المترابط:</h3>
+                    <p>المواد منفصلة، لكن المدرسين ينسقون لربط الدروس (مثل ربط تاريخ مصر بجغرافيتها).</p>
+                    <h3>• المنهج المندمج (Fused):</h3>
+                    <p>دمج مادتين أو أكثر في مادة واحدة (نبات + حيوان = <strong>أحياء</strong>) أو (فيزياء + كيمياء = <strong>علوم</strong>).</p>
+                    <h3>• المجالات الواسعة:</h3>
+                    <p>دمج مواد كثيرة جداً في مجال واحد كبير (عربي + انجليزي + فرنسي = <strong>لغات</strong>).</p>
+                `,
+                question: "عندما ندمج الكيمياء والفيزياء والأحياء في مادة واحدة تسمى 'العلوم'، هذا يسمى منهج:",
+                options: ["المواد المنفصلة", "المواد المندمجة", "منهج النشاط", "المنهج المحوري"],
+                correct: 1,
+                xp: 200
+            },
+            {
+                tag: "المجموعة الثانية: التلميذ",
+                title: "3. منهج النشاط (Activity) 🏃‍♂️🎨",
+                content: `
+                    <p>هنا الثورة! (إرث جون ديوي). المنهج ليس كتباً، بل هو <u>ما يفعله الطالب</u>.</p>
+                    <table class="comparison-table">
+                        <tr><td class="pro">✅ الطالب هو محور العملية</td><td class="con">❌ صعب جداً في التنفيذ</td></tr>
+                        <tr><td class="pro">✅ يعتمد على ميول وحاجات الطلاب</td><td class="con">❌ يحتاج إمكانيات ضخمة</td></tr>
+                        <tr><td class="pro">✅ ينمي التفكير والشخصية</td><td class="con">❌ المعرفة قد تكون غير منظمة</td></tr>
+                    </table>
+                    <p>💡 <strong>خلاصة:</strong> الطالب يتعلم من خلال العمل (Learning by doing).</p>
+                `,
+                question: "منهج النشاط يضع الأولوية لـ...؟",
+                options: ["حفظ الكتب الدراسية", "ميول واحتياجات الطالب", "رغبة المعلم في السيطرة", "الاختبارات النهائية فقط"],
+                correct: 1,
+                xp: 250
+            },
+            {
+                tag: "المنهج المتوازن",
+                title: "4. المنهج المحوري (Core) 🎯🌍",
+                content: `
+                    <p>هذا المنهج يحاول الجمع بين مصلحة الفرد ومصلحة المجتمع. ينقسم لجزئين:</p>
+                    <div style="background:rgba(255,255,255,0.05); padding:15px; border-radius:10px; margin-bottom:15px;">
+                        <strong>1. الجزء العام (المحور):</strong> مهارات ومعلومات أساسية <u>إجبارية</u> لكل الطلاب لأن المجتمع يحتاجها.<br><br>
+                        <strong>2. الجزء الخاص:</strong> أنشطة <u>اختيارية</u> يختارها الطالب حسب موهبته (رياضة، فن، موسيقى).
+                    </div>
+                    <p>✅ يربط المدرسة بمشكلات الحياة الحقيقية والمجتمع.</p>
+                `,
+                question: "المنهج الذي يتكون من جزء أساسي إجباري وجزء اختياري هو:",
+                options: ["منهج المواد المنفصلة", "المنهج المحوري", "منهج الوحدات", "المنهج التقليدي"],
+                correct: 1,
+                xp: 300
+            },
+            {
+                tag: "التنظيم المعاصر",
+                title: "5. منهج الوحدات الدراسية 📦",
+                content: `
+                    <p>تنظيم المادة في "وحدات" كبيرة تدور حول موضوع أو مشكلة (مثل: وحدة كرة السلة، وحدة التغذية).</p>
+                    <ul>
+                        <li><strong>وحدات المادة:</strong> تركز على ترتيب المعلومات.</li>
+                        <li><strong>وحدات الخبرة:</strong> تركز على نشاط الطالب وتفاعله.</li>
+                    </ul>
+                    <p>✅ يساعد على تكامل المعرفة وربط النظرية بالتطبيق.</p>
+                `,
+                question: "تقسيم المنهج إلى وحدات دراسية يهدف بشكل أساسي إلى:",
+                options: ["زيادة الحفظ", "تجزئة المعرفة", "تكامل الخبرات التعليمية", "إلغاء دور المعلم"],
+                correct: 2,
+                xp: 250
+            },
+            {
+                tag: "الاختبار النهائي للمصفوفة",
+                title: "Boss Fight: المنهج المثالي 👹⚔️",
+                content: `
+                    <p>لقد استعرضت جميع طرق تنظيم المناهج: من الجمود والانفصال إلى المرونة والنشاط.</p>
+                    <p>هذا السؤال هو "مفتاح" الفصل السادس بالكامل.</p>
+                `,
+                question: "أي العبارات التالية صحيحة تماماً حول تنظيمات المناهج؟",
+                options: [
+                    "منهج المواد المنفصلة هو الأنسب للنمو الشامل.",
+                    "المنهج المحوري يجمع بين حاجات الفرد ومتطلبات المجتمع.",
+                    "منهج النشاط لا يحتاج لمعلم أو تخطيط.",
+                    "دمج المواد يؤدي دائماً إلى تشتيت الطالب."
+                ],
+                correct: 1,
+                xp: 500
+            }
+        ];
+
+        let currentL = 0;
+        let score = 0;
+
+        function initMatrix() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            renderStep();
+        }
+
+        function renderStep() {
+            if (currentL >= matrixData.length) {
+                endMatrix();
+                return;
+            }
+            const data = matrixData[currentL];
+            const area = document.getElementById('content-area');
+            
+            document.getElementById('curr-lvl').innerText = currentL + 1;
+            document.getElementById('pb').style.width = (currentL / matrixData.length) * 100 + "%";
+
+            area.innerHTML = `
+                <div class="org-card">
+                    <span class="type-badge">${data.tag}</span>
+                    <h2>${data.title}</h2>
+                    <div>${data.content}</div>
+                </div>
+
+                <div class="quiz-container">
+                    <p style="color:var(--neon-blue); font-weight:bold; margin-bottom:20px;">❓ تحدي المصفوفة: ${data.question}</p>
+                    ${data.options.map((o, i) => `
+                        <button class="opt-btn" onclick="handle(this, ${i}, ${data.correct})">${o}</button>
+                    `).join('')}
+                    <button class="nav-btn" id="nb" onclick="nextL()">المرحلة التالية >> </button>
+                </div>
+            `;
+            window.scrollTo(0,0);
+        }
+
+        function handle(btn, i, corr) {
+            const btns = document.querySelectorAll('.opt-btn');
+            btns.forEach(b => b.style.pointerEvents = 'none');
+            if (i === corr) {
+                btn.classList.add('correct');
+                score += matrixData[currentL].xp;
+            } else {
+                btn.classList.add('wrong');
+                btns[corr].classList.add('correct');
+                score = Math.max(0, score - 50);
+            }
+            document.getElementById('xp-val').innerText = score;
+            document.getElementById('nb').style.display = 'block';
+        }
+
+        function nextL() { currentL++; renderStep(); }
+
+        function endMatrix() {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('end-screen').style.display = 'flex';
+            document.getElementById('final-xp').innerText = score + " XP";
+            document.getElementById('pb').style.width = "100%";
+        }
+    </script>
+</body>
+</html>

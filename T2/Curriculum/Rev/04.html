@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>مهندس المناهج: الفصل الرابع 🏗️</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&display=swap');
+
+        :root {
+            --bg-color: #0b0e14;
+            --card-bg: #151921;
+            --primary-neon: #bb86fc; /* Purple Neon */
+            --secondary-neon: #03dac6; /* Teal Neon */
+            --warning-neon: #cf6679; /* Red/Pink Neon */
+            --text-primary: #e1e1e1;
+            --text-dim: #9ea4b0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 15px;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(187, 134, 252, 0.05) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(3, 218, 198, 0.05) 0px, transparent 50%);
+        }
+
+        .builder-container {
+            width: 100%;
+            max-width: 800px;
+            margin-top: 10px;
+        }
+
+        /* --- Header Stats (HUD) --- */
+        .hud {
+            background: rgba(21, 25, 33, 0.9);
+            padding: 15px 20px;
+            border-radius: 20px;
+            border: 1px solid rgba(187, 134, 252, 0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 10px;
+            z-index: 1000;
+            backdrop-filter: blur(10px);
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+        }
+
+        .stat { text-align: center; }
+        .stat-label { font-size: 0.7rem; color: var(--text-dim); text-transform: uppercase; }
+        .stat-value { font-size: 1.2rem; font-weight: 900; color: var(--secondary-neon); }
+
+        .progress-container {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%; height: 4px;
+            background: #222;
+            border-radius: 0 0 20px 20px;
+            overflow: hidden;
+        }
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+            transition: width 0.4s ease;
+        }
+
+        /* --- Content Cards --- */
+        .blueprint-card {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 25px;
+            border: 1px solid rgba(255,255,255,0.05);
+            margin-bottom: 20px;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .step-tag {
+            color: var(--primary-neon);
+            font-weight: 800;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .step-title { font-size: 1.7rem; margin-bottom: 20px; color: #fff; }
+
+        .step-content { font-size: 1.1rem; line-height: 1.8; color: var(--text-primary); }
+
+        .info-panel {
+            background: rgba(187, 134, 252, 0.07);
+            border-right: 4px solid var(--primary-neon);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .grid-item {
+            background: #1d222b;
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            border: 1px solid rgba(255,255,255,0.03);
+        }
+        .grid-item span { color: var(--secondary-neon); font-weight: bold; display: block; margin-bottom: 5px; }
+
+        /* --- Challenge Area --- */
+        .challenge-section {
+            background: #0d1117;
+            padding: 20px;
+            border-radius: 18px;
+            border: 1px dashed rgba(3, 218, 198, 0.3);
+            margin-top: 30px;
+        }
+
+        .question { font-size: 1.2rem; font-weight: bold; margin-bottom: 20px; color: var(--secondary-neon); }
+
+        .option-btn {
+            display: block;
+            width: 100%;
+            padding: 16px;
+            margin-bottom: 12px;
+            background: #1c212b;
+            border: 2px solid transparent;
+            border-radius: 12px;
+            color: white;
+            text-align: right;
+            cursor: pointer;
+            transition: 0.2s;
+            font-size: 1rem;
+        }
+        .option-btn:hover { background: #252b38; border-color: var(--primary-neon); }
+        .option-btn.correct { background: rgba(3, 218, 198, 0.2); border-color: var(--secondary-neon); color: var(--secondary-neon); }
+        .option-btn.wrong { background: rgba(207, 102, 121, 0.2); border-color: var(--warning-neon); color: var(--warning-neon); }
+
+        .next-btn {
+            width: 100%;
+            padding: 18px;
+            background: var(--primary-neon);
+            color: #000;
+            border: none;
+            border-radius: 50px;
+            font-weight: 900;
+            font-size: 1.2rem;
+            margin-top: 20px;
+            cursor: pointer;
+            display: none;
+            box-shadow: 0 0 20px rgba(187, 134, 252, 0.4);
+        }
+
+        /* --- Overlays --- */
+        .overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg-color);
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .start-btn {
+            background: transparent;
+            border: 2px solid var(--secondary-neon);
+            color: var(--secondary-neon);
+            padding: 15px 50px;
+            font-size: 1.5rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        @keyframes slideIn { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* --- Mobile Responsive --- */
+        @media (max-width: 600px) {
+            .step-title { font-size: 1.4rem; }
+            .step-content { font-size: 1rem; }
+            .hud { padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Start Screen -->
+    <div class="overlay" id="start-screen">
+        <div style="font-size: 5rem;">📐🏗️</div>
+        <h1 style="font-size: 2.5rem; color: var(--primary-neon);">مهندس المناهج<br>الفصل الرابع</h1>
+        <p style="color: var(--text-dim); margin-top: 15px;">خطوات بناء وتطوير منهج التربية الرياضية بالتفصيل</p>
+        <button class="start-btn" onclick="initApp()">ابدأ التخطيط 🚀</button>
+    </div>
+
+    <!-- UI -->
+    <div class="builder-container" id="main-ui" style="display: none;">
+        <div class="hud">
+            <div class="stat">
+                <span class="stat-label">المرحلة</span>
+                <div class="stat-value" id="current-lvl">1</div>
+            </div>
+            <div class="stat">
+                <span class="stat-label">مستوى الإتقان</span>
+                <div class="stat-value"><span id="score-val">0</span> XP</div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="pb"></div>
+            </div>
+        </div>
+
+        <div id="content-slot"></div>
+    </div>
+
+    <!-- Final Result -->
+    <div class="overlay" id="final-screen" style="display: none;">
+        <div style="font-size: 5rem;">🏆</div>
+        <h1 style="color: var(--secondary-neon);">تم بناء المنهج!</h1>
+        <p>لقد أتقنت مهارات التخطيط التربوي للفصل الرابع</p>
+        <h2 id="total-xp" style="font-size: 3rem; margin: 20px 0;">0</h2>
+        <button class="start-btn" onclick="location.reload()">إعادة الدورة 🔄</button>
+    </div>
+
+    <script>
+        const chapterData = [
+            {
+                tag: "اتجاهات البناء",
+                title: "على ماذا نعتمد عند بناء المنهج؟ 🏗️",
+                content: `
+                    <p class="step-content">بناء المنهج ليس عملية عشوائية، بل يعتمد على "بوصلة" توجهنا. الكتاب يحدد 3 اتجاهات أساسية:</p>
+                    <div class="grid-3">
+                        <div class="grid-item"><span>1. التلميذ</span> ميوله، نموه، واحتياجاته.</div>
+                        <div class="grid-item"><span>2. المجتمع</span> قيمه، ثقافته، ومشكلاته.</div>
+                        <div class="grid-item"><span>3. المادة</span> الحركات والمهارات الرياضية.</div>
+                    </div>
+                    <div class="info-panel">
+                        💡 <strong>الخلاصة:</strong> المنهج الناجح هو الذي يوازن بين هذه الثلاثة؛ فلا يهمل الطالب من أجل المادة، ولا ينسى احتياجات المجتمع.
+                    </div>
+                `,
+                question: "أي من الاتجاهات التالية يركز على 'ميول الطالب ونموه الحركي'؟",
+                options: ["اتجاه المجتمع", "اتجاه المادة الدراسية", "اتجاه التلميذ", "اتجاه الإدارة المدرسية"],
+                correct: 2,
+                xp: 100
+            },
+            {
+                tag: "أركان التخطيط",
+                title: "المبادئ الثلاثة للتخطيط ⚖️",
+                content: `
+                    <p class="step-content">هذه أهم 3 كلمات في الفصل، ركز فيها لأنها تأتي في المقارنات:</p>
+                    <div class="info-panel">
+                        <strong>1. المدى (Scope):</strong> هو "كمية" و"نوع" الخبرات (إيه اللي هندرسه؟).<br><br>
+                        <strong>2. التتابع (Sequence):</strong> هو "ترتيب" الخبرات (من السهل للصعب، ومن البسيط للمركب).<br><br>
+                        <strong>3. التوازن (Balance):</strong> هو توزيع الوقت والجهد بعدالة بين كل الأنشطة (لا نهمل اللياقة من أجل الكورة).
+                    </div>
+                `,
+                question: "ترتيب المهارات التعليمية من (السهل إلى الصعب) يسمى بمصطلح:",
+                options: ["المدى", "التوازن", "التتابع", "الاستمرارية"],
+                correct: 2,
+                xp: 150
+            },
+            {
+                tag: "إطار التخطيط",
+                title: "التساؤلات السبعة الكبرى ❓",
+                content: `
+                    <p class="step-content">قبل أن يضع المهندس حجراً واحداً، يسأل نفسه 7 أسئلة (الإطار العام):</p>
+                    <ul class="step-content" style="margin-right:20px;">
+                        <li><strong>من؟</strong> (خصائص التلاميذ وسنهم).</li>
+                        <li><strong>لماذا؟</strong> (الأهداف من اختيار هذا المحتوى).</li>
+                        <li><strong>كيف؟</strong> (طرق التدريس والاستراتيجيات).</li>
+                        <li><strong>ماذا؟</strong> (الخبرات والمهارات المختارة).</li>
+                        <li><strong>متى؟</strong> (المرحلة السنية المناسبة لكل مهارة).</li>
+                    </ul>
+                    <p class="step-content" style="margin-top:10px;">إضافة إلى <strong>هيكل البرنامج</strong> و <strong>تنظيم الأنشطة</strong>.</p>
+                `,
+                question: "سؤال (من هم التلاميذ؟) في إطار تخطيط المنهج يهدف إلى معرفة:",
+                options: ["قوانين اللعبة", "خصائص واحتياجات الطلاب", "ميزانية المدرسة", "تاريخ التربية الرياضية"],
+                correct: 1,
+                xp: 200
+            },
+            {
+                tag: "مستويات التخطيط",
+                title: "مراحل التخطيط (من الكل للجزء) 📶",
+                content: `
+                    <p class="step-content">التخطيط في التربية الرياضية له مستويات زمنية:</p>
+                    <div class="grid-3">
+                        <div class="grid-item"><span>1. طويل المدى</span> خطة السنة الدراسية أو المرحلة بالكامل.</div>
+                        <div class="grid-item"><span>2. الوحدة</span> موضوع واحد (مثل كرة اليد) لعدة أسابيع.</div>
+                        <div class="grid-item"><span>3. الدرس</span> المخطط اليومي للحصة الواحدة (45 دقيقة).</div>
+                    </div>
+                    <div class="info-panel">
+                        ⚠️ <strong>تنبيه:</strong> الكتاب يؤكد أن "الدرس" هو أصغر وحدة تخطيطية ولكنه الأهم لأنه واجهة التطبيق.
+                    </div>
+                `,
+                question: "تخطيط (وحدة كرة السلة) لمدة 4 أسابيع يعتبر تخطيطاً من نوع:",
+                options: ["خطة طويلة المدى", "خطة الوحدة التعليمية", "خطة الدرس اليومي", "خطة الأنشطة الخارجية"],
+                correct: 1,
+                xp: 200
+            },
+            {
+                tag: "لجنة المنهج",
+                title: "من يبني المنهج؟ 👥",
+                content: `
+                    <p class="step-content">المنهج ليس قراراً فردياً، بل تضعه لجنة متخصصة تشمل:</p>
+                    <ul class="step-content" style="margin-right:20px;">
+                        <li>خبراء المناهج وطرق التدريس.</li>
+                        <li>الموجهين الفنيين للتربية الرياضية.</li>
+                        <li>المعلمين (لأنهم الأقرب للواقع).</li>
+                        <li>أحياناً ممثلين عن أولياء الأمور والطلاب.</li>
+                    </ul>
+                `,
+                question: "لماذا يشارك 'المعلم' في لجنة وضع المنهج؟",
+                options: ["لأنه يضع الامتحانات فقط", "لخبرته الميدانية ومعرفته بظروف الطلاب", "لأنه الممول للمدرسة", "ليس من الضروري مشاركة المعلم"],
+                correct: 1,
+                xp: 150
+            },
+            {
+                tag: "التحدي النهائي",
+                title: "اختبار الاعتماد الهندسي 📝",
+                content: `
+                    <p class="step-content">لقد استكملت جميع أدوات التخطيط للفصل الرابع.</p>
+                    <div class="info-panel" style="border-right-color: var(--secondary-neon);">
+                        تذكر أهم القواعد:<br>
+                        • المدى = المحتوى.<br>
+                        • التتابع = الترتيب.<br>
+                        • التوازن = عدالة التوزيع.
+                    </div>
+                `,
+                question: "أي العبارات التالية صحيحة حول 'عملية بناء المنهج'؟",
+                options: [
+                    "تبدأ باختيار الألعاب ثم الأهداف.",
+                    "عملية فردية يقوم بها مدير المدرسة وحده.",
+                    "عملية منظمة توازن بين التلميذ والمجتمع والمادة.",
+                    "تعتمد فقط على ما كان يدرس في الماضي."
+                ],
+                correct: 2,
+                xp: 500
+            }
+        ];
+
+        let currentStep = 0;
+        let score = 0;
+
+        function initApp() {
+            document.getElementById('start-screen').style.display = 'none';
+            document.getElementById('main-ui').style.display = 'block';
+            renderStep();
+        }
+
+        function renderStep() {
+            if (currentStep >= chapterData.length) {
+                showFinal();
+                return;
+            }
+            const data = chapterData[currentStep];
+            const slot = document.getElementById('content-slot');
+            
+            // HUD Update
+            document.getElementById('current-lvl').innerText = currentStep + 1;
+            document.getElementById('pb').style.width = (currentStep / chapterData.length) * 100 + "%";
+
+            slot.innerHTML = `
+                <div class="blueprint-card">
+                    <span class="step-tag">مهمة البناء رقم ${currentStep + 1}</span>
+                    <h2 class="step-title">${data.title}</h2>
+                    <div>${data.content}</div>
+                </div>
+
+                <div class="challenge-section">
+                    <div class="question">⚡ تحدي المهندس: ${data.question}</div>
+                    <div>
+                        ${data.options.map((opt, i) => `
+                            <button class="option-btn" onclick="handleAnswer(this, ${i}, ${data.correct})">${opt}</button>
+                        `).join('')}
+                    </div>
+                    <button class="next-btn" id="nb" onclick="nextStep()">المرحلة التالية >> </button>
+                </div>
+            `;
+            window.scrollTo(0,0);
+        }
+
+        function handleAnswer(btn, index, correct) {
+            const btns = document.querySelectorAll('.option-btn');
+            btns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (index === correct) {
+                btn.classList.add('correct');
+                score += chapterData[currentStep].xp;
+            } else {
+                btn.classList.add('wrong');
+                btns[correct].classList.add('correct');
+                score = Math.max(0, score - 50);
+            }
+            document.getElementById('score-val').innerText = score;
+            document.getElementById('nb').style.display = 'block';
+        }
+
+        function nextStep() {
+            currentStep++;
+            renderStep();
+        }
+
+        function showFinal() {
+            document.getElementById('main-ui').style.display = 'none';
+            document.getElementById('final-screen').style.display = 'flex';
+            document.getElementById('total-xp').innerText = score + " XP";
+            document.getElementById('pb').style.width = "100%";
+        }
+    </script>
+</body>
+</html>
