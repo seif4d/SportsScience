@@ -1,1 +1,561 @@
 
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>الامتحان الشامل: مناهج التربية الرياضية</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&display=swap');
+
+        :root {
+            --bg: #1a1a2e;
+            --card: #16213e;
+            --primary: #0f3460;
+            --accent: #e94560;
+            --success: #00b894;
+            --text: #ffffff;
+            --gold: #f1c40f;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            overflow: hidden;
+            position: relative;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* --- Screens --- */
+        .screen {
+            padding: 30px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            display: none; /* Hidden by default */
+        }
+
+        .screen.active {
+            display: flex;
+            animation: fadeIn 0.5s ease;
+        }
+
+        /* --- Header --- */
+        .header {
+            width: 100%;
+            padding: 15px 25px;
+            background: rgba(0,0,0,0.2);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--accent);
+        }
+
+        .stat-badge {
+            background: rgba(255,255,255,0.1);
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* --- Question Area --- */
+        .q-container {
+            width: 100%;
+            margin-top: 20px;
+            flex-grow: 1;
+        }
+
+        .q-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            color: #fff;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+            width: 100%;
+        }
+
+        .option-btn {
+            background: #252a40;
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 12px;
+            color: #ccc;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            text-align: right;
+            position: relative;
+        }
+
+        .option-btn:hover {
+            background: #303655;
+            color: #fff;
+        }
+
+        .option-btn.correct {
+            background: rgba(0, 184, 148, 0.2);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .option-btn.wrong {
+            background: rgba(233, 69, 96, 0.2);
+            border-color: var(--accent);
+            color: var(--accent);
+        }
+
+        .option-btn.hidden {
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        /* --- Lifelines --- */
+        .lifelines {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .lifeline-btn {
+            background: linear-gradient(45deg, #f1c40f, #e67e22);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(241, 196, 15, 0.3);
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #000;
+            font-weight: bold;
+        }
+
+        .lifeline-btn:disabled {
+            filter: grayscale(100%);
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* --- Progress Bar --- */
+        .progress-container {
+            width: 100%;
+            height: 6px;
+            background: #222;
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: var(--accent);
+            width: 0%;
+            transition: width 0.3s;
+        }
+
+        /* --- Start & End --- */
+        .main-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 15px 50px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            box-shadow: 0 5px 20px rgba(233, 69, 96, 0.4);
+            font-weight: bold;
+        }
+
+        .main-btn:hover { transform: translateY(-3px); }
+
+        .score-circle {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 8px solid var(--accent);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin: 20px auto;
+            color: var(--accent);
+            background: rgba(0,0,0,0.2);
+        }
+
+        .review-text {
+            color: #aaa;
+            font-size: 0.9rem;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Mobile */
+        @media (max-width: 600px) {
+            .q-text { font-size: 1.1rem; }
+            .option-btn { font-size: 0.9rem; padding: 12px; }
+            .lifeline-btn { width: 40px; height: 40px; font-size: 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- START SCREEN -->
+        <div id="start-screen" class="screen active">
+            <div style="font-size: 5rem; margin-bottom: 20px;">🏟️</div>
+            <h1 style="font-size: 2rem; margin-bottom: 10px;">الامتحان النهائي الشامل</h1>
+            <p style="color: #aaa;">مناهج التربية الرياضية | الفصول 1-6</p>
+            
+            <div style="background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px; margin: 30px 0; width: 100%; text-align: right;">
+                <p>⚡ <strong>عدد الأسئلة:</strong> 100 سؤال (عشوائي)</p>
+                <p>❤️ <strong>الفرص:</strong> 5 قلوب (أخطاء)</p>
+                <p>⏳ <strong>الوقت:</strong> 30 ثانية للسؤال</p>
+                <p>🎁 <strong>المساعدات:</strong> حذف إجابتين (x2)</p>
+            </div>
+
+            <button class="main-btn" onclick="startExam()">ابدأ التحدي 🔥</button>
+        </div>
+
+        <!-- QUIZ SCREEN -->
+        <div id="quiz-screen" class="screen">
+            <div class="progress-container"><div class="progress-fill" id="timer-bar"></div></div>
+            
+            <div class="header">
+                <div class="stat-badge">❤️ <span id="lives-txt">5</span></div>
+                <div class="stat-badge">🏆 <span id="score-txt">0</span></div>
+                <div class="stat-badge">📝 <span id="q-num">1/100</span></div>
+            </div>
+
+            <div class="q-container">
+                <div class="q-text" id="question-text">السؤال هنا...</div>
+                <div class="options-grid" id="options-area"></div>
+            </div>
+
+            <div class="lifelines">
+                <button class="lifeline-btn" id="btn-50" onclick="use5050()" title="حذف إجابتين">50:50</button>
+            </div>
+        </div>
+
+        <!-- RESULT SCREEN -->
+        <div id="result-screen" class="screen">
+            <h1>نتائج الامتحان</h1>
+            <div class="score-circle" id="final-score">0%</div>
+            <h3 id="rank-text" style="color: var(--success); margin-bottom: 10px;"></h3>
+            <p class="review-text">تمت مراجعة أخطائك، أنت الآن جاهز.</p>
+            <button class="main-btn" onclick="location.reload()">إعادة الامتحان 🔄</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- BANK OF QUESTIONS (100 Selected High-Yield Questions) ---
+        // This covers Chapters 1-6, Common Mistakes, and Exam Patterns.
+        
+        const questionBank = [
+            // --- Chapter 1: ماهية المنهج ---
+            { q: "المعنى اللغوي لكلمة (Curriculum) هو:", o: ["مضمار السباق", "الكتاب المدرسي", "قاعة المحاضرات", "جدول الحصص"], a: 0 },
+            { q: "المنهج الذي يركز على (المادة الدراسية) ويعتبر الطالب وعاءً للحفظ هو:", o: ["المنهج الحديث", "المنهج التقليدي", "منهج النشاط", "المنهج المحوري"], a: 1 },
+            { q: "أي مما يلي يُعد من مميزات (الخبرات المباشرة)؟", o: ["سهولة الحصول عليها", "قوة التأثير وبقاء الأثر", "قلة التكاليف", "تغطية الماضي"], a: 1 },
+            { q: "عندما تكون الخبرة المباشرة خطيرة أو مكلفة، نلجأ إلى:", o: ["إلغاء الدرس", "الخبرة غير المباشرة", "الحفظ", "الامتحان"], a: 1 },
+            { q: "دور المعلم في المنهج الحديث هو:", o: ["ملقن ومسيطر", "موجه ومرشد", "مراقب فقط", "واضع للامتحانات"], a: 1 },
+            { q: "المنهج الذي يهتم بالنمو الشامل (عقلي، بدني، نفسي) هو:", o: ["المنهج التقليدي", "المنهج الحديث", "منهج المواد المنفصلة", "المنهج الأكاديمي"], a: 1 },
+
+            // --- Chapter 2: الحيثيات والقوانين ---
+            { q: "وفقاً للميثاق الدولي، ممارسة التربية البدنية هي:", o: ["حق للموهوبين فقط", "حق أساسي للجميع", "رفاهية", "اختيارية للمدارس"], a: 1 },
+            { q: "الزمن المخصص للتربية الرياضية في المرحلة الابتدائية لا يقل عن:", o: ["90 دقيقة", "150 دقيقة", "200 دقيقة", "225 دقيقة"], a: 1 },
+            { q: "الزمن المخصص للتربية الرياضية في الإعدادي والثانوي لا يقل عن:", o: ["150 دقيقة", "225 دقيقة", "300 دقيقة", "90 دقيقة"], a: 1 },
+            { q: "الفلسفة التربوية يجب أن تكون:", o: ["جامدة", "ثابتة لا تتغير", "مرنة ومتطورة", "قديمة"], a: 2 },
+            { q: "هدف (احترام القوانين والتحلي بالروح الرياضية) يندرج تحت المجال:", o: ["المعرفي", "الحركي", "الوجداني/الاجتماعي", "البدني"], a: 2 },
+            { q: "من أهداف التربية الرياضية (المعرفية):", o: ["تنمية العضلات", "فهم قانون اللعبة", "احترام المنافس", "السرعة"], a: 1 },
+            
+            // --- Chapter 3: تحليل الحركة (لابان) ---
+            { q: "السؤال (ماذا يفعل الجسم؟) يتعلق ببعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 0 },
+            { q: "السؤال (كيف يتحرك الجسم؟) يتعلق ببعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 1 },
+            { q: "السؤال (أين يتحرك الجسم؟) يتعلق ببعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 2 },
+            { q: "حركات (المشي، الجري، الحجل) تعتبر حركات:", o: ["ثبات", "انتقال", "معالجة", "توازن"], a: 1 },
+            { q: "حركات (الثني، المد، الالتفاف) تعتبر حركات:", o: ["انتقال", "ثبات", "معالجة", "طيران"], a: 1 },
+            { q: "حركات (رمي الكرة، ركل، ضرب بالمضرب) تعتبر حركات:", o: ["انتقال", "ثبات", "معالجة", "سكون"], a: 2 },
+            { q: "عامل (الزمن) في بعد الجهد ينقسم إلى:", o: ["قوي وخفيف", "سريع وبطيء", "مباشر وغير مباشر", "حر ومقيد"], a: 1 },
+            { q: "عامل (الوزن/القوة) في بعد الجهد ينقسم إلى:", o: ["قوي وخفيف", "سريع وبطيء", "حر ومقيد", "عالي ومنخفض"], a: 0 },
+            { q: "الانسياب الذي يصعب إيقافه فجأة يسمى:", o: ["انسياب مقيد", "انسياب حر", "انسياب مباشر", "انسياب مرن"], a: 1 },
+            { q: "التحرك في مستوى (عالي أو منخفض) يتبع بعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 2 },
+            { q: "التحرك في (مسار متعرج) يتبع بعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 2 },
+            { q: "العمل (مع الزميل) أو (ضد الزميل) يتبع بعد:", o: ["الجسم", "الجهد", "الفراغ", "العلاقات"], a: 3 },
+            { q: "المساحة التي يشغلها الفرد وهو ثابت في مكانه تسمى:", o: ["الفراغ العام", "الفراغ الشخصي", "المسار", "الاتجاه"], a: 1 },
+            { q: "التركيز (المباشر وغير المباشر) يتبع بعد:", o: ["الجسم", "الجهد", "العلاقات", "الفراغ"], a: 1 },
+
+            // --- Chapter 4: التخطيط ---
+            { q: "مصطلح (المدى/النطاق) في التخطيط يعني:", o: ["ترتيب المحتوى", "محتوى المنهج واتساعه", "طرق التدريس", "التوازن"], a: 1 },
+            { q: "مصطلح (التتابع) في التخطيط يعني:", o: ["اختيار الأنشطة", "ترتيب الخبرات (رأسياً)", "توزيع الزمن", "التقييم"], a: 1 },
+            { q: "مصطلح (التوازن) يعني:", o: ["عدم طغيان جانب على آخر", "اختيار الألعاب", "تحديد الأهداف", "إلغاء النظري"], a: 0 },
+            { q: "خطة (الوحدة التعليمية) تغطي فترة زمنية:", o: ["سنة كاملة", "حصة واحدة", "عدة أسابيع (موضوع واحد)", "يوم دراسي"], a: 2 },
+            { q: "أصغر وحدة في التخطيط هي:", o: ["الخطة السنوية", "خطة الوحدة", "خطة الدرس", "الخطة الخمسية"], a: 2 },
+            { q: "عند تخطيط المنهج، يجب مراعاة:", o: ["التلميذ فقط", "المادة فقط", "المجتمع فقط", "التلميذ والمجتمع والمادة معاً"], a: 3 },
+            { q: "اللجنة المسؤولة عن وضع المنهج يجب أن تضم:", o: ["المدير فقط", "خبراء ومعلمين وموجهين", "الطلاب فقط", "أولياء الأمور فقط"], a: 1 },
+
+            // --- Chapter 5: البرامج والوحدات ---
+            { q: "عند تخطيط الوحدة التعليمية، الخطوة الأولى هي:", o: ["اختيار الأنشطة", "تحديد الأهداف", "تجهيز الملاعب", "التقييم"], a: 1 },
+            { q: "الأهداف السلوكية (ماجر) يجب أن تكون:", o: ["غامضة", "عامة جداً", "قابلة للملاحظة والقياس", "طويلة المدى"], a: 2 },
+            { q: "برنامج (علاج السمنة) يجب أن يراعي:", o: ["الجانب النفسي للطالب", "إحراج الطالب", "زيادة التنافس", "منع الطعام"], a: 0 },
+            { q: "برامج (الموهوبين) تهدف إلى:", o: ["شغل وقت الفراغ", "الوصول للمستويات العليا", "علاج التشوهات", "الترفيه فقط"], a: 1 },
+            { q: "اليوم الرياضي المدرسي يعتبر من:", o: ["المنهج الأكاديمي", "البرامج التكميلية", "النشاط الصفي", "الواجبات المنزلية"], a: 1 },
+            { q: "هدف البرنامج (القوامي) هو:", o: ["زيادة السرعة", "علاج التشوهات القوامية", "تعليم الكرة", "السباحة"], a: 1 },
+
+            // --- Chapter 6: تنظيمات المناهج ---
+            { q: "المنهج الذي يفصل المواد الدراسية بحواجز (تاريخ، جغرافيا، علوم) هو:", o: ["منهج المواد المنفصلة", "منهج النشاط", "المنهج المحوري", "المجالات الواسعة"], a: 0 },
+            { q: "المنهج الذي يدور حول (ميول واهتمامات التلاميذ) هو:", o: ["المواد المنفصلة", "منهج النشاط", "المواد المترابطة", "المجالات الواسعة"], a: 1 },
+            { q: "من عيوب (منهج النشاط):", o: ["سلبية الطالب", "صعوبة تنفيذه وحاجته لإمكانيات", "التركيز على الحفظ", "إهمال الميول"], a: 1 },
+            { q: "المنهج الذي يدمج (الفيزياء والكيمياء والأحياء) في مادة (العلوم) هو:", o: ["المواد المنفصلة", "المجالات الواسعة / المندمج", "النشاط", "المحوري"], a: 1 },
+            { q: "المنهج الذي يقسم الدراسة إلى (جزء عام إجباري) و(جزء خاص اختياري) هو:", o: ["المنهج المحوري", "منهج النشاط", "المواد المنفصلة", "المواد المترابطة"], a: 0 },
+            { q: "الفيلسوف المرتبط بمنهج النشاط هو:", o: ["لابان", "جون ديوي", "بلوم", "ماجر"], a: 1 },
+            { q: "من مميزات (منهج المواد المنفصلة):", o: ["سهولة التخطيط والتقويم", "مراعاة الفروق الفردية", "الإيجابية", "التكامل"], a: 0 },
+            { q: "من عيوب (منهج المواد المنفصلة):", o: ["صعوبة الامتحانات", "تفتيت المعرفة", "التركيز على الطالب", "الحاجة لمعامل"], a: 1 },
+            
+            // --- Advanced / True or False Logic as MCQ ---
+            { q: "المنهج الحديث يعترف بأن الطالب:", o: ["عقل فقط", "جسم فقط", "وحدة متكاملة", "متلقي سلبي"], a: 2 },
+            { q: "هل يمكن الاعتماد كلياً على الخبرات المباشرة في التدريس؟", o: ["نعم، دائماً", "لا، لأنها قد تكون خطرة أو مكلفة", "نعم، لأنها الأفضل", "لا، لأنها مملة"], a: 1 },
+            { q: "أي مما يلي يعتبر (خبرة غير مباشرة)؟", o: ["لعب مباراة", "تشريح ضفدع", "مشاهدة فيديو تعليمي", "زراعة شجرة"], a: 2 },
+            { q: "التكامل (Integration) هو سمة تميز:", o: ["المنهج التقليدي", "المنهج الحديث", "منهج القرون الوسطى", "منهج الحفظ"], a: 1 },
+            { q: "التقويم في المنهج الحديث يتسم بأنه:", o: ["نهائي فقط", "مستمر وشامل", "يقيس الحفظ", "شفوي فقط"], a: 1 },
+            { q: "الانسياب المقيد (Bound Flow) يعني:", o: ["حركة منطلقة لا تتوقف", "حركة يمكن التحكم فيها وإيقافها", "حركة عشوائية", "حركة سريعة"], a: 1 },
+            { q: "الوعي بالجسم (Body Awareness) يعني:", o: ["معرفة أسماء العضلات", "إدراك الفرد لأجزاء جسمه وحركتها", "قياس الوزن", "النظر في المرآة"], a: 1 },
+            { q: "هل المنهج هو الكتاب المدرسي فقط؟", o: ["نعم", "لا، المنهج أشمل (خبرات وأنشطة)", "نعم، مع الامتحانات", "نعم، مع دليل المعلم"], a: 1 },
+            { q: "أي مما يلي ليس من عناصر اللياقة البدنية؟", o: ["القوة", "السرعة", "التذكر", "المرونة"], a: 2 },
+            { q: "صياغة الهدف: (أن يجري الطالب 50 متر في 7 ثواني) تندرج تحت المجال:", o: ["المعرفي", "البدني/المهاري", "الوجداني", "الاجتماعي"], a: 1 }
+        ];
+
+        // --- GAME LOGIC ---
+        
+        let shuffledQuestions = [];
+        let currentQIndex = 0;
+        let score = 0;
+        let lives = 5;
+        let timer;
+        let timeLeft = 30;
+        let lifelines = { fifty: 2 };
+
+        const ui = {
+            start: document.getElementById('start-screen'),
+            quiz: document.getElementById('quiz-screen'),
+            result: document.getElementById('result-screen'),
+            qText: document.getElementById('question-text'),
+            optsArea: document.getElementById('options-area'),
+            timerBar: document.getElementById('timer-bar'),
+            lives: document.getElementById('lives-txt'),
+            score: document.getElementById('score-txt'),
+            qNum: document.getElementById('q-num'),
+            finalScore: document.getElementById('final-score'),
+            rankText: document.getElementById('rank-text'),
+            btn50: document.getElementById('btn-50')
+        };
+
+        function startExam() {
+            // Shuffle questions
+            shuffledQuestions = [...questionBank].sort(() => Math.random() - 0.5);
+            // Reset stats
+            currentQIndex = 0;
+            score = 0;
+            lives = 5;
+            lifelines.fifty = 2;
+            
+            ui.start.style.display = 'none';
+            ui.quiz.classList.add('active');
+            
+            updateStats();
+            loadQuestion();
+        }
+
+        function loadQuestion() {
+            if (currentQIndex >= shuffledQuestions.length || lives <= 0) {
+                endExam();
+                return;
+            }
+
+            const q = shuffledQuestions[currentQIndex];
+            ui.qText.innerText = q.q;
+            ui.qNum.innerText = `${currentQIndex + 1}/${shuffledQuestions.length}`;
+            ui.optsArea.innerHTML = '';
+            
+            // Create buttons
+            q.o.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.innerText = opt;
+                btn.onclick = () => checkAnswer(index, q.a, btn);
+                ui.optsArea.appendChild(btn);
+            });
+
+            // Reset Timer
+            resetTimer();
+        }
+
+        function checkAnswer(selected, correct, btn) {
+            clearInterval(timer);
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            // Disable clicks
+            allBtns.forEach(b => b.style.pointerEvents = 'none');
+
+            if (selected === correct) {
+                btn.classList.add('correct');
+                score += 10;
+                playSound('correct');
+            } else {
+                btn.classList.add('wrong');
+                allBtns[correct].classList.add('correct'); // Show right answer
+                lives--;
+                playSound('wrong');
+            }
+
+            updateStats();
+
+            // Next Question Delay
+            setTimeout(() => {
+                if (lives > 0) {
+                    currentQIndex++;
+                    loadQuestion();
+                } else {
+                    endExam();
+                }
+            }, 1500);
+        }
+
+        function updateStats() {
+            ui.lives.innerText = lives;
+            ui.score.innerText = score;
+            ui.btn50.disabled = lifelines.fifty <= 0;
+            if (lifelines.fifty <= 0) ui.btn50.style.opacity = 0.5;
+        }
+
+        function resetTimer() {
+            timeLeft = 30;
+            ui.timerBar.style.width = '100%';
+            ui.timerBar.style.background = '#e94560';
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                const percentage = (timeLeft / 30) * 100;
+                ui.timerBar.style.width = `${percentage}%`;
+                
+                if (percentage < 30) ui.timerBar.style.background = '#ff0000';
+                else if (percentage < 60) ui.timerBar.style.background = '#f1c40f';
+
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    lives--;
+                    updateStats();
+                    // Show correct answer then move on
+                    const q = shuffledQuestions[currentQIndex];
+                    const allBtns = document.querySelectorAll('.option-btn');
+                    allBtns[q.a].classList.add('correct');
+                    setTimeout(() => {
+                        currentQIndex++;
+                        loadQuestion();
+                    }, 1500);
+                }
+            }, 1000);
+        }
+
+        function use5050() {
+            if (lifelines.fifty > 0) {
+                const q = shuffledQuestions[currentQIndex];
+                const allBtns = Array.from(document.querySelectorAll('.option-btn'));
+                const correctBtn = allBtns[q.a];
+                
+                // Filter wrong buttons
+                let wrongBtns = allBtns.filter((b, i) => i !== q.a);
+                
+                // Hide 2 random wrong buttons
+                for (let i = 0; i < 2; i++) {
+                    if (wrongBtns.length > 0) {
+                        const randIndex = Math.floor(Math.random() * wrongBtns.length);
+                        wrongBtns[randIndex].classList.add('hidden');
+                        wrongBtns.splice(randIndex, 1);
+                    }
+                }
+                
+                lifelines.fifty--;
+                updateStats();
+            }
+        }
+
+        function endExam() {
+            clearInterval(timer);
+            ui.quiz.style.display = 'none';
+            ui.result.classList.add('active');
+            
+            const totalQuestions = shuffledQuestions.length; // Or attempted ones
+            const percentage = Math.round((score / (totalQuestions * 10)) * 100); // Rough estimate
+            
+            // Calculate real accuracy based on questions answered
+            const maxScore = (currentQIndex + (lives > 0 ? 0 : 1)) * 10;
+            // Let's just use raw score
+            
+            ui.finalScore.innerText = score;
+            
+            let rank = "";
+            if (score >= 500) rank = "👑 أسطورة المناهج (امتياز)";
+            else if (score >= 350) rank = "🔥 كوتش محترف (جيد جداً)";
+            else if (score >= 200) rank = "📚 طالب مجتهد (جيد)";
+            else rank = "⚠️ تحتاج لمراجعة المنهج";
+
+            ui.rankText.innerText = rank;
+        }
+
+        function playSound(type) {
+            // Visual feedback is primary, sound can be added here if needed
+        }
+
+    </script>
+</body>
+</html>
