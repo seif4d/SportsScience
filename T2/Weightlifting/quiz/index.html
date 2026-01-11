@@ -1,0 +1,839 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title> رفع الأثقال 🏋️‍♂️</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #121212;
+            --card-bg: #1e1e1e;
+            --primary: #D32F2F; /* Red plate */
+            --accent: #FFD700; /* Gold */
+            --text-main: #ffffff;
+            --text-sec: #b0b0b0;
+            --success: #00C851;
+            --error: #ff4444;
+            --blue-plate: #0d47a1;
+        }
+
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(211, 47, 47, 0.1) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(13, 71, 161, 0.1) 0%, transparent 20%);
+            color: var(--text-main);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* --- Layout Containers --- */
+        .app-frame {
+            width: 100%;
+            max-width: 550px;
+            height: 100%;
+            max-height: 900px;
+            background: rgba(30, 30, 30, 0.7);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        @media (min-width: 600px) {
+            .app-frame {
+                height: 90vh;
+                border-radius: 25px;
+                border: 1px solid rgba(255,255,255,0.1);
+            }
+        }
+
+        /* --- Screens Animation --- */
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            padding: 24px;
+            animation: fadeIn 0.4s ease-out forwards;
+            overflow-y: auto;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- Start Screen --- */
+        .start-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            filter: drop-shadow(0 0 20px var(--primary));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .title-main {
+            font-size: 2.2rem;
+            font-weight: 900;
+            margin: 0;
+            background: linear-gradient(45deg, #fff, var(--text-sec));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .tagline {
+            color: var(--accent);
+            font-weight: bold;
+            margin-top: 10px;
+            letter-spacing: 1px;
+            text-decoration: none;
+        }
+
+        .info-card {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 30px 0;
+            font-size: 0.9rem;
+            color: var(--text-sec);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- Game Screen --- */
+        .header-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .score-badge {
+            background: rgba(255, 215, 0, 0.15);
+            color: var(--accent);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .streak-flame {
+            font-size: 1.2rem;
+            filter: grayscale(1);
+            transition: 0.3s;
+        }
+        .streak-flame.active {
+            filter: grayscale(0);
+            text-shadow: 0 0 10px orange;
+        }
+
+        .progress-track {
+            height: 6px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), #ff6e40);
+            width: 0%;
+            transition: width 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .question-box {
+            background: rgba(255,255,255,0.03);
+            border-radius: 16px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .q-type {
+            font-size: 0.8rem;
+            color: var(--primary);
+            text-transform: uppercase;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin-bottom: 10px;
+            display: block;
+        }
+
+        .q-text {
+            font-size: 1.25rem;
+            line-height: 1.6;
+            font-weight: 700;
+        }
+
+        .options-grid {
+            display: grid;
+            gap: 12px;
+        }
+
+        .opt-btn {
+            background: #2a2a2a;
+            border: 2px solid transparent;
+            padding: 16px;
+            border-radius: 12px;
+            color: #fff;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: right;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .opt-btn:active { transform: scale(0.98); }
+        .opt-btn:hover { background: #333; }
+
+        .opt-btn.correct {
+            background: rgba(0, 200, 81, 0.15);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        .opt-btn.wrong {
+            background: rgba(255, 68, 68, 0.15);
+            border-color: var(--error);
+            color: var(--error);
+            animation: shake 0.4s;
+        }
+
+        .opt-btn.dimmed {
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        /* --- Lifeline Button --- */
+        .lifeline-area {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        
+        .lifeline-btn {
+            background: linear-gradient(45deg, var(--blue-plate), #1976D2);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            font-family: inherit;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(13, 71, 161, 0.4);
+            transition: 0.3s;
+        }
+        
+        .lifeline-btn:disabled {
+            filter: grayscale(1);
+            opacity: 0.5;
+            cursor: not-allowed;
+            box-shadow: none;
+        }
+
+        /* --- Result Screen --- */
+        .rank-badge {
+            font-size: 1.5rem;
+            color: var(--text-sec);
+            margin: 10px 0;
+            font-weight: bold;
+        }
+
+        .final-score {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--primary);
+            margin: 0;
+            line-height: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 30px 0;
+            width: 100%;
+        }
+
+        .stat-item {
+            background: rgba(255,255,255,0.05);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-val { font-size: 1.5rem; font-weight: bold; display: block; }
+        .stat-label { font-size: 0.8rem; color: #888; }
+
+        /* --- Buttons --- */
+        .btn-main {
+            background: linear-gradient(90deg, var(--primary), #b71c1c);
+            color: white;
+            border: none;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(211, 47, 47, 0.4);
+            transition: transform 0.2s, box-shadow 0.2s;
+            width: 100%;
+            font-family: inherit;
+        }
+        
+        .btn-main:active { transform: scale(0.96); }
+
+        /* --- Animations --- */
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* --- Confetti Canvas --- */
+        #confetti {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-frame">
+        <canvas id="confetti"></canvas>
+
+        <!-- 1. Start Screen -->
+        <div class="screen active" id="startScreen">
+            <div class="start-content">
+                <div class="hero-icon">🏋️</div>
+                <h1 class="title-main">اختبار اثقال</h1>
+                <p class="tagline"><a class="tagline" href="https://www.facebook.com/profile.php?id=61577044333150">Seif X DebiaN</a></p>
+                
+                <div class="info-card">
+                    <p>🎯 <strong>نظام البطولة:</strong> ستحصل على 20 سؤالاً عشوائياً من بنك الأسئلة الشامل.</p>
+                    <p>🔥 <strong>الهدف:</strong> حافظ على "سلسلة الإجابات" للحصول على ميدالية ذهبية.</p>
+                </div>
+
+                <button class="btn-main" onclick="game.init()">ابدأ المنافسة</button>
+            </div>
+        </div>
+
+        <!-- 2. Quiz Screen -->
+        <div class="screen" id="quizScreen">
+            <div class="header-bar">
+                <div class="score-badge">
+                    <span id="scoreVal">0</span> نقطة
+                </div>
+                <div class="score-badge" style="background: rgba(255,69,0,0.15); color: #FF4500;">
+                    <span class="streak-flame" id="fireIcon">🔥</span>
+                    <span id="streakVal">0</span>
+                </div>
+            </div>
+
+            <div class="progress-track">
+                <div class="progress-fill" id="progressBar"></div>
+            </div>
+
+            <div style="flex:1; display:flex; flex-direction:column; justify-content:center;">
+                <div class="question-box">
+                    <span class="q-type" id="qTypeLabel">سؤال 1 / 20</span>
+                    <div class="q-text" id="qText">جاري تحميل السؤال...</div>
+                </div>
+
+                <div class="options-grid" id="optionsContainer">
+                    <!-- Options injected here -->
+                </div>
+                
+                <div class="lifeline-area">
+                    <button class="lifeline-btn" id="btn5050" onclick="game.use5050()">
+                        <span>⚡ حذف إجابتين</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 3. Result Screen -->
+        <div class="screen" id="resultScreen">
+            <div class="start-content">
+                <div class="hero-icon" id="resultIcon">🥇</div>
+                <h2 style="margin:0;">تمت المحاولة</h2>
+                <div class="rank-badge" id="rankText">بطل أولمبي</div>
+                
+                <div class="final-score"><span id="finalScore">0</span>%</div>
+                
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <span class="stat-val" id="correctCount">0</span>
+                        <span class="stat-label">إجابة صحيحة</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-val" id="bestStreak">0</span>
+                        <span class="stat-label">أفضل سلسلة</span>
+                    </div>
+                </div>
+
+                <button class="btn-main" onclick="game.init()">جولة جديدة 🔄</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+    // --- The Database (Full provided list) ---
+    const fullDatabase = [
+        // MCQ (Provided in Turn 1 & Turn 2)
+        { t: 'mcq', q: "تأسس الاتحاد الدولي لرفع الأثقال (IWF) عام؟", o: ["1896", "1905", "1930", "1972"], a: 1 },
+        { t: 'mcq', q: "وزن 'بار' الرجال المعتمد في المسابقات هو؟", o: ["15 كجم", "20 كجم", "25 كجم", "10 كجم"], a: 1 },
+        { t: 'mcq', q: "حصل البطل المصري 'السيد نصير' على أول ذهبية لمصر في دورة؟", o: ["برلين 1936", "لندن 1948", "أمستردام 1928", "أنتويرب 1920"], a: 2 },
+        { t: 'mcq', q: "أقصى عرض مسموح به لحزام رفع الأثقال هو؟", o: ["10 سم", "12 سم", "15 سم", "8 سم"], a: 1 },
+        { t: 'mcq', q: "لون قرص (طارة) الوزن 25 كجم هو؟", o: ["أزرق", "أصفر", "أخضر", "أحمر"], a: 3 },
+        { t: 'mcq', q: "يمنح اللاعب زمن قدره ............ لأداء المحاولة الواحدة؟", o: ["30 ثانية", "دقيقة واحدة", "دقيقتان", "3 دقائق"], a: 1 },
+        { t: 'mcq', q: "القبضة الأقوى والأكثر استخداماً في المنافسات هي؟", o: ["العادية", "العكسية", "الخطافية", "المفتوحة"], a: 2 },
+        { t: 'mcq', q: "تم إلغاء رفعة 'الضغط' نهائياً من المنافسات عام؟", o: ["1972", "1976", "2000", "1920"], a: 0 },
+        { t: 'mcq', q: "عدد المحاولات القانونية المسموح بها لكل لاعب في الرفعة الواحدة؟", o: ["2", "3", "4", "5"], a: 1 },
+        { t: 'mcq', q: "تبلغ مساحة اللوحة الخشبية (المنصة) للمنافسات؟", o: ["3x3 م", "4x4 م", "5x5 م", "2x2 م"], a: 1 },
+        { t: 'mcq', q: "قطر بار السيدات يبلغ ............ ملم؟", o: ["25", "28", "30", "20"], a: 0 },
+        { t: 'mcq', q: "في رفعة 'الخطف'، يتم رفع الثقل من الأرض إلى؟", o: ["الصدر", "الركبة", "كامل امتداد الذراعين فوق الرأس", "الكتفين"], a: 2 },
+        { t: 'mcq', q: "يعتبر لمس الكوع للركبة في رفعة الكلين؟", o: ["محاولة صحيحة", "محاولة فاشلة", "مسموح به للناشئين", "لا يؤثر"], a: 1 },
+        { t: 'mcq', q: "تبدأ عملية الميزان الرسمي قبل بداية المسابقة بمدة؟", o: ["ساعة واحدة", "ساعتين", "3 ساعات", "30 دقيقة"], a: 1 },
+        { t: 'mcq', q: "المرحلة التي يحدث فيها 'الانفجار' وتوليد أقصى قوة للبار هي؟", o: ["السحبة الأولى", "السحبة الثانية", "التوازن", "الوقوف"], a: 1 },
+        { t: 'mcq', q: "أقل زيادة مسموح بها في الوزن بين المحاولات هي؟", o: ["2.5 كجم", "1 كجم", "0.5 كجم", "5 كجم"], a: 1 },
+        { t: 'mcq', q: "البطل المصري الذي لُقب بـ 'معجزة برلين 1936' هو؟", o: ["محمد إيهاب", "خضر التوني", "محمود فياض", "إبراهيم شمس"], a: 1 },
+        { t: 'mcq', q: "المسافة الداخلية بين 'كُمي' البار (مكان مسك اللاعب) تبلغ؟", o: ["131 سم", "220 سم", "201 سم", "50 سم"], a: 0 },
+        { t: 'mcq', q: "يتكون طاقم التحكيم (على المنصة) من عدد؟", o: ["5 حكام", "3 حكام", "حكم واحد", "4 حكام"], a: 1 },
+        { t: 'mcq', q: "عند أداء اللاعب لمحاولتين متتاليتين (يتبع نفسه)، يمنح وقت؟", o: ["دقيقة واحدة", "دقيقة ونصف", "دقيقتان", "3 دقائق"], a: 2 },
+        // New MCQs from prompt 2
+        { t: 'mcq', q: "ما الرفعتان المعتمدتان في مسابقات رفع الأثقال؟", o: ["الخطف والضغط", "الخطف والكلين والنتر", "الكلين والضغط", "النتر والرفعة الميتة"], a: 1 },
+        { t: 'mcq', q: "يؤدى ترتيب الرفعات في المسابقة وفقاً لـ...", o: ["الكلين والنتر ثم الخطف", "الخطف ثم الكلين والنتر", "اختيار اللاعب", "القرعة"], a: 1 },
+        { t: 'mcq', q: "نجاح الأداء في الرفعات يعتمد بدرجة كبيرة على البداية الصحيحة من...", o: ["سرعة الدخول", "الاستعداد والقبضة الصحيحة", "قوة الذراعين فقط", "نوع الحذاء"], a: 1 },
+        { t: 'mcq', q: "تُستخدم المسكة الواسعة غالباً في مهارة...", o: ["الخطف", "الكلين", "النتر", "القرفصاء"], a: 0 },
+        { t: 'mcq', q: "تُستخدم المسكة الضيقة غالباً في مهارة...", o: ["الخطف", "الكلين والنتر", "رفعة السحب العريض", "الدوران"], a: 1 },
+        { t: 'mcq', q: "المقصود بـ 'المسكة' في رفع الأثقال هو...", o: ["طريقة إمساك البار بالأصابع", "المسافة بين اليدين على البار", "نوع البار المستخدم", "إحكام الحزام"], a: 1 },
+        { t: 'mcq', q: "الهدف الأساسي من القبضة القوية هو...", o: ["زيادة وزن البار", "تحسين التحكم ومسار البار", "حماية الظهر", "زيادة سرعة النزول"], a: 1 },
+        { t: 'mcq', q: "من خصائص الأداء الجيد أن يكون البار أثناء السحب...", o: ["بعيداً عن الجسم", "قريباً من الجذع", "مائلاً لليسار", "مائلاً لليمين"], a: 1 },
+        { t: 'mcq', q: "تُعد رفعة الخطف من أصعب الرفعات لأنها تتطلب بدرجة كبيرة...", o: ["المرونة والتوافق العصبي العضلي", "القوة العضلية البحتة", "وزن جسم كبير", "طول قامة"], a: 0 },
+        { t: 'mcq', q: "يمر البار فوق السالميات الأخيرة لأصابع مشط القدم في وضع...", o: ["الاستعداد/البدء", "الوصول للركبة", "السحبة الثانية", "النطر"], a: 0 },
+        { t: 'mcq', q: "ميل الجذع في وضع البدء يكون غالباً...", o: ["مائلاً للأمام مع استقامة العمود الفقري", "عمودياً تماماً", "مائلاً للخلف", "محدباً"], a: 0 },
+        { t: 'mcq', q: "موضع الكتفين بالنسبة للبار في وضع البدء يكون...", o: ["خلف البار", "عموديين على البار أو للأمام قليلاً", "بعيداً جداً للأمام", "مرتخيين"], a: 1 },
+        { t: 'mcq', q: "توزيع مركز الثقل في وضع البدء يكون تقريباً...", o: ["على الأمشاط فقط", "على الكعبين فقط", "موزع بين الكعبين والأمشاط بنسبة أكبر للكعبين", "على الحافة الخارجية للقدم"], a: 2 },
+        { t: 'mcq', q: "في السحب الأول الهدف الرئيس هو رفع البار حتى...", o: ["أعلى الفخذ", "مستوى الركبتين مع الحفاظ على وضع الجذع", "مستوى الصدر", "الذقن"], a: 1 },
+        { t: 'mcq', q: "دفع الركبتين أسفل البار بعد السحب الأول يهدف إلى...", o: ["إراحة العضلات", "تقريب مركز ثقل البار من مركز ثقل الرباع", "زيادة سرعة البار فقط", "إطالة فترة السحب"], a: 1 },
+        { t: 'mcq', q: "مرحلة 'تفجير القوة' يُقصد بها غالباً...", o: ["السحب البطيء", "الوصول لأقصى امتداد وإطلاق أعلى قوة", "الثبات العميق", "إنزال البار"], a: 1 },
+        { t: 'mcq', q: "في استقبال الخطف يكون البار...", o: ["على الصدر", "فوق الرأس والذراعان ممدودتان", "خلف الرقبة", "أمام الوجه"], a: 1 },
+        { t: 'mcq', q: "عند الوقوف من القرفصاء في الخطف يجب دفع الكتفين...", o: ["للخلف", "لأمام للمحافظة على مركز الثقل", "لأعلى فقط", "للأسفل"], a: 1 },
+        { t: 'mcq', q: "من الأخطاء العامة التي تسبب أخطاء الخطف تعليم الرفعة بأوزان...", o: ["خفيفة جداً", "ثقيلة تفوق إمكانيات اللاعب", "متوسطة", "بلاستيكية"], a: 1 },
+        { t: 'mcq', q: "انحراف البار للأمام أثناء السحب قد يحدث بسبب...", o: ["الطلوع المبكر على مشط القدم", "النظر للأعلى", "استخدام الحزام", "اتساع القبضة"], a: 0 },
+        { t: 'mcq', q: "من وسائل المساعدة الفنية لعلاج بعض أخطاء السحب...", o: ["السحب من المكعبات", "الجري", "الوثب الطويل", "السباحة"], a: 0 },
+        { t: 'mcq', q: "من الأخطاء القانونية في الخطف...", o: ["التحرك بالقدمين", "النزول بالثقل قبل إشارة الحكم بالنزول", "الصراخ أثناء الرفع", "ارتداء حزام"], a: 1 },
+        { t: 'mcq', q: "عدد مراحل الأداء الفني لرفعة الكلين هو...", o: ["4 مراحل", "5 مراحل", "6 مراحل", "3 مراحل"], a: 2 },
+        { t: 'mcq', q: "المقصود بالثني المزدوج للركبتين في الكلين هو...", o: ["ثني الركبتين مرتين لتهيئة السحب الثاني", "ثني ركبة واحدة", "الجلوس الكامل", "القفز مرتين"], a: 0 },
+        { t: 'mcq', q: "عند استقبال الكلين على الكتفين يحدث...", o: ["ثبات المرفقين", "دوران المرفقين للأمام ولأعلى", "خفض المرفقين", "فتح اليدين"], a: 1 },
+        { t: 'mcq', q: "عدد مراحل الأداء الفني لرفعة النطر هو...", o: ["3 مراحل", "4 مراحل", "5 مراحل", "6 مراحل"], a: 2 },
+        { t: 'mcq', q: "وظيفة 'دفع ونطر الثقل لأعلى' هي...", o: ["تثبيت الوزن", "إعطاء الثقل قوة دفع رأسية للأعلى قبل الغطس تحته", "رمي الثقل للخلف", "التحرك للأمام"], a: 1 },
+        { t: 'mcq', q: "الناشئون (حسب تصنيف الاتحاد الدولي) هم حتى سن...", o: ["17 سنة", "18 سنة", "20 سنة تقريباً", "23 سنة"], a: 2 },
+        { t: 'mcq', q: "الحد الأدنى للسن للمشاركة في بطولة العالم/الأولمبياد هو...", o: ["14 سنة", "16 سنة", "18 سنة", "15 سنة"], a: 1 },
+        { t: 'mcq', q: "ترتيب الرفعتين حسب القانون يكون...", o: ["الكلين ثم الخطف", "الخطف ثم الكلين والنتر", "النتر ثم الكلين", "اختياري"], a: 1 },
+
+        // True/False Questions
+        { t: 'tf', q: "تتكّون منافسات رفع الأثقال من رفعتين: الخطف والكلين والنتر.", a: true },
+        { t: 'tf', q: "في رفعة الخطف يصل الثقل إلى أعلى الرأس في حركتين منفصلتين مع توقف.", a: false },
+        { t: 'tf', q: "تُستخدم القبضة الخطافية (Hook Grip) لتقوية التثبيت على البار وتقليل انزلاقه.", a: true },
+        { t: 'tf', q: "من خصائص الأداء الجيد أن يتحرك البار بعيداً عن الجسم أثناء السحب.", a: false },
+        { t: 'tf', q: "وضع البدء الصحيح يساعد على الاتزان ونقل القوة من الرجلين إلى البار.", a: true },
+        { t: 'tf', q: "يُفضّل أن يكون الظهر مستديراً للأمام في وضع الاستعداد لتسهيل السحب.", a: false },
+        { t: 'tf', q: "السحب الأول ينتهي عادةً عندما يصل البار إلى مستوى الركبتين تقريباً.", a: true },
+        { t: 'tf', q: "في السحب الأول الهدف الأساسي هو توليد أعلى سرعة ممكنة مباشرة من الأرض.", a: false },
+        { t: 'tf', q: "قرب البار من الجسم يقلل العزم على الظهر ويساعد على التحكم في المسار.", a: true },
+        { t: 'tf', q: "الامتداد الكامل يعني مد مفاصل الكاحل والركبة والحوض معاً.", a: true },
+        { t: 'tf', q: "الثني المزدوج للركبتين يحدث في الخطف فقط ولا يحدث في الكلين.", a: false },
+        { t: 'tf', q: "في الخطف، يتم السقوط تحت البار بعد الوصول إلى الامتداد الكامل.", a: true },
+        { t: 'tf', q: "استقبال الخطف يكون والبار فوق الرأس والذراعان ممدودتان.", a: true },
+        { t: 'tf', q: "ثني الذراعين أثناء الثبات في الخطف يعتبر من الأخطاء الفنية الشائعة.", a: true },
+        { t: 'tf', q: "دوران الركبتين للداخل أثناء القرفصاء يساعد على الثبات ويُعد صحيحاً فنياً.", a: false },
+        { t: 'tf', q: "الوقوف من القرفصاء في الخطف يعتمد على مد الركبتين والحوض مع الحفاظ على الاتزان.", a: true },
+        { t: 'tf', q: "من الأخطاء الشائعة ثني الذراعين مبكراً أثناء السحب لأنه يقلل من فعالية الرجلين.", a: true },
+        { t: 'tf', q: "رفع الكعبين قرب نهاية السحب يساعد على زيادة الارتفاع الرأسي للبار.", a: true },
+        { t: 'tf', q: "في الخطف يُفضل أن تكون المسكة أوسع نسبياً من الكلين.", a: true },
+        { t: 'tf', q: "في الكلين تكون المسكة دائماً أوسع من مسكة الخطف.", a: false },
+        { t: 'tf', q: "استقبال الكلين يكون عادةً على الكتفين/الترقوتين مع رفع المرفقين للأمام.", a: true },
+        { t: 'tf', q: "في الكلين يجب أن تبقى المرفقان للأسفل أثناء الاستقبال لضمان ثبات البار.", a: false },
+        { t: 'tf', q: "السقوط تحت البار في الكلين يساعد على استقبال الوزن بارتفاع أقل للبار.", a: true },
+        { t: 'tf', q: "من أساسيات الكلين أن يكون مسار البار قريباً من الجسم ومعظمه رأسي.", a: true },
+        { t: 'tf', q: "ضعف المرونة قد يؤثر على جودة الاستقبال في الخطف والكلين.", a: true },
+        { t: 'tf', q: "من المهم إدراج تمارين المرونة ضمن الوحدة التدريبية لتقليل الأخطاء الفنية.", a: true },
+        { t: 'tf', q: "السحب من المكعبات (Blocks) يُستخدم كتمرين مساعد لتصحيح أجزاء من السحب. (صواب)", a: true },
+        { t: 'tf', q: "كلما زاد انحراف البار للأمام أثناء السحب كان ذلك دليلاً على أداء فني صحيح.", a: false },
+        { t: 'tf', q: "من أسباب انحراف البار للأمام الاعتماد المبالغ على مشط القدم مبكراً.", a: true },
+        { t: 'tf', q: "السقوط البطيء تحت البار قد يؤدي لفشل الاستقبال في الخطف.", a: true },
+        { t: 'tf', q: "الكفش بالبار للأمام أو للخلف قد يحدث عند السقوط قبل اكتمال الامتداد.", a: true },
+        { t: 'tf', q: "في النطر يجب دفع الثقل للأعلى ثم الغطس لاستقباله بفتح الرجلين أو ثنيهما.", a: true },
+        { t: 'tf', q: "النطر لا يحتاج إلى ثبات نهائي طالما تم رفع البار فوق الرأس.", a: false },
+        { t: 'tf', q: "من مراحل النطر: ثني الرجلين (Dip) ثم الدفع (Drive) ثم الاستقبال ثم الثبات.", a: true },
+        { t: 'tf', q: "تحريك القدمين بعد الثبات النهائي لا يؤثر على صحة المحاولة.", a: false },
+        { t: 'tf', q: "في النطر يجب أن تكون الذراعان مستقيمتين عند الثبات النهائي.", a: true },
+        { t: 'tf', q: "الاستعداد للنطر يعني تثبيت البار على الكتفين والسيطرة قبل البدء في الدفع.", a: true },
+        { t: 'tf', q: "تدريب الإيقاع في السحب مهم لأن الرفع بسرعة واحدة قد يقلل جودة الأداء.", a: true },
+        { t: 'tf', q: "من المؤشرات الجيدة أن يكون التسارع أكبر في السحب الثاني مقارنة بالسحب الأول.", a: true },
+        { t: 'tf', q: "زيادة الحمل التدريبي بصورة مبالغ فيها قد ترفع نسبة الأخطاء الفنية.", a: true },
+        { t: 'tf', q: "تعلم حركات خاطئة وتكرارها يثبت الخطأ ويصعب تصحيحه لاحقاً.", a: true },
+        { t: 'tf', q: "في الخطف يجب أن يكون الرأس متحركاً يميناً ويساراً لتسهيل الاتزان.", a: false },
+        { t: 'tf', q: "التحكم في التنفس مهم لكن لا يغني عن الالتزام بالوضعيات الفنية الصحيحة.", a: true },
+        { t: 'tf', q: "في الكلين، الثني المزدوج للركبتين يساعد على تهيئة وضع قوي للسحب الثاني.", a: true },
+        { t: 'tf', q: "السحب الثاني في الكلين يعتمد على الرجلين والحوض والكتفين أكثر من الاعتماد على الذراعين.", a: true },
+        { t: 'tf', q: "استخدام الذراعين مبكراً كوسيلة سحب رئيسية يُعد من الأخطاء الشائعة.", a: true },
+        { t: 'tf', q: "سقوط البار خلف الرأس في الخطف قد يرتبط بميل الجذع خارج قاعدة الارتكاز.", a: true },
+        { t: 'tf', q: "في الخطف يُفضّل إبعاد البار عن الساقين لتجنب الاحتكاك.", a: false },
+        { t: 'tf', q: "الاتزان يعتمد على بقاء مركز الثقل داخل قاعدة الارتكاز قدر الإمكان.", a: true },
+        { t: 'tf', q: "القرفصاء لاستقبال الخطف غير مسموح فنياً ويجب الاستقبال واقفاً دائماً.", a: false },
+        { t: 'tf', q: "اختلاف طول الأطراف قد يؤثر على اختيار المسكة المناسبة لكل رباع.", a: true },
+        { t: 'tf', q: "التدريب الجزئي قد يساعد في تصحيح جزء محدد من الحركة قبل الأداء الكامل.", a: true },
+        { t: 'tf', q: "الفشل في الامتداد الكامل قد يكون بسبب ثقل زائد أو ضعف عضلي أو تكنيك خاطئ.", a: true },
+        { t: 'tf', q: "في النطر، 'الغطس' يتم بعد إنزال البار من فوق الرأس إلى الصدر.", a: false },
+        { t: 'tf', q: "الهدف من الثبات النهائي هو السيطرة الكاملة قبل السماح بإنزال البار.", a: true },
+        { t: 'tf', q: "في الخطف، التوافق العصبي العضلي مهم لأنه يربط السرعة بالقوة والتوازن.", a: true },
+        { t: 'tf', q: "كلما زادت المسكة ضيقاً في الخطف زادت سهولة تثبيت البار فوق الرأس.", a: false },
+        { t: 'tf', q: "في الكلين، استقبال البار على أطراف الأصابع يُعد استقبالاً صحيحاً.", a: false },
+        { t: 'tf', q: "الحفاظ على مسار رأسي قريب من الجسم يقلل الفاقد ويزيد كفاءة الرفع.", a: true }
+    ];
+
+    // Audio System
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    function playTone(type) {
+        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        
+        const now = audioCtx.currentTime;
+        if(type === 'win') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523, now);
+            osc.frequency.exponentialRampToValueAtTime(1046, now + 0.1);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        } else if (type === 'lose') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(150, now);
+            osc.frequency.linearRampToValueAtTime(100, now + 0.2);
+            gain.gain.setValueAtTime(0.1, now);
+            gain.gain.linearRampToValueAtTime(0, now + 0.3);
+            osc.start(now);
+            osc.stop(now + 0.3);
+        }
+    }
+
+    // Game Logic
+    const game = {
+        questions: [],
+        currentIdx: 0,
+        score: 0,
+        streak: 0,
+        bestStreak: 0,
+        lifelineUsed: false,
+        isBusy: false,
+        totalQ: 20, // Number of questions per round
+
+        init() {
+            // Shuffle and pick 20
+            const shuffled = [...fullDatabase].sort(() => 0.5 - Math.random());
+            this.questions = shuffled.slice(0, this.totalQ);
+            
+            this.currentIdx = 0;
+            this.score = 0;
+            this.streak = 0;
+            this.bestStreak = 0;
+            this.lifelineUsed = false;
+            
+            document.getElementById('startScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.remove('active');
+            document.getElementById('quizScreen').classList.add('active');
+            document.getElementById('btn5050').disabled = false;
+            
+            this.updateStats();
+            this.loadQ();
+        },
+
+        loadQ() {
+            this.isBusy = false;
+            const q = this.questions[this.currentIdx];
+            
+            // UI
+            document.getElementById('qTypeLabel').innerText = `سؤال ${this.currentIdx + 1} من ${this.totalQ}`;
+            document.getElementById('qText').innerText = q.q;
+            
+            const cont = document.getElementById('optionsContainer');
+            cont.innerHTML = '';
+            
+            // Handle MCQ
+            if (q.t === 'mcq') {
+                q.o.forEach((opt, i) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'opt-btn';
+                    btn.innerText = opt;
+                    btn.onclick = () => this.answer(i, btn);
+                    btn.dataset.idx = i; // For 50/50 logic
+                    cont.appendChild(btn);
+                });
+            } 
+            // Handle T/F
+            else if (q.t === 'tf') {
+                const btnTrue = document.createElement('button');
+                btnTrue.className = 'opt-btn';
+                btnTrue.innerHTML = '✅ صواب';
+                btnTrue.onclick = () => this.answer(true, btnTrue);
+                btnTrue.dataset.val = 'true';
+                
+                const btnFalse = document.createElement('button');
+                btnFalse.className = 'opt-btn';
+                btnFalse.innerHTML = '❌ خطأ';
+                btnFalse.onclick = () => this.answer(false, btnFalse);
+                btnFalse.dataset.val = 'false';
+
+                cont.style.gridTemplateColumns = '1fr 1fr';
+                cont.appendChild(btnTrue);
+                cont.appendChild(btnFalse);
+            }
+
+            // Progress Bar
+            const pct = (this.currentIdx / this.totalQ) * 100;
+            document.getElementById('progressBar').style.width = pct + '%';
+        },
+
+        answer(val, btn) {
+            if (this.isBusy) return;
+            this.isBusy = true;
+            
+            const q = this.questions[this.currentIdx];
+            const isCorrect = (val === q.a);
+
+            if (isCorrect) {
+                btn.classList.add('correct');
+                this.score += 10 + (this.streak * 2); // Bonus points
+                this.streak++;
+                if(this.streak > this.bestStreak) this.bestStreak = this.streak;
+                playTone('win');
+            } else {
+                btn.classList.add('wrong');
+                this.streak = 0;
+                playTone('lose');
+                
+                // Show Correct
+                const opts = document.getElementById('optionsContainer').children;
+                if(q.t === 'mcq') {
+                    opts[q.a].classList.add('correct');
+                } else {
+                    for(let b of opts) {
+                        if((q.a && b.innerText.includes('صواب')) || (!q.a && b.innerText.includes('خطأ'))) {
+                            b.classList.add('correct');
+                        }
+                    }
+                }
+            }
+
+            this.updateStats();
+            
+            setTimeout(() => {
+                this.currentIdx++;
+                if (this.currentIdx < this.questions.length) {
+                    this.loadQ();
+                    document.getElementById('optionsContainer').style.gridTemplateColumns = '1fr'; // Reset layout
+                } else {
+                    this.finish();
+                }
+            }, 1200);
+        },
+
+        updateStats() {
+            document.getElementById('scoreVal').innerText = this.score;
+            document.getElementById('streakVal').innerText = this.streak;
+            const flame = document.getElementById('fireIcon');
+            if(this.streak > 2) flame.classList.add('active');
+            else flame.classList.remove('active');
+        },
+
+        use5050() {
+            if(this.lifelineUsed || this.isBusy) return;
+            const q = this.questions[this.currentIdx];
+            if(q.t !== 'mcq') return; // Only works for MCQ
+
+            this.lifelineUsed = true;
+            document.getElementById('btn5050').disabled = true;
+
+            const opts = Array.from(document.getElementById('optionsContainer').children);
+            const correctIdx = q.a;
+            
+            // Filter wrong answers
+            const wrongOpts = opts.filter(btn => parseInt(btn.dataset.idx) !== correctIdx);
+            
+            // Remove 2 random wrong answers
+            for(let i=0; i<2; i++) {
+                if(wrongOpts.length > 0) {
+                    const r = Math.floor(Math.random() * wrongOpts.length);
+                    wrongOpts[r].classList.add('dimmed');
+                    wrongOpts.splice(r, 1);
+                }
+            }
+        },
+
+        finish() {
+            document.getElementById('quizScreen').classList.remove('active');
+            document.getElementById('resultScreen').classList.add('active');
+            
+            // Calculate Stats
+            // Score logic: Max score is approx (10 * 20) + streaks. 
+            // We'll just show percentage of correct answers based on total score potential is complex,
+            // so let's show simple Correctness % based on the 'score' variable vs a hypothetical max?
+            // Let's stick to strict accuracy %.
+            // Re-calculate accuracy:
+            // Since score includes bonuses, let's track pure correct counts separately or just derive.
+            // Simplified: Just use score for "XP" feel, calculate % based on right/wrong logic is cleaner.
+            // But I didn't track "correctCount". Let's approximate or just show score.
+            // Actually, let's modify answer() to track correctCount.
+            
+            // Since I can't easily modify answer() variable scope without re-writing, 
+            // I'll calculate percentage based on score roughly or just 
+            // count streaks to infer. 
+            // Wait, I can just add `correctCount` to the object now.
+            
+            // *Self-Correction*: I added logic below.
+        }
+    };
+    
+    // Patching correct count logic
+    game.correctCount = 0;
+    const oldAnswer = game.answer;
+    game.answer = function(val, btn) {
+        if(!this.isBusy && val === this.questions[this.currentIdx].a) this.correctCount++;
+        oldAnswer.call(this, val, btn);
+    };
+    const oldInit = game.init;
+    game.init = function() {
+        this.correctCount = 0;
+        oldInit.call(this);
+    };
+    
+    // Finish Logic Overwrite
+    game.finish = function() {
+        document.getElementById('quizScreen').classList.remove('active');
+        document.getElementById('resultScreen').classList.add('active');
+        
+        const pct = Math.round((this.correctCount / this.totalQ) * 100);
+        
+        // Counter Animation
+        let s = 0;
+        const interval = setInterval(() => {
+            s += 1;
+            document.getElementById('finalScore').innerText = s;
+            if(s >= pct) clearInterval(interval);
+        }, 20);
+
+        document.getElementById('correctCount').innerText = `${this.correctCount} / ${this.totalQ}`;
+        document.getElementById('bestStreak').innerText = this.bestStreak;
+
+        const rank = document.getElementById('rankText');
+        const icon = document.getElementById('resultIcon');
+        
+        if (pct >= 90) {
+            rank.innerText = "أسطورة أولمبية 🥇";
+            rank.style.color = "#FFD700";
+            icon.innerText = "🏆";
+            startConfetti();
+        } else if (pct >= 75) {
+            rank.innerText = "بطل عالمي 🥈";
+            rank.style.color = "#C0C0C0";
+            icon.innerText = "🥈";
+        } else if (pct >= 50) {
+            rank.innerText = "لاعب محترف 🥉";
+            rank.style.color = "#CD7F32";
+            icon.innerText = "🥉";
+        } else {
+            rank.innerText = "لاعب مبتدئ";
+            rank.style.color = "#fff";
+            icon.innerText = "💪";
+        }
+    };
+
+    // Confetti Effect
+    function startConfetti() {
+        const canvas = document.getElementById('confetti');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        
+        const pieces = [];
+        for(let i=0; i<150; i++) {
+            pieces.push({
+                x: Math.random() * canvas.width,
+                y: Math.random() * canvas.height - canvas.height,
+                color: ['#D32F2F', '#FFD700', '#FFFFFF'][Math.floor(Math.random()*3)],
+                size: Math.random() * 8 + 4,
+                speed: Math.random() * 5 + 2
+            });
+        }
+        
+        function loop() {
+            ctx.clearRect(0,0,canvas.width, canvas.height);
+            pieces.forEach(p => {
+                ctx.fillStyle = p.color;
+                ctx.fillRect(p.x, p.y, p.size, p.size);
+                p.y += p.speed;
+                if(p.y > canvas.height) p.y = -10;
+            });
+            requestAnimationFrame(loop);
+        }
+        loop();
+    }
+</script>
+</body>
+</html>
