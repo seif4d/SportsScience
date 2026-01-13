@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🏀 تحدي عمالقة السلة | المراجعة النهائية</title>
+    <style>
+        :root {
+            --primary: #ff6b00; /* Basketball Orange */
+            --secondary: #1a1a1a; /* Dark Black */
+            --accent: #ffae00; /* Gold */
+            --success: #2ecc71;
+            --error: #e74c3c;
+            --text: #ffffff;
+            --card-bg: #2d2d2d;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--secondary);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-image: radial-gradient(circle at 50% 50%, #333 0%, #000 100%);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border: 2px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header & Progress */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .streak-container {
+            color: var(--accent);
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 10px;
+            background: #444;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--accent));
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+
+        /* Screens */
+        .screen {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* Start Screen */
+        h1 {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 0 #000;
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            margin: 20px 0;
+            animation: bounce 2s infinite;
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-weight: bold;
+            margin-top: 20px;
+            width: 80%;
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Quiz Screen */
+        .question-box {
+            font-size: 1.3rem;
+            margin-bottom: 30px;
+            line-height: 1.6;
+            font-weight: 600;
+        }
+
+        .options-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 15px;
+            width: 100%;
+        }
+
+        .option-btn {
+            background: #404040;
+            color: white;
+            border: 2px solid transparent;
+            padding: 15px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s;
+            text-align: right;
+            position: relative;
+        }
+
+        .option-btn:hover {
+            background: #505050;
+            transform: translateX(-5px);
+        }
+
+        .option-btn.correct {
+            background: var(--success);
+            border-color: #27ae60;
+            animation: pulse 0.5s;
+        }
+
+        .option-btn.wrong {
+            background: var(--error);
+            border-color: #c0392b;
+            animation: shake 0.5s;
+        }
+
+        /* Result Screen */
+        .score-display {
+            font-size: 4rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .rank-badge {
+            font-size: 1.5rem;
+            background: #444;
+            padding: 10px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 1px solid var(--accent);
+            color: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+        @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .container { border-radius: 0; min-height: 100vh; border: none; }
+            h1 { font-size: 2rem; }
+            .option-btn { font-size: 0.9rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Screen 1: Start -->
+    <div id="start-screen" class="screen active">
+        <div class="hero-icon">🏀</div>
+        <h1>تحدي العمالقة</h1>
+        <p>مراجعة شاملة (نظري + عملي + قانون)</p>
+        <p style="margin-top:10px; color: #aaa;">100 سؤال لفرم المادة</p>
+        <button class="btn" onclick="startQuiz()">ابدأ المباراة ⚔️</button>
+    </div>
+
+    <!-- Screen 2: Quiz -->
+    <div id="quiz-screen" class="screen">
+        <div class="header">
+            <div id="question-count">سؤال 1 / 100</div>
+            <div class="streak-container">🔥 <span id="streak">0</span></div>
+        </div>
+        <div class="progress-bar"><div id="progress" class="progress-fill"></div></div>
+        
+        <div class="question-box" id="question-text">
+            السؤال هيظهر هنا...
+        </div>
+
+        <div class="options-grid" id="options-container">
+            <!-- Options will be injected here -->
+        </div>
+    </div>
+
+    <!-- Screen 3: Result -->
+    <div id="result-screen" class="screen">
+        <div class="hero-icon">🏆</div>
+        <h2>نتيجة المباراة</h2>
+        <div class="score-display" id="final-score">0%</div>
+        <div class="rank-badge" id="player-rank">مبتدئ</div>
+        <p id="feedback-text">محتاج تذاكر تاني يا بطل!</p>
+        <button class="btn" onclick="location.reload()">لعب ماتش جديد 🔄</button>
+    </div>
+</div>
+
+<script>
+    // 🧠 داتا الأسئلة - تم تجميعها بعناية من الكتاب والامتحانات السابقة
+    const questionsDB = [
+        // --- تاريخ ونشأة (الفصل الأول نظري) ---
+        { q: "من هو مبتكر لعبة كرة السلة؟", options: ["لوثر جوليك", "جيمس نايسميث", "مايكل جوردان", "وليام مورجان"], a: 1 },
+        { q: "في أي عام تم ابتكار كرة السلة؟", options: ["1895", "1900", "1891", "1936"], a: 2 },
+        { q: "ما هي الأداة التي استخدمت كهدف في بداية اللعبة؟", options: ["حلقة حديد", "سلة خوخ", "صندوق خشب", "شباك صيد"], a: 1 },
+        { q: "دخلت كرة السلة الأولمبياد رسمياً في دورة برلين عام:", options: ["1936", "1904", "1948", "1992"], a: 0 },
+        { q: "من التي أدخلت كرة السلة للآنسات عام 1900؟", options: ["سيرينا ويليامز", "مسز ساندا أبوت", "ماري كوري", "إليزابيث"], a: 1 },
+        { q: "دخلت كرة السلة مصر عام 1922 عن طريق:", options: ["الاحتلال الإنجليزي", "البعثات التعليمية", "جمعية الشبان المسيحية", "النادي الأهلي"], a: 2 },
+        { q: "عدد اللاعبين في أول مباراة لكرة السلة كان:", options: ["5 ضد 5", "7 ضد 7", "9 ضد 9", "11 ضد 11"], a: 2 },
+        { q: "تم تأسيس الاتحاد الدولي لكرة السلة (FIBA) عام:", options: ["1932", "1936", "1940", "1891"], a: 0 },
+        
+        // --- تصنيف المهارات (الفصل الثاني) ---
+        { q: "أي مما يلي يعتبر من المبادئ الهجومية؟", options: ["المكان الدفاعي", "التصويب", "الدفاع ضد القاطع", "التحرك الدفاعي"], a: 1 },
+        { q: "مهارة 'الارتكاز' تصنف ضمن المهارات:", options: ["الهجومية فقط", "الدفاعية فقط", "المشتركة (الحركية)", "لا شيء مما سبق"], a: 2 },
+        { q: "أسرع وسيلة لنقل الكرة من الخلف للأمام هي:", options: ["المحاورة", "التصويب", "التمرير", "الجري بدون كرة"], a: 2 },
+        { q: "المهارة التي تعتبر حجر الأساس لجميع المهارات هي:", options: ["التصويب", "مسك واستلام الكرة", "المحاورة", "الدفاع"], a: 1 },
+
+        // --- استلام الكرة (الفصل الثالث عملي) ---
+        { q: "عند استلام الكرة، يجب أن تلمس الكرة:", options: ["راحة اليد (الكف)", "عقل الأصابع", "الساعدين", "الرسغ"], a: 1 },
+        { q: "لامتصاص قوة التمريرة القوية، يجب على المستلم:", options: ["تثبيت الذراعين", "دفع الكرة للأمام", "سحب الذراعين للخلف", "القفز عالياً"], a: 2 },
+        { q: "عند استلام الكرات المنخفضة، تكون الأصابع الصغيرة (الخنصر):", options: ["متباعدة لأعلى", "قريبة من بعضها لأسفل", "مضمومة", "تشير للجانب"], a: 1 },
+        { q: "يجب على اللاعب التحرك باتجاه الكرة لاستلامها وليس انتظارها.", options: ["صح", "خطأ"], a: 0 },
+
+        // --- التمرير (الفصل الرابع عملي) ---
+        { q: "التمريرة الأكثر استخداماً للمسافات القصيرة والمتوسطة هي:", options: ["التمريرة المرتدة", "تمريرة الكتف", "التمريرة الصدرية", "التمريرة الخطافية"], a: 2 },
+        { q: "تستخدم التمريرة المرتدة غالباً عندما:", options: ["يكون المدافع طويلاً ورافعاً يديه", "في الهجوم الخاطف", "من خارج الحدود", "للمسافات الطويلة"], a: 0 },
+        { q: "تمريرة 'البيسبول' (الكتف) تستخدم في:", options: ["الهجوم الخاطف (مسافة طويلة)", "التبادل القصير", "الاختراق", "التهدئة"], a: 0 },
+        { q: "عند أداء التمريرة الصدرية، يلف المعصم ليكون الإبهام:", options: ["لأعلى", "لأسفل", "للخارج", "للداخل"], a: 1 },
+        { q: "أفضل مكان لتمرير الكرة لزميلك هو:", options: ["عند قدميه", "فوق رأسه", "منطقة الصدر", "خلف ظهره"], a: 2 },
+
+        // --- المحاورة (الفصل الخامس عملي) ---
+        { q: "الغرض الرئيسي من المحاورة العالية هو:", options: ["حماية الكرة", "قطع مسافة بسرعة", "الخداع", "تضييع الوقت"], a: 1 },
+        { q: "أثناء المحاورة، يجب أن يكون النظر موجهاً إلى:", options: ["الكرة", "الأرض", "الملعب والزملاء", "قدم المدافع"], a: 2 },
+        { q: "تستخدم المحاورة المنخفضة بغرض:", options: ["السرعة", "حماية الكرة من المدافع", "التصويب", "التمرير الطويل"], a: 1 },
+        { q: "حركة اليد أثناء المحاورة تعتمد بشكل أساسي على:", options: ["الكتف", "الساعد", "الرسغ (المعصم)", "الكوع"], a: 2 },
+        { q: "يعتبر 'حمل الكرة' أثناء المحاورة:", options: ["مهارة", "مخالفة قانونية", "خطأ شخصي", "تكتيك"], a: 1 },
+
+        // --- التصويب (الفصل السادس عملي) ---
+        { q: "المهارة التي تحسم نتيجة المباراة هي:", options: ["الدفاع", "التصويب", "المحاورة", "التمرير"], a: 1 },
+        { q: "في التصويب السلمي، إذا صوبت بيدك اليمنى، ترتقي (تقفز) بالقدم:", options: ["اليمنى", "اليسرى", "القدمين معاً", "أي قدم"], a: 1 },
+        { q: "كلمة BEEF تستخدم لتذكر القواعد الفنية لـ:", options: ["الدفاع", "التمرير", "التصويب", "المحاورة"], a: 2 },
+        { q: "لتسجيل الرمية الحرة بنجاح، يجب أن يكون قوس طيران الكرة:", options: ["مستقيماً (Flat)", "عالي (High Arc)", "منخفض", "سريع"], a: 1 },
+        { q: "حركة المعصم لأسفل بعد التصويب (Follow through) تعطي الكرة:", options: ["سرعة زائدة", "دوران خلفي (Backspin)", "قوة", "انحراف"], a: 1 },
+
+        // --- الدفاع (الفصل السابع عملي) ---
+        { q: "في وقفة الدفاع، يجب أن يكون وزن الجسم موزعاً على:", options: ["الكعبين", "أمشاط القدمين", "قدم واحدة", "الحواف الخارجية"], a: 1 },
+        { q: "عند التحرك الجانبي في الدفاع، يجب:", options: ["تقاطع القدمين (Cross)", "الزحف (عدم تقاطع القدمين)", "القفز", "الجري"], a: 1 },
+        { q: "عند الدفاع ضد لاعب يمتلك الكرة، يجب التركيز بالنظر على:", options: ["الكرة", "عين اللاعب", "منطقة الوسط (الخصر)", "أقدام اللاعب"], a: 2 },
+        { q: "المقصود بـ Box Out هو:", options: ["خروج اللاعب", "حجز المدافع للمهاجم عن السلة", "قطع الكرة", "رمية تماس"], a: 1 },
+        { q: "القاعدة الذهبية في الدفاع: يجب أن تكون بين المهاجم و...:", options: ["الكرة", "السلة", "المدرب", "الخط الجانبي"], a: 1 },
+
+        // --- القانون والمقاييس (الفصل الثامن) ---
+        { q: "أبعاد ملعب كرة السلة القانوني هي:", options: ["28 × 15 متر", "26 × 14 متر", "30 × 20 متر", "100 × 50 متر"], a: 0 },
+        { q: "ارتفاع حلقة السلة عن الأرض يبلغ:", options: ["2.90 متر", "3.00 متر", "3.05 متر", "3.50 متر"], a: 2 },
+        { q: "قطر حلقة السلة من الداخل:", options: ["40 سم", "45 سم", "50 سم", "35 سم"], a: 1 },
+        { q: "يبعد خط الرمية الحرة عن اللوحة بمسافة:", options: ["3.60 متر", "4.60 متر", "5.80 متر", "6.25 متر"], a: 1 },
+        { q: "نصف قطر دائرة المنتصف (الدائرة المركزية):", options: ["1.80 متر", "3.60 متر", "1.20 متر", "2 متر"], a: 0 },
+        { q: "عدد لاعبي الفريق الواحد داخل الملعب:", options: ["4", "5", "6", "7"], a: 1 },
+        { q: "زمن مباراة كرة السلة الكلي (لعب فعلي):", options: ["30 دقيقة", "40 دقيقة", "45 دقيقة", "90 دقيقة"], a: 1 },
+        { q: "تتكون المباراة من ... فترات:", options: ["شوطين", "3 فترات", "4 فترات", "5 فترات"], a: 2 },
+        { q: "مدة كل فترة (ربع) في المباراة:", options: ["10 دقائق", "12 دقيقة", "15 دقيقة", "20 دقيقة"], a: 0 },
+        { q: "مدة الهجمة للفريق الواحد (زمن التصويب):", options: ["30 ثانية", "24 ثانية", "10 ثواني", "8 ثواني"], a: 1 },
+        { q: "يجب نقل الكرة من المنطقة الخلفية للأمامية خلال:", options: ["5 ثواني", "8 ثواني", "10 ثواني", "24 ثانية"], a: 1 },
+        { q: "لا يجوز للمهاجم البقاء في المنطقة المحرمة أكثر من:", options: ["3 ثواني", "5 ثواني", "8 ثواني", "10 ثواني"], a: 0 },
+        { q: "اللاعب الممسوك (تحت ضغط) معه ... ثواني للتصرف في الكرة:", options: ["3", "5", "8", "24"], a: 1 },
+        { q: "عدد الأوقات المستقطعة في النصف الثاني (الربع 3 و 4):", options: ["2", "3", "4", "1"], a: 1 },
+        { q: "مدة الوقت المستقطع:", options: ["30 ثانية", "دقيقة واحدة", "دقيقتان", "5 دقائق"], a: 1 },
+        { q: "في حالة التعادل، تلعب فترة إضافية مدتها:", options: ["3 دقائق", "5 دقائق", "10 دقائق", "حتى يسجل أحد الفريقين"], a: 1 },
+        { q: "يتم استبعاد اللاعب من المباراة بعد ارتكابه:", options: ["3 أخطاء", "4 أخطاء", "5 أخطاء", "6 أخطاء"], a: 2 },
+        { q: "الرمية الحرة تحتسب بـ ... نقاط:", options: ["1", "2", "3", "0"], a: 0 },
+        { q: "التصويبة من خارج القوس تحتسب بـ ... نقاط:", options: ["2", "3", "4", "5"], a: 1 },
+        { q: "تبدأ المباراة بـ:", options: ["رمية تماس", "قرعة", "كرة قفز", "رمية حرة"], a: 2 },
+        { q: "الاتحاد الدولي لكرة السلة يرمز له بـ:", options: ["FIFA", "FIBA", "NBA", "IAAF"], a: 1 },
+        { q: "يسمح بالتبديل في كرة السلة:", options: ["عدد محدود", "عدد مفتوح (عند توقف اللعب)", "مرة واحدة لكل لاعب", "بين الأشواط فقط"], a: 1 },
+        
+        // --- أسئلة إضافية ومتنوعة ---
+        { q: "عرض خطوط الملعب يكون:", options: ["2 سم", "5 سم", "10 سم", "7 سم"], a: 1 },
+        { q: "يبلغ بعد خط الثلاث نقاط عن مركز السلة:", options: ["6.25 م", "6.75 م", "7.24 م", "6.00 م"], a: 1 },
+        { q: "يعتبر المشي بالكرة (Traveling):", options: ["خطأ شخصي", "مخالفة", "خطأ فني", "سلوك غير رياضي"], a: 1 },
+        { q: "يعتبر الدفع أو العرقلة:", options: ["مخالفة", "خطأ شخصي", "قانوني", "مهارة"], a: 1 },
+        { q: "الخطأ الذي لا يتضمن احتكاك (مثل الاعتراض على الحكم) يسمى:", options: ["خطأ شخصي", "خطأ فني", "مخالفة مشي", "خطأ مزدوج"], a: 1 },
+        { q: "الخطأ غير الرياضي يستوجب:", options: ["رمية حرة وحيازة", "رميتين وحيازة", "طرد مباشر", "رمية تماس فقط"], a: 1 },
+        { q: "هل تعتبر خطوط الملعب جزءاً من الملعب؟", options: ["نعم", "لا (تعتبر خارج الملعب)"], a: 1 },
+        { q: "إذا لمس اللاعب الخط الجانبي أثناء المحاورة، يعتبر:", options: ["مستمر في اللعب", "خارج الحدود (Out)", "خطأ فني", "هدف"], a: 1 },
+        { q: "هل يجوز تسجيل هدف في سلة فريقك بالخطأ؟", options: ["لا يحسب", "يحسب للفريق المنافس", "تعاد المباراة", "رمية حرة"], a: 1 },
+        { q: "الحد الأقصى لعدد لاعبي الفريق في القائمة (Score sheet):", options: ["10", "12", "15", "18"], a: 1 },
+        { q: "المسافة بين اللوحة والحد النهائي للملعب:", options: ["1 متر", "1.20 متر", "2 متر", "على الخط مباشرة"], a: 1 },
+        { q: "عند تنفيذ الرمية الحرة، يجب أن يخرج الكرة من يده خلال:", options: ["3 ثواني", "5 ثواني", "8 ثواني", "10 ثواني"], a: 1 },
+        { q: "اللاعب المدافع يجب أن يترك مسافة ... للمهاجم الممسوك:", options: ["خطوة واحدة", "ذراع واحد", "مترين", "بدون مسافة"], a: 1 },
+        { q: "في الهجوم الخاطف، يفضل استخدام التمريرات:", options: ["المرتدة", "الطويلة (الكتف)", "القصيرة", "الخلفية"], a: 1 },
+        { q: "يتم تبديل نصفي الملعب بين الفريقين:", options: ["بعد الفترة الأولى", "بعد الفترة الثانية (الشوط الأول)", "بعد الفترة الثالثة", "لا يتم التبديل"], a: 1 },
+        { q: "عدد الحكام داخل الملعب في المباريات الرسمية:", options: ["1", "2", "3", "4"], a: 2 },
+        { q: "وظيفة المسجل هي:", options: ["احتساب الوقت", "تسجيل النقاط والأخطاء", "مراقبة الـ 24 ثانية", "إطلاق الصافرة"], a: 1 },
+        { q: "عند انتهاء الوقت الأصلي بالتعادل، الراحة قبل الوقت الإضافي تكون:", options: ["دقيقتين", "5 دقائق", "10 دقائق", "15 دقيقة"], a: 0 },
+        { q: "أرقام قمصان اللاعبين المسموح بها حالياً:", options: ["من 4 لـ 15 فقط", "من 1 لـ 99 و 0 و 00", "أرقام فردية فقط", "من 1 لـ 12"], a: 1 },
+        { q: "المنطقة المحرمة (The Key) تكون على شكل:", options: ["دائرة", "مستطيل", "مثلث", "مربع"], a: 1 },
+        { q: "عرض المنطقة المحرمة:", options: ["3.60 م", "4.90 م", "5.80 م", "6 م"], a: 1 },
+        { q: "في حالة الخطأ المتعمد العنيف جداً (Disqualifying)، العقوبة هي:", options: ["رمية حرة", "الطرد المباشر", "إنذار", "تبديل"], a: 1 },
+        { q: "عند لمس الكرة بالقدم متعمداً، يحتسب:", options: ["استمرار لعب", "مخالفة ركل الكرة", "خطأ شخصي", "هدف"], a: 1 },
+        { q: "الجري بالكرة ثم الوقوف ثم الجري مرة أخرى يعتبر:", options: ["مهارة", "محاورة مزدوجة (Double Dribble)", "مشي", "قانوني"], a: 1 },
+        { q: "الارتكاز (Pivoting) يعتبر مهارة:", options: ["مشتركة (هجومية ودفاعية)", "دفاعية فقط", "للحراس فقط", "مخالفة"], a: 0 },
+        { q: "التصويب الخطافي (Hook Shot) يميز لاعبين:", options: ["الارتكاز (الطوال)", "صانع الألعاب", "الجناح", "الاحتياطي"], a: 0 },
+        { q: "عند أداء المحاورة، الجسم يجب أن يكون:", options: ["مستقيماً تماماً", "مائلاً قليلاً للأمام مع ثني الركب", "منحنياً للخلف", "جالساً"], a: 1 },
+        { q: "أهم صفة في التمرير الناجح:", options: ["القوة المفرطة", "التوقيت والدقة", "الارتفاع العالي", "الدوران"], a: 1 },
+        { q: "عدد الحكام الطاولة (خارج الملعب) عادة يكون:", options: ["2", "3", "4 (مسجل، ميقاتي، 24ث، مساعد مسجل)", "5"], a: 2 },
+        { q: "سمك خيوط الشبكة يجب أن لا يقل عن:", options: ["لعبة تنس", "خيط رفيع", "سميك لمنع تشابك الكرة", "سلاسل حديد"], a: 2 }, // تبسيط للمعنى
+        { q: "في بداية الشوط الثاني، يتم ادخال الكرة من:", options: ["كرة قفز", "رمية تماس من منتصف الملعب", "تحت السلة", "الرمية الحرة"], a: 1 },
+        { q: "عند إصابة لاعب ونزف الدم، يجب:", options: ["استمراره في اللعب", "خروجه واستبداله للعلاج", "إيقاف المباراة ساعة", "طرده"], a: 1 },
+        { q: "هل يجوز للمدرب طلب وقت مستقطع أثناء اللعب والكرة حية؟", options: ["نعم", "لا (يجب توقف اللعب)", "أحياناً", "حسب الحكم"], a: 1 },
+        { q: "الوثب لأعلى لصد الكرة (Block) يعتبر مهارة:", options: ["هجومية", "دفاعية", "مشتركة", "مخالفة"], a: 1 },
+        { q: "القطع (Cutting) هو:", options: ["الجري للمكان الفاضي", "ضرب اللاعب", "قطع الكرة", "قطع الشبكة"], a: 0 },
+        { q: "مصطلح (Triple Threat) يعني وضع الاستعداد لـ:", options: ["التمرير، المحاورة، التصويب", "الجري، القفز، النوم", "الدفاع، الهجوم، التحكيم", "لا شيء"], a: 0 }
+    ];
+
+    // تكرار الأسئلة لتكملة الـ 100 بنفس الجودة من خلال التنويع في الصيغ (تم دمج أهم النقاط في الـ 85 سؤال أعلاه وسأكمل الباقي بمفاهيم دقيقة)
+    const extraQuestions = [
+        { q: "طول اللوحة الخلفية (Backboard) هو:", options: ["1.20 م", "1.80 م", "2.00 م", "1.50 م"], a: 1 },
+        { q: "ارتفاع الحافة السفلية للوحة عن الأرض:", options: ["2.75 م", "2.90 م", "3.05 م", "2.50 م"], a: 1 },
+        { q: "الهدف من المنطقة المحرمة:", options: ["منع المهاجمين من البقاء طويلاً تحت السلة", "منظر جمالي", "مكان للحكم", "للرميات الثلاثية"], a: 0 },
+        { q: "في حالة الخطأ المزدوج (Double Foul):", options: ["رميات حرة للفريقين", "لا رميات حرة ويستكمل اللعب", "طرد اللاعبين", "فوز الفريقين"], a: 1 },
+        { q: "التصويب السلمي يتميز بـ:", options: ["القرب من السلة واستخدام اللوحة", "البعد عن السلة", "القوة المفرطة", "الرمي باليدين"], a: 0 },
+        { q: "عند الدفاع ضد لاعب أيمن، يفضل إجباره على:", options: ["استخدام يده اليسرى (الضعيفة)", "استخدام يده اليمنى", "التصويب", "التمرير"], a: 0 },
+        { q: "الرؤية المحيطية (Peripheral Vision) مهمة لـ:", options: ["المحاور والممرر", "المشجعين", "الحكم فقط", "المدرب"], a: 0 },
+        { q: "يجب على اللاعب المدافع أن يكون دائماً بين:", options: ["الكرة والخط", "المهاجم والسلة", "الحكم والطاولة", "المدرب والملعب"], a: 1 },
+        { q: "عدد التبديلات المسموح بها في المباراة:", options: ["3", "5", "7", "غير محدود"], a: 3 },
+        { q: "مباراة السلة لا تنتهي أبداً بـ:", options: ["فوز", "خسارة", "تعادل", "انسحاب"], a: 2 },
+        { q: "عرض خطوط الملعب (5 سم) يحسب:", options: ["من ضمن مساحة الملعب", "خارج مساحة الملعب", "لا يحسب", "حسب رغبة الحكم"], a: 1 },
+        { q: "الكرة تعتبر خارج الحدود إذا:", options: ["لمست الخط", "لمست لاعب خارج الخط", "لمست الحامل الخلفي", "كل ما سبق"], a: 3 },
+        { q: "يسمح للمدرب بالوقوف والتوجيه:", options: ["أثناء المباراة في منطقته", "ممنوع تماماً", "في الوقت المستقطع فقط", "في المدرجات"], a: 0 },
+        { q: "الحد الأدنى لبدء المباراة هو 5 لاعبين، والحد الأدنى لاستكمالها:", options: ["5", "3", "2", "1"], a: 2 }
+    ];
+
+    const allQuestions = [...questionsDB, ...extraQuestions];
+    
+    // خلط الأسئلة
+    allQuestions.sort(() => Math.random() - 0.5);
+
+    // متغيرات اللعبة
+    let currentQuestionIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let isAnswered = false;
+
+    // عناصر DOM
+    const startScreen = document.getElementById('start-screen');
+    const quizScreen = document.getElementById('quiz-screen');
+    const resultScreen = document.getElementById('result-screen');
+    const questionText = document.getElementById('question-text');
+    const optionsContainer = document.getElementById('options-container');
+    const progressFill = document.getElementById('progress');
+    const questionCount = document.getElementById('question-count');
+    const streakDisplay = document.getElementById('streak');
+    const finalScoreDisplay = document.getElementById('final-score');
+    const rankDisplay = document.getElementById('player-rank');
+    const feedbackText = document.getElementById('feedback-text');
+
+    function startQuiz() {
+        startScreen.classList.remove('active');
+        quizScreen.classList.add('active');
+        loadQuestion();
+    }
+
+    function loadQuestion() {
+        isAnswered = false;
+        const currentQ = allQuestions[currentQuestionIndex];
+        
+        // تحديث الواجهة
+        questionText.textContent = currentQ.q;
+        questionCount.textContent = `سؤال ${currentQuestionIndex + 1} / ${allQuestions.length}`;
+        progressFill.style.width = `${((currentQuestionIndex) / allQuestions.length) * 100}%`;
+        
+        // عرض الاختيارات
+        optionsContainer.innerHTML = '';
+        currentQ.options.forEach((opt, index) => {
+            const btn = document.createElement('div');
+            btn.className = 'option-btn';
+            btn.textContent = opt;
+            btn.onclick = () => checkAnswer(index, btn);
+            optionsContainer.appendChild(btn);
+        });
+    }
+
+    function checkAnswer(selectedIndex, btn) {
+        if (isAnswered) return;
+        isAnswered = true;
+
+        const currentQ = allQuestions[currentQuestionIndex];
+        const correctIndex = currentQ.a;
+        const allOptions = document.querySelectorAll('.option-btn');
+
+        if (selectedIndex === correctIndex) {
+            btn.classList.add('correct');
+            score++;
+            streak++;
+            streakDisplay.textContent = streak;
+            streakDisplay.style.color = '#ffae00';
+            streakDisplay.parentElement.style.animation = 'pulse 0.5s';
+        } else {
+            btn.classList.add('wrong');
+            allOptions[correctIndex].classList.add('correct');
+            streak = 0;
+            streakDisplay.textContent = 0;
+            streakDisplay.style.color = '#fff';
+        }
+
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < allQuestions.length) {
+                loadQuestion();
+            } else {
+                endQuiz();
+            }
+        }, 1500);
+    }
+
+    function endQuiz() {
+        quizScreen.classList.remove('active');
+        resultScreen.classList.add('active');
+
+        const percentage = Math.round((score / allQuestions.length) * 100);
+        finalScoreDisplay.textContent = `${percentage}%`;
+
+        let rank, feedback;
+        if (percentage >= 90) { rank = "MVP أسطورة 👑"; feedback = "أنت جاهز تقفل الامتحان يا بطل!"; }
+        else if (percentage >= 75) { rank = "محترف 🏀"; feedback = "مستوى ممتاز، راجع الغلطات البسيطة."; }
+        else if (percentage >= 50) { rank = "ناشئ صاعد 🏃"; feedback = "محتاج تركيز أكتر، راجع المذكرة تاني."; }
+        else { rank = "مبتدئ 👶"; feedback = "لازم تذاكر المنهج من الأول!"; }
+
+        rankDisplay.textContent = rank;
+        feedbackText.textContent = feedback;
+    }
+
+</script>
+
+</body>
+</html>
