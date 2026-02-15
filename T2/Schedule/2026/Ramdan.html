@@ -1,23 +1,25 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>جدول رمضان | علوم رياضة 🌙</title>
+    <title>جدول رمضان 🌙 علوم رياضة</title>
     
+    <!-- Google Fonts & Icons -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;500;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         :root {
-            --primary: #6366f1; /* Indigo indicating spirituality */
-            --accent: #f59e0b;  /* Gold for Ramadan */
-            --success: #10b981;
-            --dark: #0f172a;
-            --glass: rgba(30, 41, 59, 0.75);
-            --glass-border: rgba(255, 255, 255, 0.1);
+            --primary: #fbbf24; /* ذهبي رمضاني */
+            --primary-glow: rgba(251, 191, 36, 0.4);
+            --bg-deep: #0f172a; /* كحلي غامق */
+            --bg-card: rgba(30, 41, 59, 0.65);
             --text: #f8fafc;
-            --text-secondary: #94a3b8;
+            --text-muted: #94a3b8;
+            --accent-green: #10b981;
+            --border: rgba(255, 255, 255, 0.1);
         }
 
         * {
@@ -29,549 +31,528 @@
         }
 
         body {
-            background-color: var(--dark);
+            background-color: var(--bg-deep);
             color: var(--text);
             min-height: 100vh;
-            overflow-x: hidden;
-            /* خلفية رمضانية ليلية */
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
-                radial-gradient(circle at 90% 90%, rgba(99, 102, 241, 0.15) 0%, transparent 40%);
+                url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%231e293b' fill-opacity='0.4'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E"),
+                radial-gradient(circle at top, #1e3a8a, var(--bg-deep));
+            padding-bottom: 80px;
         }
 
-        /* زخرفة بسيطة (هلال) */
-        .ramadan-decor {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            font-size: 1.5rem;
-            color: var(--accent);
-            opacity: 0.8;
-            transform: rotate(-15deg);
-        }
-
-        /* حاوية التطبيق */
-        .app-container {
+        .container {
             max-width: 500px;
             margin: 0 auto;
             padding: 20px;
-            padding-bottom: 90px;
         }
 
-        /* الهيدر */
+        /* Header Ramadan Style */
         header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            text-align: center;
             margin-bottom: 25px;
             position: relative;
         }
 
-        .header-text h1 {
-            font-size: 1.4rem;
+        .ramadan-icon {
+            font-size: 3rem;
+            color: var(--primary);
+            text-shadow: 0 0 20px var(--primary-glow);
+            animation: float 3s ease-in-out infinite;
+            margin-bottom: 10px;
+        }
+
+        h1 {
+            font-size: 1.5rem;
             font-weight: 900;
-            background: linear-gradient(to right, #fff, #fbbf24);
+            background: linear-gradient(to bottom, #fff, #cbd5e1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .header-text p {
-            font-size: 0.8rem;
-            color: var(--text-secondary);
-            display: flex;
-            align-items: center;
-            gap: 5px;
-        }
-
-        .settings-btn {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text);
-            width: 45px;
-            height: 45px;
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            transition: 0.3s;
-        }
-
-        /* نافذة اختيار القسم */
-        .section-modal {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.85);
-            z-index: 100;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            opacity: 0;
-            pointer-events: none;
-            transition: 0.3s;
-            backdrop-filter: blur(8px);
-        }
-
-        .section-modal.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-content {
-            background: #1e293b;
-            padding: 25px;
-            border-radius: 24px;
-            width: 90%;
-            max-width: 350px;
-            text-align: center;
-            border: 1px solid var(--glass-border);
-            transform: scale(0.9);
-            transition: 0.3s;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-
-        .section-modal.active .modal-content {
-            transform: scale(1);
-        }
-
-        .modal-content h3 { margin-bottom: 10px; color: var(--accent); }
-        
-        .modal-content select {
-            width: 100%;
-            padding: 15px;
-            margin: 20px 0;
-            background: #0f172a;
-            border: 1px solid #334155;
-            color: white;
-            border-radius: 12px;
-            font-size: 1rem;
-            outline: none;
-        }
-
-        .save-btn {
-            background: linear-gradient(135deg, var(--primary), #4338ca);
-            color: white;
-            border: none;
-            padding: 14px 30px;
-            border-radius: 50px;
+        .subtitle {
+            font-size: 0.85rem;
+            color: var(--primary);
             font-weight: bold;
-            width: 100%;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+            background: rgba(251, 191, 36, 0.1);
+            padding: 4px 12px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-top: 5px;
+            border: 1px solid rgba(251, 191, 36, 0.2);
         }
 
-        /* شريط الأيام */
-        .days-scroll {
+        /* Controls */
+        .controls-bar {
             display: flex;
             gap: 10px;
+            margin-bottom: 20px;
             overflow-x: auto;
             padding-bottom: 5px;
-            margin-bottom: 20px;
             scrollbar-width: none;
         }
-        .days-scroll::-webkit-scrollbar { display: none; }
+        .controls-bar::-webkit-scrollbar { display: none; }
 
-        .day-pill {
-            background: var(--glass);
-            border: 1px solid var(--glass-border);
-            color: var(--text-secondary);
-            padding: 10px 22px;
-            border-radius: 50px;
+        .day-btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 10px 18px;
+            border-radius: 12px;
             white-space: nowrap;
             cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 700;
             transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
 
-        .day-pill.active {
-            background: var(--accent);
-            color: #0f172a;
-            box-shadow: 0 0 15px rgba(245, 158, 11, 0.3);
-            border-color: var(--accent);
+        .day-btn.active {
+            background: var(--primary);
+            color: #000;
+            font-weight: bold;
+            box-shadow: 0 0 15px var(--primary-glow);
+            border-color: var(--primary);
         }
 
-        /* الكروت */
+        /* Timeline Cards */
         .timeline {
             display: flex;
             flex-direction: column;
-            gap: 16px;
+            gap: 15px;
         }
 
         .card {
-            background: var(--glass);
-            backdrop-filter: blur(12px);
-            border: 1px solid var(--glass-border);
-            border-radius: 20px;
-            padding: 18px;
+            background: var(--bg-card);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 15px;
             display: flex;
             align-items: center;
             gap: 15px;
+            animation: fadeIn 0.5s ease-out forwards;
             position: relative;
             overflow: hidden;
-            animation: slideUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
-            opacity: 0;
-            transform: translateY(30px);
         }
 
-        /* شريط ملون بجانب الكارت */
-        .card::before {
+        .card::after {
             content: '';
             position: absolute;
-            right: 0; top: 0; bottom: 0; width: 5px;
+            top: 0; right: 0; bottom: 0;
+            width: 4px;
+            background: var(--text-muted);
         }
 
-        .card.theory::before { background: var(--primary); }
-        .card.practical::before { background: var(--accent); }
-        .card.lab::before { background: var(--success); }
+        .card.theory::after { background: #60a5fa; }
+        .card.practical::after { background: var(--primary); }
+        .card.lab::after { background: var(--accent-green); }
 
-        .time-col {
+        .time-box {
             display: flex;
             flex-direction: column;
             align-items: center;
             min-width: 65px;
             text-align: center;
-            background: rgba(255,255,255,0.03);
-            padding: 8px 5px;
-            border-radius: 12px;
+            border-left: 1px solid var(--border);
+            padding-left: 10px;
         }
 
-        .time-val {
+        .time-start {
             font-size: 1.2rem;
             font-weight: 900;
             color: var(--text);
             line-height: 1;
         }
 
-        .time-period {
-            font-size: 0.65rem;
-            color: var(--text-secondary);
-            margin-top: 4px;
+        .time-end {
+            font-size: 0.75rem;
+            color: var(--text-muted);
         }
 
-        .info-col { flex: 1; }
+        .info-box {
+            flex: 1;
+        }
 
-        .subject-title {
-            font-size: 1.05rem;
+        .subject {
+            font-size: 1rem;
             font-weight: 700;
-            margin-bottom: 6px;
-            color: white;
+            margin-bottom: 3px;
+            color: #fff;
         }
 
-        .meta-info {
+        .details {
+            font-size: 0.75rem;
+            color: var(--text-muted);
             display: flex;
             flex-wrap: wrap;
-            gap: 6px;
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+            gap: 8px;
         }
-
-        .meta-item {
+        
+        .badge {
+            background: rgba(255,255,255,0.05);
+            padding: 2px 6px;
+            border-radius: 4px;
             display: flex;
             align-items: center;
-            gap: 5px;
-            background: rgba(0,0,0,0.2);
-            padding: 4px 10px;
-            border-radius: 8px;
+            gap: 4px;
         }
 
-        .icon-col {
-            width: 42px;
-            height: 42px;
+        .icon-circle {
+            width: 38px;
+            height: 38px;
+            border-radius: 50%;
             background: rgba(255,255,255,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+
+        /* Settings Floating Button */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background: var(--bg-card);
+            border: 1px solid var(--primary);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
-        }
-        
-        .card.theory .icon-col { color: #a5b4fc; }
-        .card.practical .icon-col { color: #fcd34d; }
-        .card.lab .icon-col { color: #6ee7b7; }
-
-        /* رسالة فارغة */
-        .empty-msg {
-            text-align: center;
-            padding: 60px 20px;
-            color: var(--text-secondary);
-        }
-        .empty-msg i {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
-            color: var(--glass-border);
-            display: block;
+            color: var(--primary);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+            z-index: 100;
         }
 
-        /* شريط الحالة السفلي */
-        .status-bar {
+        /* Modal */
+        .modal {
             position: fixed;
-            bottom: 25px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: rgba(15, 23, 42, 0.95);
-            backdrop-filter: blur(10px);
-            padding: 10px 25px;
-            border-radius: 50px;
-            border: 1px solid var(--glass-border);
-            font-size: 0.85rem;
-            color: var(--accent);
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85);
+            z-index: 200;
             display: flex;
             align-items: center;
-            gap: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.6);
-            z-index: 50;
-            white-space: nowrap;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: 0.3s;
+            backdrop-filter: blur(5px);
         }
 
-        @keyframes slideUp {
+        .modal.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: #1e293b;
+            padding: 25px;
+            border-radius: 20px;
+            width: 90%;
+            max-width: 350px;
+            text-align: center;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 30px rgba(251, 191, 36, 0.15);
+        }
+
+        .modal-box h2 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            background: #0f172a;
+            color: white;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            margin: 15px 0;
+            font-size: 1rem;
+        }
+
+        .btn-save {
+            background: var(--primary);
+            color: #000;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+        }
+
+        /* Empty State */
+        .empty {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-muted);
+        }
+        .empty i { font-size: 3rem; margin-bottom: 10px; color: var(--border); }
+
+        /* Current Group Bar */
+        .status-bar {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            padding: 8px 15px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
             to { opacity: 1; transform: translateY(0); }
         }
-
-        /* تأخير الانميشن */
-        .card:nth-child(1) { animation-delay: 0.05s; }
-        .card:nth-child(2) { animation-delay: 0.1s; }
-        .card:nth-child(3) { animation-delay: 0.15s; }
-        .card:nth-child(4) { animation-delay: 0.2s; }
-        .card:nth-child(5) { animation-delay: 0.25s; }
 
     </style>
 </head>
 <body>
 
-    <div class="app-container">
-        <i class="fa-solid fa-moon ramadan-decor"></i>
-
+    <div class="container">
         <header>
-            <div class="header-text">
-                <h1>رمضان كريم 🌙</h1>
-                <p><i class="fa-solid fa-graduation-cap"></i> علوم رياضة - الفرقة الثانية</p>
-            </div>
-            <div class="settings-btn" onclick="openModal()">
-                <i class="fa-solid fa-sliders"></i>
-            </div>
+            <div class="ramadan-icon"><i class="fa-solid fa-moon"></i></div>
+            <h1>جدول شهر رمضان</h1>
+            <div class="subtitle">الفرقة الثانية - بنين 2025</div>
         </header>
 
-        <div class="days-scroll">
-            <div class="day-pill active" onclick="changeDay('saturday', this)">السبت</div>
-            <div class="day-pill" onclick="changeDay('monday', this)">الإثنين</div>
-            <div class="day-pill" onclick="changeDay('tuesday', this)">الثلاثاء</div>
-            <div class="day-pill" onclick="changeDay('wednesday', this)">الأربعاء</div>
+        <!-- Days Navigation -->
+        <div class="controls-bar">
+            <div class="day-btn" onclick="setDay('saturday', this)">السبت</div>
+            <div class="day-btn" onclick="setDay('monday', this)">الإثنين</div>
+            <div class="day-btn" onclick="setDay('tuesday', this)">الثلاثاء</div>
+            <div class="day-btn" onclick="setDay('wednesday', this)">الأربعاء</div>
         </div>
 
+        <!-- Schedule Cards -->
         <div id="timeline" class="timeline">
-            </div>
+            <!-- Content Injected via JS -->
+        </div>
     </div>
 
-    <div class="status-bar" id="statusBar" onclick="openModal()">
-        <i class="fa-solid fa-layer-group"></i>
-        <span id="currentGroupLabel">جاري التحميل...</span>
+    <!-- Status Bar -->
+    <div class="status-bar">
+        <i class="fa-solid fa-users"></i> <span id="groupDisplay">...</span>
     </div>
 
-    <div class="section-modal" id="sectionModal">
-        <div class="modal-content">
-            <i class="fa-solid fa-mosque" style="font-size: 3rem; color: #334155; margin-bottom:15px;"></i>
-            <h3>اختر مجموعتك</h3>
-            <p style="font-size: 0.85rem; color: #94a3b8;">لعرض جدول العملي والحاسب الصحيح</p>
+    <!-- Settings Button -->
+    <div class="fab" onclick="showModal()">
+        <i class="fa-solid fa-gear"></i>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="modal" id="settingsModal">
+        <div class="modal-box">
+            <i class="fa-solid fa-lantern fa-2x" style="color:var(--primary); margin-bottom:10px;"></i>
+            <h2>إعدادات القسم</h2>
+            <p style="color:var(--text-muted); font-size:0.9rem;">اختر رقم قسمك لعرض جدول العملي بدقة</p>
+            
             <select id="sectionSelect">
-                <option value="1-4">الأقسام من 1 إلى 4</option>
-                <option value="5-8">الأقسام من 5 إلى 8</option>
-                <option value="9-12">الأقسام من 9 إلى 12</option>
-                <option value="13-16">الأقسام من 13 إلى 16</option>
+                <option value="1-4">الأقسام (1 - 4)</option>
+                <option value="5-8">الأقسام (5 - 8)</option>
+                <option value="9-12">الأقسام (9 - 12)</option>
+                <option value="13-16">الأقسام (13 - 16)</option>
             </select>
-            <button class="save-btn" onclick="saveSection()">حفظ الجدول</button>
+            
+            <button class="btn-save" onclick="saveSettings()">حفظ - رمضان كريم</button>
         </div>
     </div>
 
     <script>
-        // --- بيانات الجدول الرمضاني الجديد ---
-        const schedule = {
+        // --- بيانات جدول رمضان الجديد ---
+        const ramadanData = {
             saturday: [
-                { t: '8-10', s: 'تشريح وظيفي', l: 'مدرج 1', d: 'أ.د/ سمير', type: 'theory', icon: 'fa-bone' },
-                { t: '10-12', s: 'مبادئ الترويح', l: 'مدرج 1', d: 'د/ أمل', type: 'theory', icon: 'fa-umbrella-beach' },
-                { t: '12-2', s: 'رياضة وصحة المجتمع', l: 'مدرج 1', d: 'د/ نسرين', type: 'theory', icon: 'fa-heart-pulse' },
-                { t: '2-4', s: 'حاسب آلي (نظري)', l: 'مدرج 1', d: 'أ.د/ مرتضى', type: 'theory', icon: 'fa-laptop-code' },
-                { t: '4-5', s: 'نظري كرة يد', l: 'مدرج 1', d: 'أ.د/ كمال & السباعي', type: 'theory', icon: 'fa-futbol' },
-                { t: '5-6', s: 'نظري مسابقات ميدان', l: 'مدرج 1', d: 'أ.د/ ليلى & إسماعيل', type: 'theory', icon: 'fa-person-running' },
-                { t: '6-7', s: 'نظري هوكي', l: 'مدرج 1', d: 'أ.د/ خالد أبو السعود', type: 'theory', icon: 'fa-hockey-puck' },
-                { t: '7-8', s: 'نظري ملاكمة', l: 'مدرج 1', d: 'أ.د/ محمود العربي', type: 'theory', icon: 'fa-hand-fist' }
+                { start: '8:00', end: '9:00', sub: 'تشريح وظيفي', doc: 'أ.د/ سمير', loc: 'مدرج 1', type: 'theory', icon: 'fa-bone' },
+                { start: '9:00', end: '10:00', sub: 'مبادئ الترويح', doc: 'د/ أمل', loc: 'مدرج 1', type: 'theory', icon: 'fa-umbrella-beach' },
+                { start: '10:00', end: '11:00', sub: 'رياضة وصحة مجتمع', doc: 'د/ نسرين', loc: 'مدرج 1', type: 'theory', icon: 'fa-heart-pulse' },
+                { start: '11:00', end: '12:00', sub: 'حاسب آلي (نظري)', doc: 'أ.د/ مرتضى', loc: 'مدرج 1', type: 'theory', icon: 'fa-laptop-code' },
+                { start: '12:00', end: '12:30', sub: 'نظري كرة يد', doc: 'أ.د/ كمال', loc: 'مدرج 1', type: 'theory', icon: 'fa-futbol' },
+                { start: '12:30', end: '1:00', sub: 'نظري مسابقات ميدان', doc: 'أ.د/ ليلى', loc: 'مدرج 1', type: 'theory', icon: 'fa-person-running' },
+                { start: '1:00', end: '1:30', sub: 'نظري هوكي', doc: 'أ.د/ خالد', loc: 'مدرج 1', type: 'theory', icon: 'fa-hockey-puck' },
+                { start: '1:30', end: '2:00', sub: 'نظري ملاكمة', doc: 'أ.د/ محمود', loc: 'مدرج 1', type: 'theory', icon: 'fa-hand-fist' }
             ],
-            // جدول العملي ليوم الاثنين (تبادلي)
             monday: {
                 "1-4": [
-                    { t: '8-10', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '10-12', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '12-2', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '2-4', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' }
+                    { start: '8:00', end: '9:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '9:00', end: '10:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '10:00', end: '11:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '11:00', end: '12:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' }
                 ],
                 "5-8": [
-                    { t: '8-10', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '10-12', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '12-2', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '2-4', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' }
+                    { start: '8:00', end: '9:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '9:00', end: '10:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '10:00', end: '11:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '11:00', end: '12:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' }
                 ],
                 "9-12": [
-                    { t: '8-10', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '10-12', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '12-2', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '2-4', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
+                    { start: '8:00', end: '9:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '9:00', end: '10:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '10:00', end: '11:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '11:00', end: '12:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
                 ],
                 "13-16": [
-                    { t: '8-10', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '10-12', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '12-2', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '2-4', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' }
+                    { start: '8:00', end: '9:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '9:00', end: '10:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '10:00', end: '11:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '11:00', end: '12:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' }
                 ]
             },
-            // جدول الثلاثاء (حاسب آلي) - تم ربط الأقسام بالمجموعات
-            // المجموعة الأولى = 1-8 ، المجموعة الثانية = 9-16
-            tuesday: {
-                "1-4": [
-                    { t: '8-10', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الأولى ج1', type: 'lab', icon: 'fa-computer' },
-                    { t: '10-12', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الأولى ج2', type: 'lab', icon: 'fa-microchip' }
-                ],
-                "5-8": [
-                    { t: '8-10', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الأولى ج1', type: 'lab', icon: 'fa-computer' },
-                    { t: '10-12', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الأولى ج2', type: 'lab', icon: 'fa-microchip' }
-                ],
-                "9-12": [
-                    { t: '12-2', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الثانية ج1', type: 'lab', icon: 'fa-computer' },
-                    { t: '2-4', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الثانية ج2', type: 'lab', icon: 'fa-microchip' }
-                ],
-                "13-16": [
-                    { t: '12-2', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الثانية ج1', type: 'lab', icon: 'fa-computer' },
-                    { t: '2-4', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة الثانية ج2', type: 'lab', icon: 'fa-microchip' }
-                ]
-            },
-            // جدول العملي ليوم الأربعاء (تبادلي)
+            tuesday: [
+                { start: '8:00', end: '9:00', sub: 'حاسب آلي (ج1)', doc: 'مجموعة 1', loc: 'معمل الحاسب', type: 'lab', icon: 'fa-desktop' },
+                { start: '9:00', end: '10:00', sub: 'حاسب آلي (ج2)', doc: 'مجموعة 1', loc: 'معمل الحاسب', type: 'lab', icon: 'fa-desktop' },
+                { start: '10:00', end: '11:00', sub: 'حاسب آلي (ج1)', doc: 'مجموعة 2', loc: 'معمل الحاسب', type: 'lab', icon: 'fa-desktop' },
+                { start: '11:00', end: '12:00', sub: 'حاسب آلي (ج2)', doc: 'مجموعة 2', loc: 'معمل الحاسب', type: 'lab', icon: 'fa-desktop' }
+            ],
             wednesday: {
                 "1-4": [
-                    { t: '8-10', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '10-12', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '12-2', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '2-4', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' }
+                    { start: '8:00', end: '9:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '9:00', end: '10:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '10:00', end: '11:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '11:00', end: '12:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' }
                 ],
                 "5-8": [
-                    { t: '8-10', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '10-12', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '12-2', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '2-4', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
+                    { start: '8:00', end: '9:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '9:00', end: '10:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '10:00', end: '11:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '11:00', end: '12:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
                 ],
                 "9-12": [
-                    { t: '8-10', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '10-12', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '12-2', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
-                    { t: '2-4', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' }
+                    { start: '8:00', end: '9:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '9:00', end: '10:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '10:00', end: '11:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' },
+                    { start: '11:00', end: '12:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' }
                 ],
                 "13-16": [
-                    { t: '8-10', s: 'كرة يد', l: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
-                    { t: '10-12', s: 'مسابقات الميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
-                    { t: '12-2', s: 'هوكي', l: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
-                    { t: '2-4', s: 'ملاكمة', l: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' }
+                    { start: '8:00', end: '9:00', sub: 'كرة يد', loc: 'ملاعب المرور', type: 'practical', icon: 'fa-futbol' },
+                    { start: '9:00', end: '10:00', sub: 'مسابقات ميدان', loc: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { start: '10:00', end: '11:00', sub: 'هوكي', loc: 'الملاعب القديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { start: '11:00', end: '12:00', sub: 'ملاكمة', loc: 'صالة الملاكمة', type: 'practical', icon: 'fa-hand-fist' }
                 ]
             }
         };
 
-        // --- المنطق البرمجي ---
-        let currentSection = localStorage.getItem('studentSection');
+        // --- منطق التطبيق ---
+        let userSection = localStorage.getItem('ramadanSection');
         let currentDay = 'saturday';
 
-        const modal = document.getElementById('sectionModal');
+        const modal = document.getElementById('settingsModal');
         const timeline = document.getElementById('timeline');
-        const statusLabel = document.getElementById('currentGroupLabel');
-        const pills = document.querySelectorAll('.day-pill');
+        const groupDisplay = document.getElementById('groupDisplay');
 
+        // عند التحميل
         window.onload = function() {
-            if (!currentSection) {
-                setTimeout(() => modal.classList.add('active'), 600);
+            if(!userSection) {
+                setTimeout(showModal, 500);
             } else {
-                statusLabel.innerText = `${currentSection}`;
-                document.getElementById('sectionSelect').value = currentSection;
+                updateGroupDisplay();
+                document.getElementById('sectionSelect').value = userSection;
             }
             autoSelectDay();
-            render();
-        };
+            renderSchedule();
+        }
 
-        function openModal() { modal.classList.add('active'); }
-
-        function saveSection() {
+        function showModal() { modal.classList.add('active'); }
+        
+        function saveSettings() {
             const val = document.getElementById('sectionSelect').value;
-            currentSection = val;
-            localStorage.setItem('studentSection', val);
-            statusLabel.innerText = `${val}`;
+            userSection = val;
+            localStorage.setItem('ramadanSection', val);
+            updateGroupDisplay();
             modal.classList.remove('active');
-            render();
+            renderSchedule();
+        }
+
+        function updateGroupDisplay() {
+            groupDisplay.textContent = `مجموعة ${userSection || 'غير محدد'}`;
         }
 
         function autoSelectDay() {
-            const today = new Date().getDay(); 
-            const dayMap = { 6: 'saturday', 1: 'monday', 2: 'tuesday', 3: 'wednesday' };
-            if (dayMap[today]) {
-                currentDay = dayMap[today];
-                pills.forEach(p => p.classList.remove('active'));
-                const targetPill = Array.from(pills).find(p => p.getAttribute('onclick').includes(currentDay));
-                if(targetPill) targetPill.classList.add('active');
+            const dayIndex = new Date().getDay();
+            const daysMap = { 6: 'saturday', 1: 'monday', 2: 'tuesday', 3: 'wednesday' };
+            
+            if(daysMap[dayIndex]) {
+                currentDay = daysMap[dayIndex];
+            } else {
+                currentDay = 'saturday'; // الافتراضي
             }
+            
+            // تحديث الزر النشط
+            document.querySelectorAll('.day-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if(btn.getAttribute('onclick').includes(currentDay)) {
+                    btn.classList.add('active');
+                }
+            });
         }
 
-        function changeDay(day, element) {
+        function setDay(day, el) {
             currentDay = day;
-            pills.forEach(p => p.classList.remove('active'));
-            element.classList.add('active');
-            render();
+            document.querySelectorAll('.day-btn').forEach(b => b.classList.remove('active'));
+            el.classList.add('active');
+            renderSchedule();
         }
 
-        function render() {
+        function renderSchedule() {
             timeline.innerHTML = '';
             let data = [];
 
-            // تحديد البيانات بناءً على اليوم والقسم
-            if (currentDay === 'saturday') {
-                data = schedule[currentDay];
-            } else {
-                if (currentSection && schedule[currentDay]) {
-                    data = schedule[currentDay][currentSection];
+            // جلب البيانات بناء على اليوم
+            if (currentDay === 'monday' || currentDay === 'wednesday') {
+                if(userSection && ramadanData[currentDay][userSection]) {
+                    data = ramadanData[currentDay][userSection];
                 }
+            } else {
+                data = ramadanData[currentDay];
             }
 
-            // حالة عدم وجود بيانات
             if (!data || data.length === 0) {
                 timeline.innerHTML = `
-                    <div class="empty-msg">
+                    <div class="empty">
                         <i class="fa-solid fa-mug-hot"></i>
-                        <p>لا توجد محاضرات في هذا اليوم أو لم تقم باختيار المجموعة.</p>
-                    </div>
-                `;
+                        <p>لا يوجد محاضرات مسجلة أو لم يتم تحديد القسم!</p>
+                    </div>`;
                 return;
             }
 
             // رسم الكروت
             data.forEach((item, index) => {
-                const docHtml = item.d ? `<div class="meta-item"><i class="fa-solid fa-user-tie"></i> ${item.d}</div>` : '';
+                // تأخير الحركة لكل كرت
+                const delay = index * 0.1;
                 
-                // إضافة تأخير بسيط للأنميشن
-                const animationDelay = index * 0.1;
+                const docHtml = item.doc ? `<div class="badge"><i class="fa-solid fa-user-tie"></i> ${item.doc}</div>` : '';
                 
-                const html = `
-                    <div class="card ${item.type}" style="animation-delay: ${animationDelay}s">
-                        <div class="time-col">
-                            <span class="time-val">${item.t}</span>
-                            <span class="time-period">رمضان</span>
+                const card = `
+                    <div class="card ${item.type}" style="animation-delay: ${delay}s">
+                        <div class="time-box">
+                            <div class="time-start">${item.start}</div>
+                            <div class="time-end">${item.end}</div>
                         </div>
-                        <div class="info-col">
-                            <div class="subject-title">${item.s}</div>
-                            <div class="meta-info">
-                                <div class="meta-item"><i class="fa-solid fa-location-dot"></i> ${item.l}</div>
+                        <div class="info-box">
+                            <div class="subject">${item.sub}</div>
+                            <div class="details">
+                                <div class="badge"><i class="fa-solid fa-location-dot"></i> ${item.loc}</div>
                                 ${docHtml}
                             </div>
                         </div>
-                        <div class="icon-col">
+                        <div class="icon-circle">
                             <i class="fa-solid ${item.icon}"></i>
                         </div>
                     </div>
                 `;
-                timeline.innerHTML += html;
+                timeline.innerHTML += card;
             });
         }
     </script>
