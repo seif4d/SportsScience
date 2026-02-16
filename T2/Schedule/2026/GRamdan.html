@@ -1,0 +1,602 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>جدول البنات ✨</title>
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;700;900&family=Tajawal:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        :root {
+            /* Palette: Purple/Pink/Gold */
+            --bg-dark: #2e1065;
+            --bg-gradient: linear-gradient(135deg, #2e1065 0%, #4c1d95 50%, #be185d 100%);
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --primary: #f472b6; /* Pink */
+            --accent: #fbbf24; /* Gold */
+            --text: #ffffff;
+            --text-muted: #e9d5ff;
+            --card-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Tajawal', 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background: var(--bg-gradient);
+            color: var(--text);
+            min-height: 100vh;
+            padding-bottom: 100px;
+            overflow-x: hidden;
+            background-attachment: fixed;
+        }
+
+        /* Background Shapes for aesthetics */
+        body::before {
+            content: '';
+            position: fixed;
+            top: -50px; left: -50px;
+            width: 200px; height: 200px;
+            background: var(--primary);
+            filter: blur(100px);
+            opacity: 0.4;
+            z-index: -1;
+        }
+        body::after {
+            content: '';
+            position: fixed;
+            bottom: 100px; right: -50px;
+            width: 200px; height: 200px;
+            background: var(--accent);
+            filter: blur(100px);
+            opacity: 0.3;
+            z-index: -1;
+        }
+
+        .container {
+            max-width: 480px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            margin-top: 10px;
+        }
+
+        .header-icon {
+            font-size: 2.5rem;
+            color: var(--accent);
+            text-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+            animation: float 3s ease-in-out infinite;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 10px 0 5px;
+            background: linear-gradient(to right, #fff, #fbcfe8);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            background: rgba(0,0,0,0.2);
+            padding: 5px 15px;
+            border-radius: 50px;
+            display: inline-block;
+        }
+
+        /* Day Selector */
+        .days-wrapper {
+            display: flex;
+            gap: 12px;
+            overflow-x: auto;
+            padding: 5px 5px 15px 5px;
+            margin-bottom: 10px;
+            scrollbar-width: none;
+        }
+        .days-wrapper::-webkit-scrollbar { display: none; }
+
+        .day-chip {
+            background: var(--glass);
+            border: 1px solid var(--glass-border);
+            color: var(--text-muted);
+            padding: 10px 20px;
+            border-radius: 20px;
+            white-space: nowrap;
+            font-size: 0.9rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
+        }
+
+        .day-chip.active {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 0 15px rgba(244, 114, 182, 0.5);
+            border-color: var(--primary);
+            transform: scale(1.05);
+        }
+
+        /* Timeline Cards */
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.07);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 24px;
+            padding: 18px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            box-shadow: var(--card-shadow);
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s forwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative line */
+        .card::before {
+            content: '';
+            position: absolute;
+            left: 0; top: 0; bottom: 0;
+            width: 6px;
+        }
+        .card.theory::before { background: #60a5fa; } /* Blue */
+        .card.practical::before { background: #f472b6; } /* Pink */
+        .card.lab::before { background: #34d399; } /* Green */
+
+        .time-col {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-width: 65px;
+            text-align: center;
+            border-left: 1px solid rgba(255,255,255,0.1);
+            padding-left: 12px;
+        }
+
+        .time-val { font-weight: 900; font-size: 1.1rem; line-height: 1; }
+        .time-suffix { font-size: 0.7rem; color: var(--text-muted); margin-top: 4px; }
+
+        .info-col { flex: 1; }
+
+        .sub-name {
+            font-size: 1.05rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .sub-meta {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .tag {
+            background: rgba(255,255,255,0.1);
+            padding: 2px 8px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .icon-col {
+            width: 45px; height: 45px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            font-size: 1.2rem;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* Footer Credits */
+        footer {
+            margin-top: 40px;
+            text-align: center;
+            padding: 20px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .credits {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 5px;
+        }
+
+        .credits a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            position: relative;
+            transition: 0.3s;
+        }
+        
+        .credits a:hover { text-shadow: 0 0 10px var(--accent); }
+
+        .copyright-icon { color: #f43f5e; animation: pulse 1.5s infinite; }
+
+        /* Floating Settings */
+        .settings-fab {
+            position: fixed; bottom: 20px; left: 20px;
+            width: 55px; height: 55px;
+            background: rgba(20, 20, 20, 0.6);
+            backdrop-filter: blur(10px);
+            border: 1px solid var(--primary);
+            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--primary);
+            box-shadow: 0 5px 20px rgba(0,0,0,0.5);
+            z-index: 99; cursor: pointer;
+            transition: 0.3s;
+        }
+        .settings-fab:active { transform: scale(0.9); }
+
+        /* Status Pill */
+        .status-pill {
+            position: fixed; bottom: 20px; right: 20px;
+            background: rgba(20, 20, 20, 0.8);
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            color: #fff;
+            z-index: 99;
+            backdrop-filter: blur(10px);
+            display: flex; align-items: center; gap: 8px;
+        }
+        .status-pill span { color: var(--primary); font-weight: bold; }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed; inset: 0;
+            background: rgba(0,0,0,0.8);
+            backdrop-filter: blur(8px);
+            z-index: 200;
+            display: flex; align-items: center; justify-content: center;
+            opacity: 0; pointer-events: none; transition: 0.4s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+
+        .modal-box {
+            background: #1f1d2e;
+            width: 90%; max-width: 340px;
+            padding: 30px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid var(--glass-border);
+            box-shadow: 0 0 50px rgba(244, 114, 182, 0.2);
+            transform: scale(0.9); transition: 0.3s;
+        }
+        .modal-overlay.active .modal-box { transform: scale(1); }
+
+        .modal-box select {
+            width: 100%; padding: 15px;
+            margin: 20px 0;
+            background: #2d2b3b; color: #fff;
+            border: 1px solid var(--primary);
+            border-radius: 15px;
+            outline: none; font-size: 1rem;
+        }
+
+        .btn-main {
+            background: linear-gradient(45deg, var(--primary), #be185d);
+            color: white; border: none;
+            padding: 15px; width: 100%;
+            border-radius: 50px;
+            font-weight: bold; font-size: 1rem;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(190, 24, 93, 0.4);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed; bottom: -100px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 255, 255, 0.95);
+            color: #333;
+            padding: 12px 25px;
+            border-radius: 50px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            font-weight: bold;
+            z-index: 300;
+            display: flex; gap: 10px; align-items: center;
+            transition: 0.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            white-space: nowrap;
+        }
+        .toast.show { bottom: 90px; }
+
+        /* Animations */
+        @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.2); } 100% { transform: scale(1); } }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(30px); } to { opacity: 1; transform: translateY(0); } }
+
+        .empty-state { padding: 40px; text-align: center; color: var(--text-muted); }
+        .empty-state i { font-size: 3rem; margin-bottom: 15px; opacity: 0.5; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <i class="fa-solid fa-heart" style="color: #be185d;"></i>
+        <span>نورتي الجدول يا بطلة 🌸</span>
+    </div>
+
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <div class="header-icon"><i class="fa-solid fa-moon"></i></div>
+            <h1>جدول بنات</h1>
+            <div class="subtitle">الفرقة الثانية - علوم رياضة</div>
+        </header>
+
+        <!-- Days -->
+        <div class="days-wrapper">
+            <div class="day-chip" onclick="setDay('saturday', this)">السبت</div>
+            <div class="day-chip" onclick="setDay('sunday', this)">الأحد</div>
+            <div class="day-chip" onclick="setDay('monday', this)">الإثنين</div>
+            <div class="day-chip" onclick="setDay('tuesday', this)">الثلاثاء</div>
+        </div>
+
+        <!-- Schedule -->
+        <div id="timeline" class="timeline"></div>
+
+        <!-- Footer -->
+        <footer>
+            <div class="credits">
+                Designed with <i class="fa-solid fa-heart copyright-icon"></i> by 
+                <a href="https://www.facebook.com/profile.php?id=61577044333150" target="_blank">Seif X DebiaN</a>
+            </div>
+            <div style="font-size:0.7rem; color:rgba(255,255,255,0.3)">2025 Release</div>
+        </footer>
+    </div>
+
+    <!-- Controls -->
+    <div class="status-pill">
+        <i class="fa-solid fa-user-group"></i>
+        <span id="sectionLabel">...</span>
+    </div>
+
+    <div class="settings-fab" onclick="openModal()">
+        <i class="fa-solid fa-sliders"></i>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal-overlay" id="modal">
+        <div class="modal-box">
+            <i class="fa-solid fa-wand-magic-sparkles fa-3x" style="color:var(--primary); margin-bottom:15px;"></i>
+            <h3 style="color:#fff; margin-bottom:5px;">اختاري رقم قسمك</h3>
+            <p style="color:#aaa; font-size:0.85rem;">عشان نظبطلك جدول العملي والحاسب</p>
+            
+            <select id="sectionSelect" onchange="checkAlert()">
+                <option value="" disabled selected>✨ اختاري القسم ✨</option>
+                <option value="1-4">الأقسام (1 - 4)</option>
+                <option value="5-8">الأقسام (5 - 8)</option>
+                <option value="9-12">الأقسام (9 - 12)</option>
+                <option value="13-16">الأقسام (13 - 16)</option>
+                <option value="17-19" style="color:#f472b6; font-weight:bold;">الأقسام (17 - 19) 🎀</option>
+            </select>
+
+            <div id="alert17" style="background:rgba(239,68,68,0.2); color:#fca5a5; padding:10px; border-radius:10px; font-size:0.8rem; margin-bottom:15px; display:none;">
+                ⚠️ أقسام 17-19 حضوركم العملي مع المجموعة الأخيرة (13-16).
+            </div>
+
+            <button class="btn-main" onclick="saveSettings()">حفظ الجدول</button>
+        </div>
+    </div>
+
+    <script>
+        // --- Data ---
+        const data = {
+            saturday: [
+                { t: '8:00 - 9:00', s: 'مبادئ الترويح', l: 'مدرج 2', d: 'د/ أمل سعيد', type: 'theory', icon: 'fa-umbrella-beach' },
+                { t: '9:00 - 10:00', s: 'تشريح وظيفي', l: 'مدرج 2', d: 'أ.د/ سمير', type: 'theory', icon: 'fa-bone' },
+                { t: '10:00 - 11:00', s: 'حاسب آلي (نظري)', l: 'مدرج 2', d: 'أ.د/ مرتضى', type: 'theory', icon: 'fa-laptop-code' },
+                { t: '11:00 - 12:00', s: 'رياضة وصحة', l: 'مدرج 2', d: 'د/ نسرين', type: 'theory', icon: 'fa-heart-pulse' },
+                { t: '12:00 - 12:30', s: 'نظري مسابقات', l: 'مدرج 2', d: 'أ.د/ ليلى', type: 'theory', icon: 'fa-person-running' },
+                { t: '12:30 - 1:00', s: 'نظري كرة يد', l: 'مدرج 2', d: 'أ.د/ كمال', type: 'theory', icon: 'fa-futbol' },
+                { t: '1:00 - 1:30', s: 'نظري تعبير حركي', l: 'مدرج 2', d: 'أ.د/ رانيا', type: 'theory', icon: 'fa-person-rays' },
+                { t: '1:30 - 2:00', s: 'نظري هوكي', l: 'مدرج 2', d: 'أ.د/ خالد', type: 'theory', icon: 'fa-hockey-puck' }
+            ],
+            sunday: {
+                "1-4": [
+                    { t: '8-9', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '9-10', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '10-11', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '11-12', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' }
+                ],
+                "5-8": [
+                    { t: '8-9', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '9-10', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '10-11', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '11-12', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
+                ],
+                "9-12": [
+                    { t: '8-9', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '9-10', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '10-11', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '11-12', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' }
+                ],
+                "13-16": [
+                    { t: '8-9', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '9-10', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '10-11', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '11-12', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' }
+                ]
+            },
+            monday: {
+                "1-4": [ { t: '8:00 - 9:00', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة 1', type: 'lab', icon: 'fa-desktop' } ],
+                "5-8": [ { t: '9:00 - 10:00', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة 1', type: 'lab', icon: 'fa-desktop' } ],
+                "9-12": [ { t: '10:00 - 11:00', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة 2', type: 'lab', icon: 'fa-desktop' } ],
+                "13-16": [ { t: '11:00 - 12:00', s: 'حاسب آلي (عملي)', l: 'معمل الحاسب', d: 'المجموعة 2', type: 'lab', icon: 'fa-desktop' } ]
+            },
+            tuesday: {
+                "1-4": [
+                    { t: '8-9', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '9-10', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '10-11', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '11-12', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' }
+                ],
+                "5-8": [
+                    { t: '8-9', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '9-10', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '10-11', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '11-12', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' }
+                ],
+                "9-12": [
+                    { t: '8-9', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '9-10', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '10-11', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' },
+                    { t: '11-12', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' }
+                ],
+                "13-16": [
+                    { t: '8-9', s: 'كرة يد', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-futbol' },
+                    { t: '9-10', s: 'هوكي', l: 'ملاعب قديمة', type: 'practical', icon: 'fa-hockey-puck' },
+                    { t: '10-11', s: 'مسابقات ميدان', l: 'الاستاد', type: 'practical', icon: 'fa-person-running' },
+                    { t: '11-12', s: 'تعبير حركي', l: 'صالة التعبير', type: 'practical', icon: 'fa-person-rays' }
+                ]
+            }
+        };
+
+        // --- Logic ---
+        let currentDay = 'saturday';
+        let sectionKey = localStorage.getItem('g_key');
+        let sectionLabel = localStorage.getItem('g_label');
+
+        const modal = document.getElementById('modal');
+        const alertBox = document.getElementById('alert17');
+        const timeline = document.getElementById('timeline');
+        const sectionDisplay = document.getElementById('sectionLabel');
+
+        window.onload = function() {
+            // Show Toast
+            setTimeout(() => document.getElementById('toast').classList.add('show'), 1000);
+            setTimeout(() => document.getElementById('toast').classList.remove('show'), 4000);
+
+            if (!sectionKey) {
+                setTimeout(openModal, 800);
+            } else {
+                sectionDisplay.innerText = sectionLabel;
+                document.getElementById('sectionSelect').value = sectionLabel;
+            }
+
+            autoDetectDay();
+            render();
+        };
+
+        function openModal() { modal.classList.add('active'); }
+        function checkAlert() {
+            alertBox.style.display = (document.getElementById('sectionSelect').value === '17-19') ? 'block' : 'none';
+        }
+
+        function saveSettings() {
+            const val = document.getElementById('sectionSelect').value;
+            if(!val) return;
+
+            sectionLabel = val;
+            sectionKey = (val === '17-19') ? '13-16' : val;
+
+            localStorage.setItem('g_label', sectionLabel);
+            localStorage.setItem('g_key', sectionKey);
+
+            sectionDisplay.innerText = sectionLabel;
+            modal.classList.remove('active');
+            render();
+        }
+
+        function autoDetectDay() {
+            const d = new Date().getDay();
+            const map = {6:'saturday', 0:'sunday', 1:'monday', 2:'tuesday'};
+            if(map[d]) {
+                currentDay = map[d];
+                document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
+                const activeBtn = Array.from(document.querySelectorAll('.day-chip')).find(c => c.getAttribute('onclick').includes(currentDay));
+                if(activeBtn) activeBtn.classList.add('active');
+            } else {
+                // Default Saturday
+                 document.querySelector('.day-chip').classList.add('active');
+            }
+        }
+
+        function setDay(d, el) {
+            currentDay = d;
+            document.querySelectorAll('.day-chip').forEach(c => c.classList.remove('active'));
+            el.classList.add('active');
+            render();
+        }
+
+        function render() {
+            timeline.innerHTML = '';
+            let list = [];
+
+            if(currentDay === 'saturday') {
+                list = data['saturday'];
+            } else {
+                if(sectionKey && data[currentDay][sectionKey]) {
+                    list = data[currentDay][sectionKey];
+                }
+            }
+
+            if(!list || list.length === 0) {
+                timeline.innerHTML = `<div class="empty-state"><i class="fa-solid fa-mug-hot"></i><p>مفيش محاضرات أو لم يتم تحديد القسم ✨</p></div>`;
+                return;
+            }
+
+            list.forEach((item, idx) => {
+                const docHTML = item.d ? `<div class="tag"><i class="fa-solid fa-user-tie"></i> ${item.d}</div>` : '';
+                
+                const html = `
+                    <div class="card ${item.type}" style="animation-delay: ${idx * 0.1}s">
+                        <div class="time-col">
+                            <span class="time-val">${item.t.split(' ')[0].split('-')[0]}</span>
+                            <span class="time-suffix">${item.t}</span>
+                        </div>
+                        <div class="info-col">
+                            <div class="sub-name">${item.s}</div>
+                            <div class="sub-meta">
+                                <div class="tag"><i class="fa-solid fa-location-dot"></i> ${item.l}</div>
+                                ${docHTML}
+                            </div>
+                        </div>
+                        <div class="icon-col">
+                            <i class="fa-solid ${item.icon}"></i>
+                        </div>
+                    </div>
+                `;
+                timeline.innerHTML += html;
+            });
+        }
+    </script>
+</body>
+</html>
