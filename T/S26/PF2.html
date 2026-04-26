@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -116,7 +115,7 @@
 
         .groups-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
         .group-btn { padding: 12px 0; border-radius: 12px; background: rgba(255,255,255,0.03); border: 1px solid var(--glass-border); color: var(--text-muted); font-weight: 800; font-size: 1.1rem; text-align: center; cursor: pointer; transition: 0.2s; }
-        .group-btn.wide { grid-column: span 2; }
+        .group-btn.wide { grid-column: span 4; }
         .group-btn.active { background: var(--gradient-main); color: #fff; border-color: transparent; transform: scale(0.95); }
 
         .start-btn { width: 100%; padding: 18px; border-radius: 100px; background: var(--gradient-main); color: #fff; font-size: 1.2rem; font-weight: 800; border: none; cursor: pointer; box-shadow: var(--glow-shadow); transition: 0.3s; margin-top: 10px; }
@@ -245,7 +244,7 @@
                     <h2><i class="fa-solid fa-signature"></i> الاعتمادات</h2>
                     <div class="sigs">
                         <div class="sig-card"><p>شئون الطلاب</p><p>أ. باسم ونيس</p></div>
-                        <div class="sig-card"><p>وكيل الكلية</p><p>أ.د / ياسر حسن</p></div>
+                        <div class="sig-card"><p>وكيل الكلية</p><p>أ.د / ياسر حسن حامد</p></div>
                         <div class="sig-card full"><p>عميد الكلية</p><p>أ.د / عماد سمير محمود</p></div>
                     </div>
                 </div>
@@ -291,17 +290,19 @@
 
     function generateGroupButtons() {
         const grid = document.getElementById('groups-grid');
-        for (let i = 1; i <= 14; i++) {
+        // تعديل العدد ليصبح 12 شعبة فقط لتطابق الصورة
+        for (let i = 1; i <= 12; i++) {
             const btn = document.createElement('div');
             btn.className = 'group-btn';
             btn.innerText = i;
             btn.onclick = () => selectGroup(i, btn);
             grid.appendChild(btn);
         }
+        // إضافة الباقين وربطها بالرقم 13 لمعالجتها برمجياً
         const remainBtn = document.createElement('div');
         remainBtn.className = 'group-btn wide';
         remainBtn.innerText = 'الباقين';
-        remainBtn.onclick = () => selectGroup(15, remainBtn);
+        remainBtn.onclick = () => selectGroup(13, remainBtn);
         grid.appendChild(remainBtn);
     }
 
@@ -352,7 +353,7 @@
         document.getElementById('setup-screen').classList.remove('active');
         document.getElementById('main-app').classList.add('active');
         
-        const groupText = config.group === 15 ? 'الباقين' : config.group;
+        const groupText = config.group === 13 ? 'الباقين' : config.group;
         const genderText = config.gender === 'male' ? 'بنين' : 'بنات';
         document.getElementById('user-badge').innerText = `شعبة ${groupText} - ${genderText}`;
 
@@ -360,34 +361,18 @@
         renderSchedule(scheduleData);
     }
 
-    // المُحرك المنطقي والمطابق تماماً للجداول الرسمية
+    // المُحرك المنطقي والمطابق تماماً للجدول العملي بالصورة المرفقة 
     function generatePersonalSchedule(gender, group) {
         let exams = [];
 
-        // 1. ميعاد ومكان الحاسب الآلي
-        const compDate = gender === 'male' ? 'الأحد ١٩ / ٤ / ٢٠٢٦' : 'الاثنين ٢٠ / ٤ / ٢٠٢٦';
-        let compTime = '';
-        if (group >= 1 && group <= 3) compTime = { s: '٠٨:٠٠', e: '٠٩:٠٠ ص' };
-        else if (group >= 4 && group <= 6) compTime = { s: '٠٩:٠٠', e: '١٠:٠٠ ص' };
-        else if (group >= 7 && group <= 9) compTime = { s: '١٠:٠٠', e: '١١:٠٠ ص' };
-        else if (group >= 10 && group <= 12) compTime = { s: '١١:٠٠', e: '١٢:٠٠ ص' }; // مطابقة للجدول
-        else if (group >= 13 && group <= 14) compTime = { s: '١٢:٠٠', e: '٠١:٠٠ ظ' }; // مطابقة للجدول
-        else if (group === 15) compTime = { s: '٠١:٠٠', e: '٠٢:٠٠ ظ' }; // الباقين
-
-        exams.push({
-            date: compDate + ' (حاسب آلي)',
-            time: compTime,
-            subj: 'حاسب آلي',
-            loc: 'معمل الحاسب الآلي',
-            ico: 'fa-computer'
-        });
-
-        // 2. ميعاد الامتحانات العملية
-        const pracDate = gender === 'male' ? 'الاثنين ٢٧ / ٤ / ٢٠٢٦' : 'الخميس ٢٣ / ٤ / ٢٠٢٦';
+        // 1. ميعاد الامتحانات العملية 
+        const pracDate = gender === 'male' ? 'الاثنين ٢٧ / ٤ / ٢٠٢٦م' : 'الخميس ٢٣ / ٤ / ٢٠٢٦م';
         
-        // الأماكن تختلف لكرة اليد بين البنين والبنات
+        // الأماكن والمواد متطابقة مع الجدول
         const field = { subj: 'أساسيات الميدان', loc: 'الاستاد الرياضي', ico: 'fa-person-running' };
         const hockey = { subj: 'أساسيات الهوكي', loc: 'الملاعب القديمة', ico: 'fa-hockey-puck' };
+        
+        // تخصيص الملاعب للذكور والإناث (الملاكمة وكرة اليد للبنين في الملاعب الجديدة)
         const hbLoc = gender === 'male' ? 'الملاعب الجديدة' : 'الملاعب القديمة';
         const hb = { subj: 'أساسيات كرة اليد', loc: hbLoc, ico: 'fa-volleyball' };
         
@@ -396,24 +381,24 @@
             ? { subj: 'أساسيات الملاكمة', loc: 'الملاعب الجديدة', ico: 'fa-hand-back-fist' }
             : { subj: 'تعبير حركي', loc: 'الملاعب الجديدة', ico: 'fa-child-reaching' };
 
-        // الترتيب حسب المجموعات
+        // الترتيب حسب المجموعات (معدل ليتطابق مع التقسيم الثلاثي 1-3، 4-6 ... المرفق بالصورة)
         let order = [];
-        if (group >= 1 && group <= 4) order = [field, hockey, fourth, hb];
-        else if (group >= 5 && group <= 8) order = [hb, field, hockey, fourth];
-        else if (group >= 9 && group <= 12) order = [fourth, hb, field, hockey];
-        else order = [hockey, fourth, hb, field]; // 13, 14, والباقين
+        if (group >= 1 && group <= 3) order = [field, hockey, fourth, hb];
+        else if (group >= 4 && group <= 6) order = [hb, field, hockey, fourth];
+        else if (group >= 7 && group <= 9) order = [fourth, hb, field, hockey];
+        else order = [hockey, fourth, hb, field]; // 10, 11, 12, والباقين (13)
 
-        // التوقيتات مطابقة بالنص
+        // التوقيتات مطابقة للصورة حرفياً
         const times = [
             { s: '٠٨:٠٠', e: '١٠:٠٠ ص' },
-            { s: '١٠:٠٠', e: '١٢:٠٠ ص' }, // تم وضعها 'ص' لتطابق كلمة (صباحا) بالجدول
+            { s: '١٠:٠٠', e: '١٢:٠٠ ص' }, // تم وضعها 'ص' لتطابق كلمة (صباحا) المكتوبة بالجدول
             { s: '١٢:٠٠', e: '٠٢:٠٠ ظ' }, // ظهرا
             { s: '٠٢:٠٠', e: '٠٤:٠٠ ع' }  // عصرا
         ];
 
         for(let i=0; i<4; i++) {
             exams.push({
-                date: pracDate + ' (عملي)',
+                date: pracDate,
                 time: times[i],
                 ...order[i]
             });
@@ -470,7 +455,7 @@
         if (navigator.share) {
             navigator.share({
                 title: 'الجدول الذكي للامتحانات',
-                text: 'ادخل لمعرفة جدول امتحانات العملي والحاسب الآلي الخاص بك:',
+                text: 'ادخل لمعرفة جدول امتحانات العملي الخاص بك:',
                 url: window.location.href
             }).catch(console.error);
         } else {
