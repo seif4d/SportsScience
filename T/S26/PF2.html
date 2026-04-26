@@ -288,21 +288,24 @@
         checkUserSession();
     });
 
+    // تحديث لإنشاء 14 شعبة بدلاً من 12 لتطابق الجدول الجديد
     function generateGroupButtons() {
         const grid = document.getElementById('groups-grid');
-        // تعديل العدد ليصبح 12 شعبة فقط لتطابق الصورة
-        for (let i = 1; i <= 12; i++) {
+        grid.innerHTML = ''; 
+        
+        for (let i = 1; i <= 14; i++) {
             const btn = document.createElement('div');
             btn.className = 'group-btn';
             btn.innerText = i;
             btn.onclick = () => selectGroup(i, btn);
             grid.appendChild(btn);
         }
-        // إضافة الباقين وربطها بالرقم 13 لمعالجتها برمجياً
+        
+        // زر الباقين (ربطناه برقم 15 لمعالجته برمجياً)
         const remainBtn = document.createElement('div');
         remainBtn.className = 'group-btn wide';
         remainBtn.innerText = 'الباقين';
-        remainBtn.onclick = () => selectGroup(13, remainBtn);
+        remainBtn.onclick = () => selectGroup(15, remainBtn);
         grid.appendChild(remainBtn);
     }
 
@@ -353,7 +356,7 @@
         document.getElementById('setup-screen').classList.remove('active');
         document.getElementById('main-app').classList.add('active');
         
-        const groupText = config.group === 13 ? 'الباقين' : config.group;
+        const groupText = config.group === 15 ? 'الباقين' : config.group;
         const genderText = config.gender === 'male' ? 'بنين' : 'بنات';
         document.getElementById('user-badge').innerText = `شعبة ${groupText} - ${genderText}`;
 
@@ -366,34 +369,39 @@
         let exams = [];
 
         // 1. ميعاد الامتحانات العملية 
-        const pracDate = gender === 'male' ? 'الاثنين ٢٧ / ٤ / ٢٠٢٦م' : 'الخميس ٢٣ / ٤ / ٢٠٢٦م';
+        const pracDate = gender === 'male' ? 'الاثنين ٢٧ / ٤ / ٢٠٢٦م' : 'الخميس ٢٣ / ٤ / ٢٠٢٦م (بنات)';
         
         // الأماكن والمواد متطابقة مع الجدول
         const field = { subj: 'أساسيات الميدان', loc: 'الاستاد الرياضي', ico: 'fa-person-running' };
         const hockey = { subj: 'أساسيات الهوكي', loc: 'الملاعب القديمة', ico: 'fa-hockey-puck' };
         
-        // تخصيص الملاعب للذكور والإناث (الملاكمة وكرة اليد للبنين في الملاعب الجديدة)
-        const hbLoc = gender === 'male' ? 'الملاعب الجديدة' : 'الملاعب القديمة';
-        const hb = { subj: 'أساسيات كرة اليد', loc: hbLoc, ico: 'fa-volleyball' };
+        // تعديل أماكن الملاكمة وكرة اليد لتطابق الصورة
+        const boxing = { subj: 'أساسيات الملاكمة', loc: 'الملاعب الجديدة', ico: 'fa-hand-back-fist' };
+        const hb = { subj: 'أساسيات كرة اليد', loc: 'الملاعب الجديدة', ico: 'fa-volleyball' };
         
-        // المادة الرابعة
-        const fourth = gender === 'male' 
-            ? { subj: 'أساسيات الملاكمة', loc: 'الملاعب الجديدة', ico: 'fa-hand-back-fist' }
-            : { subj: 'تعبير حركي', loc: 'الملاعب الجديدة', ico: 'fa-child-reaching' };
+        // بديل للبنات (في حالة اختيار بنات رغم أن الجدول للبنين فقط)
+        const dance = { subj: 'تعبير حركي', loc: 'الملاعب الجديدة', ico: 'fa-child-reaching' };
+        const fourth = gender === 'male' ? boxing : dance;
 
-        // الترتيب حسب المجموعات (معدل ليتطابق مع التقسيم الثلاثي 1-3، 4-6 ... المرفق بالصورة)
+        // الترتيب حسب المجموعات بالصورة المرفقة تماماً
         let order = [];
-        if (group >= 1 && group <= 3) order = [field, hockey, fourth, hb];
-        else if (group >= 4 && group <= 6) order = [hb, field, hockey, fourth];
-        else if (group >= 7 && group <= 9) order = [fourth, hb, field, hockey];
-        else order = [hockey, fourth, hb, field]; // 10, 11, 12, والباقين (13)
+        if (group >= 1 && group <= 4) {
+            order = [field, hockey, fourth, hb];
+        } else if (group >= 5 && group <= 8) {
+            order = [hb, field, hockey, fourth];
+        } else if (group >= 9 && group <= 12) {
+            order = [fourth, hb, field, hockey];
+        } else {
+            // شعب 13 و 14 والباقين (15)
+            order = [hockey, fourth, hb, field];
+        }
 
         // التوقيتات مطابقة للصورة حرفياً
         const times = [
             { s: '٠٨:٠٠', e: '١٠:٠٠ ص' },
-            { s: '١٠:٠٠', e: '١٢:٠٠ ص' }, // تم وضعها 'ص' لتطابق كلمة (صباحا) المكتوبة بالجدول
-            { s: '١٢:٠٠', e: '٠٢:٠٠ ظ' }, // ظهرا
-            { s: '٠٢:٠٠', e: '٠٤:٠٠ ع' }  // عصرا
+            { s: '١٠:٠٠', e: '١٢:٠٠ ص' },
+            { s: '١٢:٠٠', e: '٠٢:٠٠ ظ' }, 
+            { s: '٠٢:٠٠', e: '٠٤:٠٠ ع' }  
         ];
 
         for(let i=0; i<4; i++) {
