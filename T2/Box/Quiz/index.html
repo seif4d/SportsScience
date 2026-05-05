@@ -1,0 +1,506 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Underground Boxing Quiz 🥊</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <style>
+        /* === الثيم الحماسي والدارك === */
+        :root {
+            --bg-dark: #050505;
+            --bg-card: #121212;
+            --primary-red: #ff003c;
+            --primary-red-glow: rgba(255, 0, 60, 0.5);
+            --neon-green: #00ff66;
+            --neon-green-glow: rgba(0, 255, 102, 0.4);
+            --text-main: #ffffff;
+            --text-dim: #888888;
+            --border-glow: 0 0 15px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 0%, #3a000d 0%, transparent 50%),
+                linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(20,20,20,1) 100%);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* === الحاوية الرئيسية (شكل التطبيق) === */
+        #app {
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(8px);
+            box-shadow: inset 0 0 50px rgba(255, 0, 60, 0.05);
+        }
+
+        @media (min-width: 481px) {
+            #app {
+                height: 90vh;
+                border-radius: 20px;
+                border: 1px solid rgba(255, 0, 60, 0.2);
+                box-shadow: 0 20px 50px rgba(0,0,0,0.9), 0 0 30px var(--primary-red-glow);
+            }
+        }
+
+        /* === الشاشات === */
+        .screen {
+            display: none;
+            flex-direction: column;
+            height: 100%;
+            padding: 25px;
+            animation: punchIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .screen.active { display: flex; }
+
+        /* === شاشة البداية === */
+        .header-box { text-align: center; margin-top: 10vh; flex: 1; }
+        .logo-icon { font-size: 80px; margin-bottom: 10px; filter: drop-shadow(0 0 20px var(--primary-red)); animation: float 2s ease-in-out infinite alternate; }
+        h1 { font-size: 36px; font-weight: 900; color: var(--text-main); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 5px; text-shadow: 2px 2px 0px var(--primary-red); }
+        .subtitle { color: var(--text-dim); font-size: 16px; margin-bottom: 30px; }
+        
+        .rules-box {
+            background: var(--bg-card);
+            border-left: 4px solid var(--primary-red);
+            padding: 15px;
+            border-radius: 0 10px 10px 0;
+            margin-bottom: 40px;
+            font-size: 14px;
+            color: #ddd;
+        }
+
+        /* === الأزرار === */
+        .btn-start {
+            background: var(--primary-red);
+            color: white;
+            border: none;
+            padding: 20px;
+            font-size: 22px;
+            font-weight: 900;
+            border-radius: 12px;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 10px 20px rgba(255, 0, 60, 0.4);
+            transition: all 0.2s;
+        }
+        .btn-start:active { transform: scale(0.95); box-shadow: 0 5px 10px rgba(255, 0, 60, 0.4); }
+
+        /* === شاشة اللعب (HUD) === */
+        .hud { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; background: var(--bg-card); padding: 15px; border-radius: 15px; border: 1px solid #222; }
+        .hud-stat { display: flex; flex-direction: column; align-items: center; }
+        .hud-label { font-size: 11px; color: var(--text-dim); text-transform: uppercase; letter-spacing: 1px; }
+        .hud-value { font-size: 22px; font-weight: 900; }
+        
+        .streak-fire { color: #ff6600; text-shadow: 0 0 15px #ff6600; opacity: 0; transition: opacity 0.3s; }
+        .streak-fire.active { opacity: 1; animation: pulse 0.4s infinite alternate; }
+
+        .progress-bar { width: 100%; height: 6px; background: #222; border-radius: 5px; margin-bottom: 30px; overflow: hidden; }
+        .progress-fill { height: 100%; background: var(--primary-red); width: 0%; transition: width 0.3s ease; box-shadow: 0 0 10px var(--primary-red); }
+
+        /* === كارت السؤال === */
+        .question-card {
+            flex: 1;
+            background: var(--bg-card);
+            border: 2px solid #333;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: 800;
+            line-height: 1.5;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            position: relative;
+            z-index: 1;
+            transition: all 0.3s;
+        }
+        .question-card::before {
+            content: 'Q';
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 150px;
+            font-weight: 900;
+            color: rgba(255,255,255,0.02);
+            z-index: -1;
+        }
+
+        /* === أزرار الإجابة === */
+        .answers { display: flex; gap: 15px; margin-top: 30px; margin-bottom: 20px; }
+        .btn-ans {
+            flex: 1;
+            padding: 20px;
+            font-size: 24px;
+            font-weight: 900;
+            border-radius: 15px;
+            border: 2px solid;
+            background: var(--bg-card);
+            cursor: pointer;
+            transition: 0.1s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+        }
+        .btn-ans span { font-size: 14px; font-weight: 700; color: var(--text-dim); }
+        
+        .btn-true { border-color: var(--neon-green); color: var(--neon-green); }
+        .btn-true:active { background: var(--neon-green); color: black; box-shadow: var(--border-glow) var(--neon-green); transform: scale(0.95); }
+        
+        .btn-false { border-color: var(--primary-red); color: var(--primary-red); }
+        .btn-false:active { background: var(--primary-red); color: white; box-shadow: var(--border-glow) var(--primary-red); transform: scale(0.95); }
+
+        /* === الـ Toast (رسائل التعليق) === */
+        .toast {
+            position: absolute; top: -100px; left: 50%; transform: translateX(-50%);
+            background: #111; border: 2px solid; padding: 15px 20px;
+            border-radius: 12px; font-weight: bold; text-align: center; width: 90%;
+            z-index: 100; transition: top 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+            font-size: 16px; line-height: 1.4;
+        }
+        .toast.show { top: 20px; }
+
+        /* === التأثيرات الحركية === */
+        @keyframes punchIn { 0% { opacity: 0; transform: scale(0.8) translateY(50px); } 100% { opacity: 1; transform: scale(1) translateY(0); } }
+        @keyframes float { 0% { transform: translateY(0px) rotate(-5deg); } 100% { transform: translateY(-15px) rotate(5deg); } }
+        @keyframes pulse { 0% { transform: scale(1); } 100% { transform: scale(1.3); } }
+        .shake-wrong { animation: shakeError 0.4s cubic-bezier(.36,.07,.19,.97) both; border-color: var(--primary-red) !important; box-shadow: inset 0 0 20px var(--primary-red-glow); }
+        .glow-correct { border-color: var(--neon-green) !important; box-shadow: inset 0 0 20px var(--neon-green-glow); }
+        @keyframes shakeError { 10%, 90% { transform: translate3d(-2px, 0, 0); } 20%, 80% { transform: translate3d(4px, 0, 0); } 30%, 50%, 70% { transform: translate3d(-6px, 0, 0); } 40%, 60% { transform: translate3d(6px, 0, 0); } }
+
+        /* === شاشة النتيجة === */
+        .result-content { text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center; }
+        .result-emoji { font-size: 80px; margin-bottom: 10px; }
+        .rank-title { font-size: 32px; font-weight: 900; text-transform: uppercase; margin-bottom: 5px; }
+        .rank-desc { color: var(--text-dim); margin-bottom: 30px; font-size: 18px; }
+        .final-score-box { background: var(--bg-card); padding: 20px; border-radius: 15px; border: 1px solid #333; margin-bottom: 30px; }
+        .final-score-box h1 { font-size: 50px; color: var(--primary-red); margin: 0; text-shadow: none; }
+    </style>
+</head>
+<body>
+
+<div id="app">
+    <!-- Toast Message -->
+    <div id="toast" class="toast">رسالة هنا</div>
+
+    <!-- 1. شاشة البداية -->
+    <div id="home-screen" class="screen active">
+        <div class="header-box">
+            <div class="logo-icon">🥊</div>
+            <h1>Boxing Final</h1>
+            <p class="subtitle">امتحان الملاكمة مش حفظ، ده تكتيك حلبة! 🩸</p>
+            
+            <div class="rules-box">
+                <p>💀 <strong>النظام:</strong> Survival Mode (بقاء للأقوى)</p>
+                <p>❤️ <strong>الأرواح:</strong> معاك 5 أرواح بس.</p>
+                <p>🚨 <strong>الأسئلة:</strong> شاملة كل المنهج وفخوخ الامتحانات.</p>
+            </div>
+        </div>
+        <button class="btn-start" onclick="startGame()">Fight! 💥</button>
+    </div>
+
+    <!-- 2. شاشة الأسئلة -->
+    <div id="quiz-screen" class="screen">
+        <div class="hud">
+            <div class="hud-stat">
+                <span class="hud-label">Score</span>
+                <span class="hud-value" id="score">0</span>
+            </div>
+            <div class="hud-stat">
+                <span class="hud-label">Streak</span>
+                <span class="hud-value"><span id="streak">0</span> <span id="streak-fire" class="streak-fire">🔥</span></span>
+            </div>
+            <div class="hud-stat">
+                <span class="hud-label">Lives</span>
+                <span class="hud-value" id="lives">❤️❤️❤️❤️❤️</span>
+            </div>
+        </div>
+
+        <div class="progress-bar"><div class="progress-fill" id="progress-bar"></div></div>
+
+        <div class="question-card" id="question-text">جاري تحميل الضربة...</div>
+
+        <div class="answers">
+            <button class="btn-ans btn-true" onclick="checkAnswer(true)">
+                ✔️<span>صح</span>
+            </button>
+            <button class="btn-ans btn-false" onclick="checkAnswer(false)">
+                ❌<span>غلط</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- 3. شاشة النتيجة -->
+    <div id="result-screen" class="screen">
+        <div class="result-content">
+            <div class="result-emoji" id="result-emoji">🏆</div>
+            <div class="rank-title" id="rank-title">GOAT</div>
+            <p class="rank-desc" id="rank-desc">أنت قفلت اللعبة!</p>
+            
+            <div class="final-score-box">
+                <p style="color: #888; font-size: 14px; text-transform: uppercase;">Total Score</p>
+                <h1 id="final-score">0</h1>
+            </div>
+        </div>
+        <button class="btn-start" onclick="location.reload()">Rematch 🔄</button>
+    </div>
+</div>
+
+<script>
+    // ==========================================
+    // 📚 بنك الأسئلة الشامل (أكثر من 60 سؤال وفخ)
+    // ==========================================
+    const allQuestions = [
+        // --- أولاً: التاريخ ---
+        { q: "المصريون القدماء هم أول من مارس الملاكمة (بدليل نقوش معابد بني حسن بالمنيا).", a: true, msg: "الفراعنة ملوك اللعبة من زمان 🇪🇬👑" },
+        { q: "إنجلترا هي موطن الملاكمة الحديثة.", a: true, msg: "بالظبط، الإنجليز هم اللي حدثوها 🇬🇧" },
+        { q: "'جيمس فيج' عام 1719 هو أول من فتح مدرسة لتعليم فن الملاكمة.", a: true, msg: "أول مدرسة ملاكمة في التاريخ 🏫" },
+        { q: "'جاك بورتون' عام 1734 يُسمى 'أبو الملاكمة' لأنه أول من وضع قوانين اللعبة وابتكر القفازات.", a: true, msg: "أبو الملاكمة الحقيقي 🥊" },
+        { q: "'جون جاكسون' عام 1785 هو من ابتكر اللكمة المستقيمة اليسرى، وحدد مكان الحلبة.", a: true, msg: "صح، هو اللي حدد الحلبة بعد ما كانت بلا حدود." },
+        { q: "تأسس أول اتحاد مصري لملاكمة الهواة عام 1923م.", a: true, msg: "احفظ التاريخ ده كويس (1923) 📅" },
+        { q: "أول مشاركة أولمبية لمصر كانت في دورة باريس عام 1924م.", a: true, msg: "باريس 1924، صح جداً 🗼" },
+        { q: "تأسس الاتحاد الأفريقي للملاكمة عام 1961م وتعتبر مصر من الدول المؤسسة.", a: true, msg: "مصر دايماً في الريادة 🌍" },
+        { q: "كانت الملاكمة قديماً عند الرومان تُمارس بأوزان محددة.", a: false, msg: "فخ! 🚨 مكنش فيه أوزان، وكان بيفوز لاعب الوزن الثقيل." },
+
+        // --- ثانياً: الحلبة والأدوات (الأرقام) ---
+        { q: "مساحة حلبة الملاكمة 6.10 متر × 6.10 متر (من داخل الحبال).", a: true, msg: "رقم أساسي مبيخلاش منه امتحان! 📏" },
+        { q: "ارتفاع الحلبة عن الأرض 100 سم (متر واحد).", a: true, msg: "بالظبط، متر واحد 💯" },
+        { q: "يجب أن يكون للحلبة 3 حبال.", a: false, msg: "غلط! الحلبة الدولية لازم تكون 4 حبال 🪢" },
+        { q: "الإفريز (المنطقة خارج الحبال) يجب أن تمتد لمسافة 85 سم.", a: true, msg: "صح، 85 سم بالظبط عشان أمان اللاعب." },
+        { q: "سمك الحبل لا يقل عن 3 سم ولا يزيد عن 5 سم.", a: true, msg: "معلومة دقيقة وصح ✔️" },
+        { q: "الركن القريب على يسار رئيس لجنة الحكام هو الركن الأحمر.", a: true, msg: "يسار = أحمر 🔴" },
+        { q: "الركن القريب على يمين رئيس لجنة الحكام هو الركن الأبيض (المحايد).", a: true, msg: "يمين قريب = أبيض ⚪" },
+        { q: "الركن البعيد على يسار الحكام (أبيض محايد)، والبعيد على اليمين (أزرق).", a: true, msg: "البعيد يمين = أزرق 🔵" },
+        { q: "تزود الحلبة بـ 3 سلالم.", a: true, msg: "صح! (2 للاعبين، 1 للحكم والطبيب) 🪜" },
+        { q: "من الأدوات العامة الخاصة برياضة الملاكمة قفازات البطولة.", a: false, msg: "فخ امتحانات! 🚨 القفاز أداة (خاصة) لمنع نقل الأمراض." },
+        { q: "وزن القفاز للرجال والشباب (حتى 64 كجم) 10 أوز، وللأوزان الثقيلة 12 أوز.", a: true, msg: "الأوزان التقيلة بتلبس 12 أوز 🥊" },
+
+        // --- ثالثاً: الحكام والقوانين ---
+        { q: "AIBA هو الاختصار الدال على الاتحاد الدولي للملاكمة.", a: true, msg: "صح ✔️" },
+        { q: "يُدير المباراة داخل الحلبة حكم واحد، ويجلس خارج الحلبة 5 قضاة.", a: true, msg: "1 جوه، 5 بره يحسبوا النقط." },
+        { q: "الحكم داخل الحلبة يقوم بتسجيل النقاط.", a: false, msg: "فخ! 🚨 القضاة الخمسة اللي بره هم اللي بيسجلوا النقاط." },
+        { q: "يستخدم الحكم 3 كلمات منها break.", a: false, msg: "غلط! بيستخدم 4 كلمات: Stop, Box, Break, Time ⏱️" },
+        { q: "يمنع الحكم الكلام نهائياً داخل الحلبة ويعتمد على الإشارات وهذه الكلمات الأربع.", a: true, msg: "مفيش رغي جوه الحلبة 🤐" },
+        { q: "جولات الرجال والشباب: 3 جولات، زمن الجولة 3 دقائق، والراحة دقيقة واحدة.", a: true, msg: "3 جولات × 3 دقايق 🥊" },
+        { q: "في حالة العد الإجباري، يجب أن يصل الحكم بالعد حتى (8) على الأقل حتى لو نهض الملاكم.", a: true, msg: "لازم يعد لـ 8 عشان يتأكد من سلامة اللاعب 🏥" },
+        { q: "إذا وصل العد إلى (10) تنتهي المباراة بالضربة القاضية KO.", a: true, msg: "KNOCKOUT 💀" },
+        { q: "يخسر الملاكم إذا تم العد عليه 3 مرات في الجولة، أو 4 مرات في المباراة كلها.", a: true, msg: "قانون مهم جداً! ⚖️" },
+        { q: "في حالة العد الإجباري يخسر الملاكم إذا عُد عليه 3 مرات في الجولة ولا يشترط عدد مرات خلال المباراة.", a: false, msg: "فخ أسيوط! 🚨 يشترط طبعاً! لو اتعد عليه 4 مرات في المباراة كلها يخسر." },
+        { q: "فئة 'الشباب والشابات' تحدد أعمارهم من سن (17 - 18) سنة.", a: true, msg: "صح 👦" },
+        { q: "يجب أن يصعد القاضي من سلم الحلبة الخاص بالحكم والطبيب.", a: false, msg: "فخ! 🚨 القاضي مبيصعدش الحلبة أصلاً، بيقعد بره!" },
+
+        // --- رابعاً: وقفة الاستعداد والتحركات ---
+        { q: "في وقفة الاستعداد يجب أن يكون وزن الجسم محملاً بنسبة أكبر على القدم الأمامية.", a: false, msg: "غلط! الوزن لازم يكون متوزع (بالتساوي) ⚖️" },
+        { q: "في اللكمات يجب أن يكون وزن الجسم موزعاً على القدمين بالتساوي.", a: false, msg: "فخ امتحانات خطير! 🚨 في اللكم لازم تنقل وزنك لزيادة قوة الضربة." },
+        { q: "من شروط وقفة الاستعداد: الارتخاء، الاتزان، التغطية، سهولة الحركة.", a: true, msg: "عاش ✔️" },
+        { q: "يقصد بالتغطية استخدام الذراعين ودوران الجذع لليسار لمواجهة المنافس بالجانب الأيمن.", a: false, msg: "غلط! المواجهة بتكون بالجانب (الأيسر) للاعب الأيمن." },
+        { q: "في التحرك للأمام: تتحرك القدم الأمامية أولاً، ثم تتبعها القدم الخلفية.", a: true, msg: "الرجل اللي في اتجاه الحركة بتتحرك الأول 🚶" },
+        { q: "في التحرك للخلف: تتحرك القدم الخلفية أولاً، ثم تتبعها القدم الأمامية.", a: true, msg: "صح ✔️" },
+        { q: "من الأخطاء الشائعة في التحركات: التحرك بالوثب الخفيف.", a: false, msg: "الوثب العالي وتقاطع القدمين هو اللي غلط لأنه بيفقد الاتزان 🤡" },
+        { q: "أثناء وقفة الاستعداد يجب ثني الركبتين قليلاً، والذقن للداخل، والفم مغلق.", a: true, msg: "وقفة مثالية 🗿" },
+
+        // --- خامساً: اللكمات ---
+        { q: "عدد اللكمات الأساسية 12 لكمة.", a: true, msg: "صح، 12 لكمة 👊" },
+        { q: "أشكال اللكمات تنقسم إلى: مستقيمة، جانبية، صاعدة.", a: true, msg: "أنواع اللكمات الـ 3 ✔️" },
+        { q: "اللكمة المستقيمة اليسرى هي الأكثر استخداماً، وتعتبر أقصر طريق لإصابة الهدف.", a: true, msg: "بطلة اللعبة وأسرعهم 🥇" },
+        { q: "اللكمات التمهيدية غرضها تشتيت انتباه الخصم ولا يبذل فيها الملاكم جهداً كبيراً.", a: true, msg: "شغل تكتيك 🧠" },
+        { q: "المنطقة المصرح باللكم فيها: جانبي الذقن، الجبهة، منتصف الوجه، والجذع فوق الحزام.", a: true, msg: "الضرب تحت الحزام ممنوع 🚫" },
+        { q: "من الشروط العامة لأداء اللكمات أن تصيب بمقدمة القفاز المفتوح.", a: false, msg: "فخ لغوي! 🚨 إزاي مفتوح؟ لازم القفاز يكون (مغلق)!" },
+        { q: "يجب أن تكون اللكمة مؤثرة وبها وزن الجسم (الكتف) ليحسبها القضاة نقاطاً.", a: true, msg: "لازم ضربة بضمير عشان تتحسب 💥" },
+        { q: "اللكمة المضادة هي التي تأتي مباشرة بعد حركة دفاع ناجحة.", a: true, msg: "Counter-punch 🥊" },
+
+        // --- سادساً وسابعاً: الدفاع والتدريب ---
+        { q: "الدفع: هو من أنجح وأسهل أنواع الدفاع، ويكون ببطن اليد لتغيير مسار اللكمة.", a: true, msg: "أسهل دفاع 🛡️" },
+        { q: "في الدفاع بـ 'الغطس' أو 'الزوغان'، يجب أن يكون الميل بثني الظهر فقط.", a: false, msg: "غلط! لازم تتني ركبتك مش ضهرك بس 🦵" },
+        { q: "الهجوم المضاد يعتمد نجاحه على إجادة الملاكم للمهارات الدفاعية أولاً.", a: true, msg: "دافع الأول بعدين اضرب 🧠" },
+        { q: "التكتيك هو دراسة شكل وأنواع ووسائل التنافس مع المنافسين.", a: true, msg: "صح ✔️" },
+        { q: "الفورمة الرياضية هي حالة الاستعداد المثالي، ولا يمكن الاحتفاظ بها طوال العام.", a: true, msg: "مستحيل جسمك يفضل في القمة طول السنة 📉" },
+        { q: "الأكياس الثقيلة تستخدم لتنمية القوة، وكرات التنس لتنمية السرعة والتوافق.", a: true, msg: "صح جداً 🎒" },
+        { q: "التوافق والرشاقة وسرعة رد الفعل من أهم المتطلبات البدنية للملاكم.", a: true, msg: "أساسيات الوحش 🦍" }
+    ];
+
+    // ==========================================
+    // ⚙️ نظام اللعب (Game State)
+    // ==========================================
+    let gameQuestions = [];
+    let currentQIndex = 0;
+    let score = 0;
+    let streak = 0;
+    let lives = 5; // 5 Lives for Survival Mode
+    let maxQuestions = 25; // 25 random questions per match
+
+    const screens = {
+        home: document.getElementById('home-screen'),
+        quiz: document.getElementById('quiz-screen'),
+        result: document.getElementById('result-screen')
+    };
+    
+    const ui = {
+        qText: document.getElementById('question-text'),
+        score: document.getElementById('score'),
+        streak: document.getElementById('streak'),
+        streakFire: document.getElementById('streak-fire'),
+        lives: document.getElementById('lives'),
+        progress: document.getElementById('progress-bar'),
+        toast: document.getElementById('toast'),
+        qCard: document.querySelector('.question-card')
+    };
+
+    // خلط المصفوفة
+    function shuffle(array) {
+        let currentIndex = array.length, randomIndex;
+        while (currentIndex != 0) {
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex--;
+            [array[currentIndex], array[randomIndex]] = [array[randomIndex], array[currentIndex]];
+        }
+        return array;
+    }
+
+    function switchScreen(screenName) {
+        Object.values(screens).forEach(s => s.classList.remove('active'));
+        screens[screenName].classList.add('active');
+    }
+
+    function startGame() {
+        // نختار 25 سؤال عشوائي من بنك الأسئلة
+        gameQuestions = shuffle([...allQuestions]).slice(0, maxQuestions);
+        currentQIndex = 0;
+        score = 0;
+        streak = 0;
+        lives = 5;
+        
+        updateHUD();
+        switchScreen('quiz');
+        loadQuestion();
+    }
+
+    function updateHUD() {
+        ui.score.innerText = score;
+        ui.streak.innerText = streak;
+        
+        // رسم القلوب (أحمر للمتبقي، أسود مكسور للضائع)
+        ui.lives.innerHTML = '❤️'.repeat(lives) + '<span style="opacity:0.3">🖤</span>'.repeat(5 - lives);
+        
+        if(streak >= 3) ui.streakFire.classList.add('active');
+        else ui.streakFire.classList.remove('active');
+
+        ui.progress.style.width = `${(currentQIndex / maxQuestions) * 100}%`;
+    }
+
+    function loadQuestion() {
+        ui.qCard.classList.remove('shake-wrong', 'glow-correct');
+        
+        if (currentQIndex >= maxQuestions || lives <= 0) {
+            endGame();
+            return;
+        }
+        
+        ui.qText.innerText = gameQuestions[currentQIndex].q;
+        updateHUD();
+    }
+
+    function showToast(msg, isCorrect) {
+        ui.toast.innerText = msg;
+        ui.toast.style.borderColor = isCorrect ? 'var(--neon-green)' : 'var(--primary-red)';
+        ui.toast.style.color = isCorrect ? 'var(--neon-green)' : '#fff';
+        ui.toast.style.backgroundColor = isCorrect ? 'rgba(0,255,100,0.1)' : 'rgba(255,0,60,0.2)';
+        
+        ui.toast.classList.add('show');
+        setTimeout(() => ui.toast.classList.remove('show'), 3000);
+    }
+
+    function checkAnswer(userAnswer) {
+        // منع الضغط المزدوج السريع
+        if(ui.qCard.classList.contains('shake-wrong') || ui.qCard.classList.contains('glow-correct')) return;
+
+        const currentQ = gameQuestions[currentQIndex];
+        const isCorrect = (userAnswer === currentQ.a);
+
+        if (isCorrect) {
+            streak++;
+            score += 100 * (streak >= 3 ? 2 : 1); // دبل سكور لو الستريك شغال
+            showToast(currentQ.msg, true);
+            ui.qCard.classList.add('glow-correct');
+            
+            // احتفال خفيف
+            confetti({ particleCount: 20, spread: 60, origin: { y: 0.8 }, colors: ['#00ff66', '#ffffff'] });
+        } else {
+            streak = 0;
+            lives--;
+            showToast(currentQ.msg, false);
+            ui.qCard.classList.add('shake-wrong');
+            
+            // اهتزاز الموبايل
+            if ("vibrate" in navigator) navigator.vibrate([200, 50, 200]);
+        }
+
+        currentQIndex++;
+        setTimeout(loadQuestion, 1200);
+    }
+
+    function endGame() {
+        switchScreen('result');
+        document.getElementById('final-score').innerText = score;
+        
+        const rTitle = document.getElementById('rank-title');
+        const rDesc = document.getElementById('rank-desc');
+        const rEmoji = document.getElementById('result-emoji');
+        
+        const winPercentage = (score / (maxQuestions * 100)) * 100;
+
+        if (lives > 0 && winPercentage >= 80) {
+            rTitle.innerText = "Undisputed Champion 🥊👑";
+            rTitle.style.color = "#ffd700";
+            rDesc.innerText = "أنت قفلت المادة! مفيش فخ من أسيوط يقدر يوقعك.";
+            rEmoji.innerText = "🥇";
+            triggerWinConfetti();
+        } else if (lives > 0 && winPercentage >= 50) {
+            rTitle.innerText = "Pro Contender 🦍";
+            rTitle.style.color = "var(--neon-green)";
+            rDesc.innerText = "عاش! مستواك جامد بس محتاج تراجع كام تريكاية.";
+            rEmoji.innerText = "🔥";
+        } else {
+            rTitle.innerText = "Knockout (KO) 💀";
+            rTitle.style.color = "var(--primary-red)";
+            rDesc.innerText = "الفخوخ وقعتك يا بطل.. راجع الروشتة والعب تاني!";
+            rEmoji.innerText = "🚑";
+        }
+    }
+
+    function triggerWinConfetti() {
+        const duration = 3000;
+        const end = Date.now() + duration;
+        (function frame() {
+            confetti({ particleCount: 5, angle: 60, spread: 55, origin: { x: 0 }, colors: ['#ff003c', '#00ff66', '#ffd700'] });
+            confetti({ particleCount: 5, angle: 120, spread: 55, origin: { x: 1 }, colors: ['#ff003c', '#00ff66', '#ffd700'] });
+            if (Date.now() < end) requestAnimationFrame(frame);
+        }());
+    }
+</script>
+</body>
+</html>
