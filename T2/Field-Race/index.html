@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0f">
+    <meta name="description" content="المنصة الشاملة لمحاضرات الميدان والمضمار - كلية التربية الرياضية">
+    
+    <title>Track & Field Hub | الميدان والمضمار</title>
+    
+    <!-- خطوط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === المتغيرات (Themes) === */
+        :root {
+            --bg-main: #0a0a0f;
+            --surface: #151520;
+            --text-main: #ffffff;
+            --text-muted: #8e8e9f;
+            --glass-bg: rgba(21, 21, 32, 0.6);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            
+            /* ألوان الألعاب بناءً على التصميمات السابقة */
+            --triple-neon: #00f0ff; /* سيان للوثب الثلاثي */
+            --long-neon: #00FF66;   /* أخضر للوثب الطويل */
+            --shot-neon: #FF5100;   /* برتقالي ناري لدفع الجلة */
+            --jav-neon: #FFD700;    /* ذهبي لرمي الرمح */
+        }
+
+        /* === الإعدادات الأساسية === */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            overflow-x: hidden;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 240, 255, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(255, 81, 0, 0.1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(255, 215, 0, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(0, 255, 102, 0.1) 0px, transparent 50%);
+            background-attachment: fixed;
+            min-height: 100vh;
+        }
+
+        /* === Header === */
+        .header {
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(10, 10, 15, 0.8);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .header .logo {
+            font-size: 1.2rem;
+            font-weight: 900;
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .header .logo i {
+            color: var(--text-main);
+            background: linear-gradient(135deg, #FF5100, #FFD700);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .header .uni-name {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        /* === Hero Section === */
+        .hero {
+            padding: 50px 20px 30px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+        .gamer-tag {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 6px 20px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: bold;
+            color: #fff;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .hero h1 span {
+            background: linear-gradient(to left, #00f0ff, #00FF66, #FFD700, #FF5100);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 300% 300%;
+            animation: gradientMove 5s ease infinite;
+        }
+        @keyframes gradientMove {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* === Grid Layout (The Levels) === */
+        .container {
+            padding: 0 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        /* === Cards === */
+        .card {
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--text-main);
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s ease;
+        }
+        .card:hover, .card:active {
+            transform: translateY(-10px);
+            background: rgba(30, 30, 45, 0.9);
+        }
+        .card:hover::before, .card:active::before {
+            transform: scaleX(1);
+        }
+
+        /* Card Themes */
+        .card.triple-jump:hover { border-color: var(--triple-neon); box-shadow: 0 15px 30px rgba(0, 240, 255, 0.2); }
+        .card.triple-jump::before { background: var(--triple-neon); }
+        .card.triple-jump .icon { color: var(--triple-neon); background: rgba(0, 240, 255, 0.1); }
+
+        .card.long-jump:hover { border-color: var(--long-neon); box-shadow: 0 15px 30px rgba(0, 255, 102, 0.2); }
+        .card.long-jump::before { background: var(--long-neon); }
+        .card.long-jump .icon { color: var(--long-neon); background: rgba(0, 255, 102, 0.1); }
+
+        .card.shot-put:hover { border-color: var(--shot-neon); box-shadow: 0 15px 30px rgba(255, 81, 0, 0.2); }
+        .card.shot-put::before { background: var(--shot-neon); }
+        .card.shot-put .icon { color: var(--shot-neon); background: rgba(255, 81, 0, 0.1); }
+
+        .card.javelin:hover { border-color: var(--jav-neon); box-shadow: 0 15px 30px rgba(255, 215, 0, 0.2); }
+        .card.javelin::before { background: var(--jav-neon); }
+        .card.javelin .icon { color: var(--jav-neon); background: rgba(255, 215, 0, 0.1); }
+
+        /* Card Content */
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.8rem;
+            transition: all 0.3s;
+        }
+        .card-title {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 5px;
+        }
+        .card-desc {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            flex-grow: 1;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 10px;
+            padding-top: 15px;
+            border-top: 1px solid var(--glass-border);
+        }
+        .start-btn {
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        .card.triple-jump .start-btn { color: var(--triple-neon); }
+        .card.long-jump .start-btn { color: var(--long-neon); }
+        .card.shot-put .start-btn { color: var(--shot-neon); }
+        .card.javelin .start-btn { color: var(--jav-neon); }
+
+        /* === Scroll Reveal === */
+        .fade-up {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* === Footer === */
+        .footer {
+            text-align: center;
+            padding: 30px 20px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            border-top: 1px solid var(--glass-border);
+            background: rgba(10,10,15,0.8);
+        }
+        .footer strong { color: #fff; }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="logo">
+            <i class="fa-solid fa-trophy"></i> T&F Hub
+        </div>
+        <div class="uni-name">
+            جامعة أسيوط
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero fade-up">
+        <div class="gamer-tag"><i class="fa-solid fa-gamepad"></i> Select Your Class</div>
+        <h1>ملصخات<br><span>سباق الميدان</span></h1>
+        <p>أهلاً بيك في الـ Basecamp 🚀</br> هنا هتلاقي كل مهارات ألعاب القوى مشروحة بستايل جديد. </br> اختار اللعبة اللي عايز تـ Level Up فيها وابدأ المذاكرة بدون ملل.</p>
+    </section>
+
+    <!-- Main Categories Grid -->
+    <div class="container">
+        <div class="grid">
+            
+            <!-- الوثب الثلاثي -->
+            <!-- غيّر 'triple-jump.html' باسم الملف الذي حفظته للوثب الثلاثي -->
+            <a href="triple-jump" class="card triple-jump fade-up" style="transition-delay: 0.1s;">
+                <div class="card-header">
+                    <div class="icon"><i class="fa-solid fa-bolt"></i></div>
+                    <i class="fa-solid fa-arrow-left" style="color: var(--text-muted);"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">الوثب الثلاثي</h3>
+                    <p class="card-desc">الحجلة، الخطوة، الوثبة. الميكانيكا المطلوبة للطيران والتكنيك الصحيح لـ Triple Jump.</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color:var(--text-muted); font-size: 0.8rem;"><i class="fa-regular fa-clock"></i> شامل القوانين</span>
+                    <span class="start-btn">ادخل السيرفر <i class="fa-solid fa-play"></i></span>
+                </div>
+            </a>
+
+            <!-- الوثب الطويل -->
+            <!-- غيّر 'long-jump.html' باسم الملف الذي حفظته للوثب الطويل -->
+            <a href="long-jump" class="card long-jump fade-up" style="transition-delay: 0.2s;">
+                <div class="card-header">
+                    <div class="icon"><i class="fa-solid fa-plane-departure"></i></div>
+                    <i class="fa-solid fa-arrow-left" style="color: var(--text-muted);"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">الوثب الطويل</h3>
+                    <p class="card-desc">كسر الجاذبية بالسرعة العالية والارتقاء الانفجاري. اعرف أسرار الطيران والهبوط الاقتصادي.</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color:var(--text-muted); font-size: 0.8rem;"><i class="fa-regular fa-clock"></i> شامل القوانين</span>
+                    <span class="start-btn">ادخل السيرفر <i class="fa-solid fa-play"></i></span>
+                </div>
+            </a>
+
+            <!-- دفع الجلة -->
+            <!-- غيّر 'shot-put.html' باسم الملف الذي حفظته لدفع الجلة -->
+            <a href="shot-put" class="card shot-put fade-up" style="transition-delay: 0.3s;">
+                <div class="card-header">
+                    <div class="icon"><i class="fa-solid fa-fire"></i></div>
+                    <i class="fa-solid fa-arrow-left" style="color: var(--text-muted);"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">دفع الجلة</h3>
+                    <p class="card-desc">لعبة القوة الانفجارية المطلقة (Raw Power). تعلم التكور، الزحف، الدفع القوي والتغطية.</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color:var(--text-muted); font-size: 0.8rem;"><i class="fa-regular fa-clock"></i> شامل القوانين</span>
+                    <span class="start-btn">ادخل السيرفر <i class="fa-solid fa-play"></i></span>
+                </div>
+            </a>
+
+            <!-- رمي الرمح -->
+            <!-- غيّر 'javelin.html' باسم الملف الذي حفظته لرمي الرمح -->
+            <a href="javelin" class="card javelin fade-up" style="transition-delay: 0.4s;">
+                <div class="card-header">
+                    <div class="icon"><i class="fa-solid fa-location-arrow" style="transform: rotate(-45deg);"></i></div>
+                    <i class="fa-solid fa-arrow-left" style="color: var(--text-muted);"></i>
+                </div>
+                <div>
+                    <h3 class="card-title">رمي الرمح</h3>
+                    <p class="card-desc">الـ Rhythm العالي والانسيابية. خطوات التقاطع، حركة القوس الكرباجية لتحقيق أبعد مسافة.</p>
+                </div>
+                <div class="card-footer">
+                    <span style="color:var(--text-muted); font-size: 0.8rem;"><i class="fa-regular fa-clock"></i> شامل القوانين</span>
+                    <span class="start-btn">ادخل السيرفر <i class="fa-solid fa-play"></i></span>
+                </div>
+            </a>
+
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>إشراف: <strong>د. محمود عطية - د. محمد إبراهيم - د. ليلى جمال - د. أحمد إسماعيل - د. الأمير عبد الستار</strong></p>
+        <p style="margin-top: 5px; opacity: 0.7;">كلية علوم الرياضة | شعبة مسابقات الميدان والمضمار</p>
+    </footer>
+
+    <!-- JavaScript -->
+    <script>
+        // Scroll Reveal Animation
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-up').forEach(element => observer.observe(element));
+    </script>
+</body>
+</html>
