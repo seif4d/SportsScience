@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0a0a0f">
+    <title>Quiz App | بنك أسئلة الميدان</title>
+    
+    <!-- خطوط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #0a0a0f;
+            --surface: #151520;
+            --primary-neon: #00BFFF; /* أزرق سماوي */
+            --secondary-neon: #00FF66; /* أخضر للإجابة الصح */
+            --danger-neon: #FF2D55; /* وردي فاقع للغلط */
+            --text-main: #FFFFFF;
+            --text-muted: #8e8e9f;
+            --glass-bg: rgba(21, 21, 32, 0.8);
+            --glass-border: rgba(0, 191, 255, 0.2);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* === Header & Progress === */
+        .app-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+
+        .score-board {
+            font-weight: 900;
+            font-size: 1.2rem;
+            color: var(--primary-neon);
+        }
+
+        .question-counter {
+            font-weight: bold;
+            color: var(--text-muted);
+            background: rgba(255,255,255,0.05);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .progress-container {
+            width: 100%; height: 4px;
+            background: rgba(0, 191, 255, 0.1);
+        }
+        
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: var(--primary-neon);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        /* === Main Content Area === */
+        .main-container {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            scrollbar-width: none;
+            max-width: 600px; /* For better desktop view */
+            margin: 0 auto;
+            width: 100%;
+        }
+        .main-container::-webkit-scrollbar { display: none; }
+
+        .screen {
+            display: none;
+            flex-direction: column;
+            animation: fadeIn 0.4s ease forwards;
+        }
+        .screen.active { display: flex; }
+
+        /* === Start Screen === */
+        .start-screen {
+            text-align: center;
+            justify-content: center;
+            height: 100%;
+            gap: 20px;
+        }
+        .start-icon {
+            font-size: 5rem;
+            color: var(--primary-neon);
+            filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.6));
+            margin-bottom: 10px;
+        }
+        .start-title { font-size: 2.5rem; font-weight: 900; line-height: 1.2; }
+        .start-desc { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* === Question Screen === */
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 20px;
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            text-align: center;
+        }
+        .question-text {
+            font-size: 1.3rem;
+            font-weight: bold;
+            line-height: 1.6;
+        }
+
+        .options-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .option-btn {
+            background: rgba(255,255,255,0.03);
+            border: 2px solid var(--glass-border);
+            color: #fff;
+            padding: 18px 20px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: bold;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .option-btn:hover { background: rgba(0, 191, 255, 0.1); }
+        .option-btn:active { transform: scale(0.98); }
+
+        .option-btn.correct {
+            background: rgba(0, 255, 102, 0.1);
+            border-color: var(--secondary-neon);
+        }
+        .option-btn.wrong {
+            background: rgba(255, 45, 85, 0.1);
+            border-color: var(--danger-neon);
+        }
+        .option-btn.disabled { pointer-events: none; opacity: 0.6; }
+        .option-btn.correct.disabled { opacity: 1; }
+
+        .feedback-box {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            display: none;
+            animation: slideUp 0.3s ease forwards;
+        }
+        .feedback-box.show { display: block; }
+        .feedback-box.success { background: rgba(0, 255, 102, 0.1); border-left: 4px solid var(--secondary-neon); }
+        .feedback-box.error { background: rgba(255, 45, 85, 0.1); border-left: 4px solid var(--danger-neon); }
+
+        .action-btn {
+            margin-top: 20px;
+            background: var(--primary-neon);
+            color: #0a0a0f;
+            border: none;
+            padding: 18px;
+            border-radius: 16px;
+            font-size: 1.2rem;
+            font-weight: 900;
+            width: 100%;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(0, 191, 255, 0.4);
+            transition: transform 0.2s;
+        }
+        .action-btn:active { transform: translateY(2px); }
+        .next-btn { display: none; }
+
+        /* === Result Screen === */
+        .result-screen {
+            text-align: center;
+            justify-content: center;
+            height: 100%;
+            gap: 15px;
+        }
+        .final-score {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--secondary-neon);
+        }
+        .rank-title {
+            font-size: 1.8rem;
+            color: var(--primary-neon);
+            margin-bottom: 10px;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+    </style>
+</head>
+<body>
+
+    <header class="app-header">
+        <div class="score-board"><i class="fa-solid fa-star"></i> <span id="score">0</span> XP</div>
+        <div class="question-counter"><span id="q-current">0</span> / <span id="q-total">0</span></div>
+    </header>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <main class="main-container">
+        
+        <div id="start-screen" class="screen active start-screen">
+            <div class="start-icon"><i class="fa-solid fa-brain"></i></div>
+            <div class="start-title">بنك أسئلة الميدان</div>
+            <p class="start-desc">مستعد تختبر كل المعلومات المهمة في المنهج؟ 30 سؤال هيلموا معاك الليلة. بالتوفيق! 🎓</p>
+            <button class="action-btn" onclick="startQuiz()">ابدأ الاختبار 🔥</button>
+        </div>
+
+        <div id="question-screen" class="screen">
+            <div class="question-card">
+                <div class="question-text" id="question-text"></div>
+            </div>
+            <div class="options-grid" id="options-grid"></div>
+            <div id="feedback" class="feedback-box"></div>
+            <button id="next-btn" class="action-btn next-btn" onclick="nextQuestion()">السؤال التالي <i class="fa-solid fa-arrow-left"></i></button>
+        </div>
+
+        <div id="result-screen" class="screen result-screen">
+            <div><i class="fa-solid fa-trophy" style="font-size: 4rem; color: #FFD700; margin-bottom: 10px;"></i></div>
+            <div class="rank-title" id="rank-title"></div>
+            <div class="final-score" id="final-score"></div>
+            <p id="result-msg" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;"></p>
+            <button class="action-btn" onclick="location.reload()">إعادة الاختبار 🔄</button>
+        </div>
+
+    </main>
+
+    <script>
+        // === بنك الأسئلة الشامل ===
+        const quizData = [
+            // الأوزان والمقاسات
+            { q: "ما هو وزن الجلة الرسمي للرجال والسيدات؟", options: ["7 كجم / 5 كجم", "7.260 كجم / 4 كجم", "8 كجم / 4 كجم", "6 كجم / 3 كجم"], correct: 1, feedback: "تمام! الرجال 7.260 كجم والسيدات 4 كجم. دي أرقام أساسية." },
+            { q: "ما هو وزن الرمح الرسمي للرجال والسيدات؟", options: ["1000 جم / 800 جم", "800 جم / 600 جم", "900 جم / 700 جم", "700 جم / 500 جم"], correct: 1, feedback: "بالظبط! الرجال 800 جرام والسيدات 600 جرام. متلخبطش بينهم وبين الجلة." },
+            { q: "قطر دائرة دفع الجلة هو:", options: ["2.5 متر", "3 متر", "2.135 متر", "1.22 متر"], correct: 2, feedback: "ممتاز! 2.135 متر هو الرقم اللي بيجي دايمًا في الامتحانات." },
+            { q: "ما هو ارتفاع لوحة الإيقاف في دفع الجلة؟", options: ["15 سم", "1.22 متر", "7 ملم", "10 سم"], correct: 3, feedback: "صح! ارتفاعها 10 سم تقريباً (من 9.8 إلى 10.2 سم). الـ 7 ملم دي بتاعت لوحة الصلصال في الوثب." },
+            { q: "طول ممر الاقتراب في رمي الرمح يتراوح بين:", options: ["40 - 45 متر", "20 - 25 متر", "30 - 36.5 متر", "أقل من 30 متر"], correct: 2, feedback: "عاش! ممر الرمح أقصر من الوثب، من 30 لـ 36.5 متر." },
+            { q: "طول ممر الاقتراب في الوثب الطويل والثلاثي يتراوح بين:", options: ["25 - 30 متر", "40 - 45 متر", "30 - 35 متر", "أكثر من 50 متر"], correct: 1, feedback: "تمام! ممر الوثب أطول عشان محتاج سرعة قصوى، من 40 لـ 45 متر." },
+            { q: "زاوية قطاع الرمي في دفع الجلة هي:", options: ["29 درجة", "45 درجة", "90 درجة", "34.92 درجة"], correct: 3, feedback: "حريف! زاوية الجلة 34.92 درجة. الـ 29 درجة دي بتاعت الرمح." },
+            { q: "عرض حفرة هبوط الوثب يتراوح بين:", options: ["1 - 2 متر", "2.75 - 3 متر", "4 - 5 متر", "2 متر فقط"], correct: 1, feedback: "صح جداً! العرض من 2.75 متر لـ 3 متر عشان يدي مساحة أمان للهبوط." },
+            { q: "في الوثب الثلاثي، تبعد لوحة الارتقاء عن حفرة الهبوط للرجال مسافة:", options: ["11 متر", "9 متر", "1 متر", "13 متر"], correct: 3, feedback: "مظبوط! 13 متر للرجال و 11 متر للسيدات." },
+            { q: "عرض لوحة الصلصال (Indicator) في الوثب هو:", options: ["20 سم", "10 سم", "5 سم", "1.22 متر"], correct: 1, feedback: "تمام! عرضها 10 سم ووظيفتها تكشف لو اللاعب تخطى خط الارتقاء." },
+            
+            // القوانين وحالات الفشل
+            { q: "إذا كان عدد المتسابقين 8 أو أقل، كم محاولة يحصل عليها كل لاعب؟", options: ["3 محاولات", "3 ثم 3 إضافية", "6 محاولات", "4 محاولات"], correct: 2, feedback: "بالظبط! لو العدد قليل (8 أو أقل) بياخدوا الـ 6 محاولات كاملة من الأول." },
+            { q: "إذا كان عدد المتسابقين أكثر من 8، كيف يتم منح المحاولات؟", options: ["كلهم 6 محاولات", "3 محاولات للكل، ثم أفضل 8 لهم 3 إضافية", "3 محاولات فقط", "أفضل لاعب له 6 محاولات"], correct: 1, feedback: "صح! النظام ده اسمه (التصفية)، 3 للكل وبعدين بنفلتر أفضل 8 يكملوا." },
+            { q: "أي من الحالات التالية يعتبر محاولة فاشلة في دفع الجلة؟", options: ["الخروج من النصف الخلفي للدائرة", "استخدام بودرة المغنيسيوم", "لمس السطح العلوي للوحة الإيقاف", "سقوط الجلة داخل القطاع"], correct: 2, feedback: "فاول أكيد! ممنوع تلمس السطح العلوي للوحة الإيقاف أو الأرض خارج الدائرة." },
+            { q: "لكي تكون رمية الرمح صحيحة، يجب أن:", options: ["ينغرس الرمح في الأرض", "يرتطم سن الرمح المعدني بالأرض أولاً", "يُرمى من تحت مستوى الكتف", "يلف اللاعب دورة كاملة قبل الرمي"], correct: 1, feedback: "مهم جداً! مش شرط الرمح ينغرس، المهم السن يلمس الأرض قبل أي جزء تاني." },
+            { q: "تعتبر المحاولة فاشلة في الوثب الطويل إذا:", options: ["هبط اللاعب بالقدمين معاً", "لمس حفرة الرمل بأي جزء خلف القدمين", "ارتقى بقدم واحدة", "خرج من جانبي الحفرة"], correct: 1, feedback: "تمام! لو إيدك رجعت وراك ولمست الرمل، القياس هيكون من إيدك. لازم تقع قدام." },
+            { q: "التسلسل الصحيح للوثب الثلاثي هو:", options: ["خطوة -> حجلة -> وثبة", "وثبة -> خطوة -> حجلة", "حجلة -> خطوة -> وثبة", "حجلة -> حجلة -> وثبة"], correct: 2, feedback: "عاش! الترتيب ده أساسي: حجلة (Hop) على نفس الرجل، ثم خطوة (Step) على الرجل الأخرى، ثم وثبة (Jump)." },
+            { q: "ما هو الزمن المسموح به لبدء المحاولة في مسابقات الميدان؟", options: ["30 ثانية", "دقيقتان", "دقيقة واحدة (60 ثانية)", "15 ثانية"], correct: 2, feedback: "صح! اللاعب عنده دقيقة واحدة من وقت النداء عليه عشان يبدأ محاولته." },
+
+            // المراحل الفنية والميكانيكا
+            { q: "ما هو العامل الأكثر تأثيراً في مسافة الوثب الطويل؟", options: ["قوة الذراعين", "سرعة الاقتراب", "وزن اللاعب", "مرونة الحوض"], correct: 1, feedback: "السرعة هي كل حاجة! كل ما كنت أسرع عند الارتقاء، كل ما طرت أبعد." },
+            { q: "طريقة الطيران الأنسب للمبتدئين في الوثب الطويل هي:", options: ["المشي في الهواء", "التعلق", "القرفصاء (الشراع)", "الدوران"], correct: 2, feedback: "تمام! القرفصاء هي الأسهل في التعلم والتطبيق للمبتدئين." },
+            { q: "في مرحلة 'وضع الدفع' في الجلة، يكون وزن الجسم مرتكزا على:", options: ["القدمين بالتساوي", "القدم اليسرى (الأمامية)", "القدم اليمنى (الخلفية)", "كعب القدمين"], correct: 2, feedback: "صح! القوة كلها بتتجمع على القدم الخلفية (اليمنى للي بيرمي باليمين) عشان تعمل دفع انفجاري." },
+            { q: "أي من مسكات الرمح التالية يكون فيها الرمح بين إصبعي السبابة والوسطى؟", options: ["المسكة الأمريكية", "المسكة المقصية (شكل V)", "المسكة الفنلندية", "المسكة الهنغارية"], correct: 1, feedback: "بالظبط! المسكة المقصية أو (V-Grip) هي اللي الرمح بيمر فيها بين السبابة والوسطى." },
+            { q: "ما الهدف الرئيسي من مرحلة 'التغطية' أو 'الاتزان' في نهاية الرمي؟", options: ["زيادة مسافة الرمية", "إعطاء شكل جمالي", "منع اللاعب من الخروج من الدائرة (Foul)", "إرخاء العضلات"], correct: 2, feedback: "مهمة جداً! التغطية هي فرملة الجسم عشان اللاعب ميقعش قدام ويعمل فاول." },
+            { q: "في الوثب الثلاثي، أي مرحلة تغطي أقل مسافة عادةً؟", options: ["الحجلة (Hop)", "الخطوة (Step)", "الوثبة (Jump)", "كلهم متساويين"], correct: 1, feedback: "صح! الخطوة (Step) هي اللي بتغطي أقل مسافة، بينما الحجلة (Hop) هي الأطول غالباً." },
+
+            // أسئلة متنوعة من الملخص
+            { q: "كيف يتم حسم التعادل بين متسابقين في المركز الأول؟", options: ["عملة معدنية", "إعادة المحاولات", "النظر إلى ثاني أفضل محاولة", "حسب وزن اللاعب"], correct: 2, feedback: "مظبوط! بنشوف مين فيهم عنده تاني أحسن رمية أو وثبة." },
+            { q: "هل تلغى المحاولة إذا انكسر الرمح في الهواء؟", options: ["نعم، تعتبر فاشلة", "لا، تُعاد المحاولة إذا لم يرتكب اللاعب خطأ", "نعم، ويتم استبعاد اللاعب", "لا، ويتم قياس مكان سقوط الجزء الأكبر"], correct: 1, feedback: "تمام! دي حالة استثنائية، المحاولة بتتعاد طالما اللاعب معملش فاول." },
+            { q: "في أي مسابقة يُسمح بارتداء القفازات؟", options: ["دفع الجلة", "رمي الرمح", "رمي المطرقة", "كل ما سبق"], correct: 2, feedback: "صح! المطرقة هي المسابقة الوحيدة اللي مسموح فيها بالقفازات لحماية اليد." },
+            { q: "زاوية الانطلاق المثالية للرمح هي:", options: ["~29 درجة", "~40 درجة", "~45 درجة", "~20 درجة"], correct: 0, feedback: "عاش! زاوية الرمح حوالي 29 درجة. الـ 40 درجة دي قريبة من الجلة." },
+            { q: "مسابقة العشاري (Decathlon) هي مسابقة للـ... وتقام على...؟", options: ["للرجال / يوم واحد", "للنساء / يومين", "للرجال / يومين", "للنساء / يوم واحد"], correct: 2, feedback: "صح! العشاري (10 مسابقات) للرجال على يومين." },
+            { q: "مسابقة السباعي (Heptathlon) هي مسابقة للـ... وتقام على...؟", options: ["للرجال / يومين", "للنساء / يومين", "للرجال / يوم واحد", "للنساء / يوم واحد"], correct: 1, feedback: "ممتاز! السباعي (7 مسابقات) للسيدات على يومين." },
+            { q: "الوضع الصحيح للجلة قبل الدفع يكون:", options: ["بعيدة عن الرقبة", "في راحة اليد", "أسفل الفك وأمام الرقبة وفوق الترقوة", "خلف الرأس"], correct: 2, feedback: "بالظبط! لازم تكون الجلة لازقة في رقبتك عشان مسار القوة يكون صح." }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        const totalQ = quizData.length;
+
+        const screenStart = document.getElementById('start-screen');
+        const screenQuestion = document.getElementById('question-screen');
+        const screenResult = document.getElementById('result-screen');
+        
+        const elQText = document.getElementById('question-text');
+        const elOptions = document.getElementById('options-grid');
+        const elFeedback = document.getElementById('feedback');
+        const elNextBtn = document.getElementById('next-btn');
+        
+        const elScore = document.getElementById('score');
+        const elQCurrent = document.getElementById('q-current');
+        const elQTotal = document.getElementById('q-total');
+        const elProgress = document.getElementById('progress');
+
+        function startQuiz() {
+            screenStart.classList.remove('active');
+            screenQuestion.classList.add('active');
+            elQTotal.textContent = totalQ;
+            shuffleArray(quizData); // To make it interesting each time
+            loadQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function loadQuestion() {
+            elFeedback.className = 'feedback-box';
+            elFeedback.innerHTML = '';
+            elNextBtn.style.display = 'none';
+            elOptions.innerHTML = '';
+
+            const data = quizData[currentQ];
+            elQCurrent.textContent = currentQ + 1;
+            elProgress.style.width = `${((currentQ) / totalQ) * 100}%`;
+            
+            elQText.textContent = data.q;
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(index, btn);
+                elOptions.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            const data = quizData[currentQ];
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            allBtns.forEach(b => b.classList.add('disabled'));
+
+            if (selectedIndex === data.correct) {
+                btnElement.classList.add('correct');
+                score++;
+                elScore.textContent = score * 10;
+                showFeedback(`✔️ ${data.feedback}`, 'success');
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[data.correct].classList.add('correct');
+                showFeedback(`❌ ${data.feedback}`, 'error');
+            }
+
+            elProgress.style.width = `${((currentQ + 1) / totalQ) * 100}%`;
+            elNextBtn.style.display = 'block';
+        }
+
+        function showFeedback(text, type) {
+            elFeedback.innerHTML = text;
+            elFeedback.classList.add(type, 'show');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ < totalQ) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            screenQuestion.classList.remove('active');
+            screenResult.classList.add('active');
+            
+            const finalScoreEl = document.getElementById('final-score');
+            const rankTitle = document.getElementById('rank-title');
+            const resultMsg = document.getElementById('result-msg');
+            const percentage = Math.round((score / totalQ) * 100);
+            
+            finalScoreEl.textContent = `${percentage}%`;
+
+            if (percentage >= 90) {
+                rankTitle.textContent = "أسطورة الميدان 🥇";
+                resultMsg.textContent = `عاش يا وحش! جاوبت ${score} من ${totalQ}. أنت مقفل المادة وجاهز للامتحان.`;
+            } else if (percentage >= 70) {
+                rankTitle.textContent = "لاعب محترف 🥈";
+                resultMsg.textContent = `مستوى عالي! جاوبت ${score} من ${totalQ}. شوية تركيز وهتقفل.`;
+            } else if (percentage >= 50) {
+                rankTitle.textContent = "ناجح ومكمل 🥉";
+                resultMsg.textContent = `عديت! جاوبت ${score} من ${totalQ}. محتاج تراجع القوانين والمقاسات تاني.`;
+            } else {
+                rankTitle.textContent = "محتاج معسكر تدريبي 💀";
+                resultMsg.textContent = `جاوبت ${score} بس من ${totalQ}. ركز والعب تاني، الأسئلة دي هي اللي بتيجي.`;
+            }
+        }
+    </script>
+</body>
+</html>
