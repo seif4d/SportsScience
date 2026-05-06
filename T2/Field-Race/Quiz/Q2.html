@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#000000">
+    <title>Matrix Quiz | اختبار الميدان v2.0</title>
+    
+    <!-- خطوط جوجل (Changa) - له طابع تقني -->
+    <link href="https://fonts.googleapis.com/css2?family=Changa:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-dark: #000000;
+            --surface: #0a0a0a;
+            --primary-neon: #00FF41; /* أخضر الماتركس */
+            --secondary-neon: #39FF14;
+            --danger-neon: #FF073A;
+            --text-main: #FFFFFF;
+            --text-muted: #a0a0a0;
+            --glass-border: rgba(0, 255, 65, 0.2);
+        }
+
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Changa', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background-image:
+                linear-gradient(rgba(0, 255, 65, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 65, 0.05) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+
+        .app-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            border-bottom: 1px solid var(--glass-border);
+            z-index: 10;
+        }
+
+        .score-board {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--primary-neon);
+            text-shadow: 0 0 10px var(--primary-neon);
+        }
+
+        .question-counter {
+            font-weight: 600;
+            color: var(--text-muted);
+            background: rgba(0, 255, 65, 0.1);
+            padding: 5px 12px;
+            border-radius: 20px;
+        }
+
+        .progress-container { width: 100%; height: 2px; background: rgba(0, 255, 65, 0.1); }
+        .progress-bar {
+            height: 100%; width: 0%;
+            background: var(--primary-neon);
+            transition: width 0.4s ease;
+            box-shadow: 0 0 5px var(--primary-neon);
+        }
+
+        .main-container {
+            flex-grow: 1; padding: 20px;
+            overflow-y: auto; display: flex; flex-direction: column;
+            scrollbar-width: none; max-width: 600px; margin: 0 auto; width: 100%;
+        }
+        .main-container::-webkit-scrollbar { display: none; }
+
+        .screen { display: none; flex-direction: column; animation: glitch-load 0.5s; }
+        .screen.active { display: flex; }
+
+        .start-screen { text-align: center; justify-content: center; height: 100%; gap: 20px; }
+        .start-icon { font-size: 5rem; color: var(--primary-neon); animation: flicker 2s infinite; }
+        .start-title { font-size: 2.5rem; font-weight: 700; line-height: 1.2; }
+        .start-desc { color: var(--text-muted); font-size: 1.1rem; }
+
+        .question-card {
+            background: var(--surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 0; /* شكل حاد */
+            padding: 25px 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .question-text { font-size: 1.3rem; font-weight: 600; line-height: 1.6; }
+
+        .options-grid { display: flex; flex-direction: column; gap: 12px; }
+        .option-btn {
+            background: transparent;
+            border: 2px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 15px 20px;
+            border-radius: 0;
+            font-size: 1.05rem;
+            font-weight: 600;
+            text-align: right;
+            cursor: pointer;
+            transition: all 0.2s;
+            position: relative;
+        }
+        .option-btn:hover { background: rgba(0, 255, 65, 0.1); color: var(--primary-neon); border-color: var(--primary-neon); }
+        .option-btn:active { transform: scale(0.98); }
+
+        .option-btn.correct { background: rgba(0, 255, 65, 0.15); border-color: var(--secondary-neon); color: var(--secondary-neon); }
+        .option-btn.wrong { background: rgba(255, 7, 58, 0.15); border-color: var(--danger-neon); color: var(--danger-neon); }
+        .option-btn.disabled { pointer-events: none; opacity: 0.5; }
+        .option-btn.correct.disabled { opacity: 1; }
+
+        .feedback-box {
+            margin-top: 20px; padding: 15px; border-radius: 0;
+            font-size: 0.95rem; line-height: 1.5;
+            display: none; animation: slideUp 0.3s ease forwards;
+        }
+        .feedback-box.show { display: block; }
+        .feedback-box.success { background: rgba(0, 255, 65, 0.1); border-left: 4px solid var(--secondary-neon); }
+        .feedback-box.error { background: rgba(255, 7, 58, 0.1); border-left: 4px solid var(--danger-neon); }
+
+        .action-btn {
+            margin-top: 20px; background: var(--primary-neon);
+            color: #000; border: none; padding: 15px;
+            border-radius: 0; font-size: 1.2rem; font-weight: 700;
+            width: 100%; cursor: pointer;
+            transition: all 0.2s;
+        }
+        .action-btn:hover { box-shadow: 0 0 15px var(--primary-neon); }
+        .next-btn { display: none; }
+
+        .result-screen { text-align: center; justify-content: center; height: 100%; gap: 15px; }
+        .final-score { font-size: 4rem; font-weight: 700; color: var(--secondary-neon); }
+        .rank-title { font-size: 1.8rem; color: var(--primary-neon); margin-bottom: 10px; }
+
+        @keyframes flicker { 0%, 100% { opacity: 1; } 50% { opacity: 0.5; } }
+        @keyframes glitch-load { 0% { transform: translateX(5%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+    </style>
+</head>
+<body>
+    <header class="app-header">
+        <div class="score-board"><span id="score">0</span></div>
+        <div class="question-counter"><span id="q-current">0</span> / <span id="q-total">0</span></div>
+    </header>
+    
+    <div class="progress-container">
+        <div class="progress-bar" id="progress"></div>
+    </div>
+
+    <main class="main-container">
+        
+        <div id="start-screen" class="screen active start-screen">
+            <div class="start-icon"><i class="fa-solid fa-code"></i></div>
+            <div class="start-title">QUIZ v2.0</div>
+            <p class="start-desc">تم تحديث بنك الأسئلة. 30 تحدي جديد في انتظارك. هل أنت مستعد للاتصال؟</p>
+            <button class="action-btn" onclick="startQuiz()">[ RUN_TEST ]</button>
+        </div>
+
+        <div id="question-screen" class="screen">
+            <div class="question-card">
+                <div class="question-text" id="question-text"></div>
+            </div>
+            <div class="options-grid" id="options-grid"></div>
+            <div id="feedback" class="feedback-box"></div>
+            <button id="next-btn" class="action-btn next-btn" onclick="nextQuestion()">[ NEXT ]</button>
+        </div>
+
+        <div id="result-screen" class="screen result-screen">
+            <div><i class="fa-solid fa-shield-halved" style="font-size: 4rem; color: var(--primary-neon); margin-bottom: 10px;"></i></div>
+            <div class="rank-title" id="rank-title"></div>
+            <div class="final-score" id="final-score"></div>
+            <p id="result-msg" style="color: var(--text-muted); font-size: 1.1rem; margin-bottom: 20px;"></p>
+            <button class="action-btn" onclick="location.reload()">[ RESTART_SEQUENCE ]</button>
+        </div>
+
+    </main>
+
+    <script>
+        // === بنك الأسئلة الجديد (v2.0) ===
+        const quizData = [
+            // تفاصيل دقيقة في المقاسات
+            { q: "ما هو سمك الإطار الحديدي المحيط بدائرة دفع الجلة؟", options: ["10 سم", "6 ملم", "2 سم", "1 ملم"], correct: 1, feedback: "بالمللي! سمكه 6 ملم، وهو حد فاصل مهم بين داخل وخارج الدائرة." },
+            { q: "لوحة الصلصال في الوثب ترتفع عن لوحة الارتقاء مسافة:", options: ["10 سم", "1 سم", "7 ملم", "لا ترتفع"], correct: 2, feedback: "دقيقة جداً! ارتفاعها 7 ملم فقط، عشان أي لمسة خفيفة تظهر." },
+            { q: "عرض ممر الاقتراب في رمي الرمح هو:", options: ["1.22 متر", "2.75 متر", "4 متر", "5 متر"], correct: 2, feedback: "صح! ممر الرمح أعرض من الوثب (4 متر)، بينما الوثب 1.22 متر." },
+            { q: "ما هو عرض لوحة الارتقاء في الوثب الطويل؟", options: ["10 سم", "30 سم", "20 سم", "15 سم"], correct: 2, feedback: "تمام! عرضها 20 سم، وطولها 1.22 متر." },
+            { q: "وزن الجلة للناشئين والشباب (تحت 20 سنة) هو:", options: ["4 كجم / 5 كجم", "5 كجم / 6 كجم", "6 كجم / 7 كجم", "نفس وزن الرجال"], correct: 1, feedback: "ممتاز! 5 كجم للناشئين و 6 كجم للشباب. الـ 7.260 كجم دي للرجال (الفئة المفتوحة)." },
+
+            // قوانين وحالات خاصة
+            { q: "في رمي الرمح، يُمنع على اللاعب إدارة ظهره لقطاع الرمي...", options: ["فقط أثناء الرمي", "فقط أثناء الجري", "حتى يتم التخلص من الرمح", "مسموح دائماً"], correct: 2, feedback: "قانون مهم! اللاعب لازم يفضل مواجه للقطاع لحد ما الرمح يطير من إيده." },
+            { q: "في الوثب الثلاثي، لو اللاعب ارتقى بقدم (يمين)، ما هو تسلسل هبوطه الصحيح؟", options: ["هبوط باليمين، ثم باليسار، ثم بالقدمين", "هبوط باليسار، ثم باليمين، ثم بالقدمين", "هبوط باليمين، ثم باليمين مرة أخرى، ثم بالقدمين", "هبوط بالقدمين في كل مرة"], correct: 0, feedback: "الحجلة على نفس القدم (يمين)، ثم الخطوة على القدم العكسية (يسار)، ثم الوثبة بالقدمين." },
+            { q: "أي من هذه المواد مسموح بوضعها على اليد في دفع الجلة؟", options: ["شريط لاصق لربط الأصابع", "قفازات", "بودرة (مغنيسيوم)", "زيت لتقليل الاحتكاك"], correct: 2, feedback: "فقط المغنيسيوم (البودرة) مسموح به. ربط الأصابع مسموح فقط بتقرير طبي." },
+            { q: "الارتقاء من خارج نهايتي لوحة الارتقاء (من اليمين أو اليسار) يعتبر:", options: ["محاولة صحيحة", "محاولة فاشلة", "تُعاد المحاولة", "يتم القياس من مكان الارتقاء"], correct: 1, feedback: "فاول! لازم الارتقاء يتم من داخل مساحة اللوحة نفسها." },
+            { q: "إذا سقطت الجلة على خط قطاع الرمي بالضبط، فالمحاولة تعتبر:", options: ["صحيحة", "فاشلة", "تُعاد", "يتم قياس نصف المسافة"], correct: 1, feedback: "خطأ! الخط نفسه يعتبر خارج القطاع. لازم الجلة تسقط بالكامل داخل الخطين." },
+
+            // ميكانيكا حيوية وتكنيك متقدم
+            { q: "ما هو الهدف من 'خطوة التقاطع' (الخطوة الرابعة) في الخطوات الخمس التوقيتية لرمي الرمح؟", options: ["إبطاء السرعة للتركيز", "عمل دفعة قوية وزيادة زخم الجسم", "إراحة عضلات الرجلين", "الاستعداد للتغطية"], correct: 1, feedback: "هي دي التريكة! خطوة التقاطع بتعمل stretch للجذع وبتشحن الجسم زي السوستة للرمية." },
+            { q: "في الوثب الطويل، الخطوة الأخيرة قبل الارتقاء تكون عادةً:", options: ["أطول من التي قبلها", "بنفس طول التي قبلها", "أقصر من التي قبلها", "لا علاقة لها بالخطوات الأخرى"], correct: 2, feedback: "صح! تقصير الخطوة الأخيرة يساعد على خفض مركز الثقل قليلاً ثم رفعه بقوة أثناء الارتقاء." },
+            { q: "في أي مرحلة من دفع الجلة يكون الظهر مواجهاً لقطاع الرمي؟", options: ["وقفة الاستعداد والزحف ووضع الدفع", "فقط عند الدفع النهائي", "فقط في وقفة الاستعداد", "لا يكون الظهر مواجهاً أبداً"], correct: 0, feedback: "ممتاز! اللاعب بيفضل مدي ظهره للقطاع في كل المراحل دي عشان يولد أقصى قوة دورانية." },
+            { q: "زاوية انطلاق الوثب الطويل المثالية تتراوح بين:", options: ["40-45 درجة", "30-35 درجة", "20-24 درجة", "10-15 درجة"], correct: 2, feedback: "صح! عشان السرعة الأفقية عالية، زاوية الانطلاق بتكون أقل من 45 درجة (اللي هي مثالية في غياب السرعة)." },
+            { q: "في الوثب الثلاثي، المدرسة البولندية تعتمد على:", options: ["القوة العضلية", "السرعة والإيقاع", "طول القامة", "المرونة فقط"], correct: 1, feedback: "تمام! المدرسة البولندية بتوزع النسب بشكل متوازن (35%، 30%، 35%) معتمدة على السرعة." },
+            
+            // أسئلة متنوعة وشاملة
+            { q: "في مسابقة السباعي للسيدات، أي من هذه المسابقات غير موجودة؟", options: ["وثب عالي", "100 متر حواجز", "رمي الرمح", "رمي القرص"], correct: 3, feedback: "صعب ده! السباعي للسيدات لا يتضمن رمي القرص. (السبع مسابقات هي: 100م حواجز، وثب عالي، دفع جلة، 200م، وثب طويل، رمي رمح، 800م)." },
+            { q: "ما هو نصف قطر قوس الرمي في مسابقة رمي الرمح؟", options: ["4 متر", "2.135 متر", "8 متر", "10 متر"], correct: 2, feedback: "صح! القوس اللي اللاعب بيرمي من خلفه نصف قطره 8 أمتار." },
+            { q: "الاسم الإنجليزي لمسابقة 'الوثب الثلاثي' هو:", options: ["Long Jump", "High Jump", "Triple Jump", "Step Jump"], correct: 2, feedback: "سهلة دي! Triple Jump." },
+            { q: "لون لوحة الإيقاف في دفع الجلة يجب أن يكون:", options: ["أسود", "أحمر", "أبيض", "أي لون"], correct: 2, feedback: "القانون واضح، لازم تكون مدهونة باللون الأبيض." },
+            { q: "في أي مرحلة من مراحل دفع الجلة، يقوم اللاعب بعمل 'الميزان' و 'التكور'؟", options: ["الزحف", "الدفع", "وقفة الاستعداد", "التحفز"], correct: 3, feedback: "بالظبط! مرحلة التحفز هي مرحلة شحن الطاقة قبل الزحف." },
+            { q: "ما هو الهدف من 'لف مشط القدم للداخل' أثناء الزحف في دفع الجلة؟", options: ["لإبطاء الحركة", "للمساعدة في الحفاظ على وضع الجسم مغلقاً", "لزيادة طول الخطوة", "لا يوجد هدف معين"], correct: 1, feedback: "تكتيك مهم! لف المشط للداخل بيحافظ على عزم الدوران وبيمنع فتح الجسم مبكراً." },
+            { q: "أي جزء من اليد لا يجب أن تلمسه الجلة عند مسكها؟", options: ["سلاميات الأصابع", "قواعد الأصابع", "راحة الكف (التجويف)", "الإبهام"], correct: 2, feedback: "تمام! لو الجلة سندت في راحة الكف، ده بيقلل من قوة الدفع وبيكون مسك خاطئ." },
+            { q: "الارتقاء بالقدمين معاً في الوثب الطويل يعتبر:", options: ["تكنيك متقدم", "محاولة فاشلة", "محاولة صحيحة", "يتم قياسها بشكل مختلف"], correct: 1, feedback: "فاول! الارتقاء في الوثب الطويل والثلاثي يجب أن يكون بقدم واحدة فقط." },
+            { q: "ما هو 'وضع التعلق' في الوثب الطويل؟", options: ["الجري في الهواء", "ضم الركبتين للصدر", "تقوس الجذع ومد الرجلين للخلف", "الدوران حول المحور الطولي"], correct: 2, feedback: "صح! هو تقوس الجذع للخلف مع مد الرجلين والذراعين، وهي طريقة قديمة نسبياً." },
+            { q: "ما هو عرض الخطوط التي تحدد قطاع الرمي في الجلة والرمح؟", options: ["10 سم", "2 سم", "5 سم", "1 سم"], correct: 2, feedback: "المقاس ده ثابت، عرض الخطوط البيضاء بيكون 5 سم." },
+            { q: "ما هي أول مسابقة في اليوم الأول لمسابقة العشاري للرجال؟", options: ["الوثب الطويل", "دفع الجلة", "عدو 100 متر", "الوثب العالي"], correct: 2, feedback: "دايماً بيبدأوا بأسرع مسابقة، وهي عدو 100 متر." },
+            { q: "ما هي آخر مسابقة في اليوم الثاني لمسابقة السباعي للسيدات؟", options: ["رمي الرمح", "عدو 800 متر", "الوثب الطويل", "200 متر"], correct: 1, feedback: "بيختموها بأصعب سباق تحمل، وهو عدو 800 متر." },
+            { q: "إذا حدث تعادل في المركز الثامن بعد أول 3 محاولات، ماذا يحدث؟", options: ["يتم استبعادهم جميعاً", "يتم عمل قرعة", "كل اللاعبين المتعادلين يحصلون على 3 محاولات إضافية", "يتم حسمه بثاني أفضل محاولة"], correct: 2, feedback: "قانون مهم! كل المتعادلين على المركز الثامن بيكملوا وياخدوا 3 محاولات إضافية." },
+            { q: "كيف يتم ترتيب المتنافسين في بداية أي مسابقة؟", options: ["حسب الأفضلية", "حسب الترتيب الأبجدي", "عن طريق القرعة", "حسب رغبة اللاعبين"], correct: 2, feedback: "دايماً بالقرعة لتحقيق العدالة." },
+            { q: "الاسم الإنجليزي لمرحلة 'الارتقاء' هو:", options: ["Flight", "Landing", "Approach", "Take-off"], correct: 3, feedback: "تمام! Approach (اقتراب)، Take-off (ارتقاء)، Flight (طيران)، Landing (هبوط)." }
+        ];
+
+        let currentQ = 0;
+        let score = 0;
+        let totalQ = quizData.length;
+
+        const screenStart = document.getElementById('start-screen');
+        const screenQuestion = document.getElementById('question-screen');
+        const screenResult = document.getElementById('result-screen');
+        
+        const elQText = document.getElementById('question-text');
+        const elOptions = document.getElementById('options-grid');
+        const elFeedback = document.getElementById('feedback');
+        const elNextBtn = document.getElementById('next-btn');
+        
+        const elScore = document.getElementById('score');
+        const elQCurrent = document.getElementById('q-current');
+        const elQTotal = document.getElementById('q-total');
+        const elProgress = document.getElementById('progress');
+
+        function startQuiz() {
+            screenStart.classList.remove('active');
+            screenQuestion.classList.add('active');
+            elQTotal.textContent = totalQ;
+            shuffleArray(quizData);
+            loadQuestion();
+        }
+
+        function shuffleArray(array) {
+            for (let i = array.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [array[i], array[j]] = [array[j], array[i]];
+            }
+        }
+
+        function loadQuestion() {
+            elFeedback.className = 'feedback-box';
+            elFeedback.innerHTML = '';
+            elNextBtn.style.display = 'none';
+            elOptions.innerHTML = '';
+
+            const data = quizData[currentQ];
+            elQCurrent.textContent = currentQ + 1;
+            elProgress.style.width = `${((currentQ) / totalQ) * 100}%`;
+            
+            elQText.textContent = data.q;
+
+            data.options.forEach((opt, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'option-btn';
+                btn.textContent = opt;
+                btn.onclick = () => selectAnswer(index, btn);
+                elOptions.appendChild(btn);
+            });
+        }
+
+        function selectAnswer(selectedIndex, btnElement) {
+            const data = quizData[currentQ];
+            const allBtns = document.querySelectorAll('.option-btn');
+            
+            allBtns.forEach(b => b.classList.add('disabled'));
+
+            if (selectedIndex === data.correct) {
+                btnElement.classList.add('correct');
+                score++;
+                elScore.textContent = score;
+                showFeedback(`[//] ACCESS GRANTED: ${data.feedback}`, 'success');
+            } else {
+                btnElement.classList.add('wrong');
+                allBtns[data.correct].classList.add('correct');
+                showFeedback(`[!] ACCESS DENIED: ${data.feedback}`, 'error');
+            }
+
+            elProgress.style.width = `${((currentQ + 1) / totalQ) * 100}%`;
+            elNextBtn.style.display = 'block';
+        }
+
+        function showFeedback(text, type) {
+            elFeedback.innerHTML = text;
+            elFeedback.classList.add(type, 'show');
+        }
+
+        function nextQuestion() {
+            currentQ++;
+            if (currentQ < totalQ) {
+                loadQuestion();
+            } else {
+                showResults();
+            }
+        }
+
+        function showResults() {
+            screenQuestion.classList.remove('active');
+            screenResult.classList.add('active');
+            
+            const finalScoreEl = document.getElementById('final-score');
+            const rankTitle = document.getElementById('rank-title');
+            const resultMsg = document.getElementById('result-msg');
+            const percentage = Math.round((score / totalQ) * 100);
+            
+            finalScoreEl.textContent = `${percentage}%`;
+
+            if (percentage >= 90) {
+                rankTitle.textContent = "SYSTEM_MASTER 🥇";
+                resultMsg.textContent = `[ STATUS: PERFECT ] جبت ${score} من ${totalQ}. أنت متحكم في النظام بالكامل.`;
+            } else if (percentage >= 70) {
+                rankTitle.textContent = "ELITE_OPERATOR 🥈";
+                resultMsg.textContent = `[ STATUS: EFFICIENT ] جبت ${score} من ${totalQ}. أداء قوي، أنت من النخبة.`;
+            } else if (percentage >= 50) {
+                rankTitle.textContent = "ROOKIE_AGENT 🥉";
+                resultMsg.textContent = `[ STATUS: PASSED ] جبت ${score} من ${totalQ}. نجحت في المهمة، لكن محتاج تدريب أكتر.`;
+            } else {
+                rankTitle.textContent = "CONNECTION_LOST 💀";
+                resultMsg.textContent = `[ STATUS: FAILED ] جبت ${score} من ${totalQ}. لازم تعمل إعادة تشغيل للنظام وتذاكر تاني.`;
+            }
+        }
+    </script>
+</body>
+</html>
