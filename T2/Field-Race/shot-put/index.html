@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#0d0806">
+    <meta name="description" content="الدليل الشامل لاحتراف دفع الجلة - شرح تفصيلي وتكنيك بأسلوب عصري.">
+    
+    <title>Shot Put Beast | دفع الجلة</title>
+    
+    <!-- خطوط جوجل -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === المتغيرات والألوان (Fire/Power Vibe) === */
+        :root {
+            --bg-dark: #0d0806;
+            --surface: #1a100d;
+            --primary-neon: #FF5100; /* برتقالي ناري */
+            --secondary-neon: #FFB300; /* أصفر/ذهبي */
+            --accent-danger: #FF003C; /* أحمر للأخطاء */
+            --text-main: #FFFFFF;
+            --text-muted: #a89f9c;
+            --glass-bg: rgba(26, 16, 13, 0.7);
+            --glass-border: rgba(255, 81, 0, 0.15);
+            --safe-bottom: 90px;
+        }
+
+        /* === الإعدادات الأساسية === */
+        * {
+            margin: 0; padding: 0; box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            scrollbar-width: none; 
+            scroll-behavior: smooth;
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* === تأثيرات الخلفية العائمة === */
+        .ambient-glow {
+            position: fixed; width: 400px; height: 400px;
+            background: radial-gradient(circle, rgba(255,81,0,0.15) 0%, rgba(0,0,0,0) 70%);
+            top: -150px; left: -100px; z-index: -1;
+            border-radius: 50%; pointer-events: none;
+        }
+        .ambient-glow.right {
+            background: radial-gradient(circle, rgba(255,179,0,0.1) 0%, rgba(0,0,0,0) 70%);
+            top: 50%; right: -150px; left: auto;
+        }
+
+        /* === الـ App Header === */
+        .app-header {
+            position: fixed; top: 0; width: 100%;
+            padding: 15px 20px;
+            background: rgba(13, 8, 6, 0.85);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 1000;
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .app-header .logo {
+            font-weight: 900; font-size: 1.3rem;
+            display: flex; align-items: center; gap: 8px;
+            color: #fff;
+        }
+        .app-header .logo i { color: var(--primary-neon); }
+        .app-header .uni-badge {
+            font-size: 0.75rem; font-weight: bold;
+            background: rgba(255, 179, 0, 0.1);
+            padding: 6px 12px; border-radius: 20px;
+            border: 1px solid rgba(255, 179, 0, 0.3);
+            color: var(--secondary-neon);
+        }
+
+        /* === الـ Main Container === */
+        .app-content {
+            padding-top: 80px;
+            padding-bottom: calc(var(--safe-bottom) + 30px);
+        }
+
+        /* === أنيميشن الدخول (Scroll Reveal) === */
+        .fade-up {
+            opacity: 0; transform: translateY(30px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+        /* === Hero Section === */
+        .hero {
+            padding: 30px 20px; text-align: center;
+            display: flex; flex-direction: column; align-items: center; gap: 15px;
+        }
+        .gamer-tag {
+            background: linear-gradient(90deg, rgba(255,81,0,0.15), rgba(255,179,0,0.15));
+            border: 1px solid rgba(255,81,0,0.3);
+            color: var(--primary-neon);
+            padding: 6px 20px; border-radius: 30px;
+            font-size: 0.85rem; font-weight: bold;
+            display: inline-flex; align-items: center; gap: 8px;
+        }
+        .hero h1 {
+            font-size: 2.8rem; font-weight: 900; line-height: 1.2;
+        }
+        .hero h1 span {
+            background: linear-gradient(to left, var(--primary-neon), var(--secondary-neon));
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero p {
+            color: var(--text-muted); font-size: 1rem; line-height: 1.6; max-width: 90%;
+        }
+
+        /* === كارت الأداة (The Gear) === */
+        .gear-card {
+            margin: 0 20px; background: var(--surface);
+            border: 1px solid var(--glass-border); border-radius: 20px;
+            padding: 20px; display: flex; align-items: center; gap: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .gear-icon {
+            width: 60px; height: 60px; border-radius: 50%;
+            background: linear-gradient(135deg, #444, #111);
+            border: 2px solid var(--secondary-neon);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.5rem; color: #fff; flex-shrink: 0;
+            box-shadow: inset 0 0 10px rgba(255,255,255,0.2);
+        }
+        .gear-info h3 { color: var(--primary-neon); margin-bottom: 5px; font-size: 1.1rem; }
+        .gear-info p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.5; }
+        .weight-tags { display: flex; gap: 10px; margin-top: 10px; }
+        .weight-tags span {
+            background: rgba(255,255,255,0.05); padding: 4px 10px;
+            border-radius: 8px; font-size: 0.75rem; border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* === عناوين الأقسام === */
+        .section-header {
+            padding: 0 20px; margin: 40px 0 20px 0;
+            display: flex; align-items: center; gap: 12px;
+        }
+        .section-header h2 { font-size: 1.5rem; font-weight: 900; }
+        .section-header .icon-box {
+            width: 40px; height: 40px; border-radius: 12px;
+            background: rgba(255,81,0,0.1);
+            display: flex; justify-content: center; align-items: center;
+            font-size: 1.2rem; color: var(--primary-neon);
+        }
+
+        /* === السكرول الأفقي (Phases) === */
+        .horizontal-scroll {
+            display: flex; overflow-x: auto; scroll-snap-type: x mandatory;
+            gap: 15px; padding: 10px 20px 30px 20px; scrollbar-width: none;
+        }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        
+        .phase-card {
+            min-width: 85vw; background: var(--surface);
+            border: 1px solid var(--glass-border); border-radius: 24px;
+            padding: 25px; scroll-snap-align: center; position: relative;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+        }
+        .phase-card.active-card { border-color: var(--primary-neon); }
+        
+        .phase-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .phase-icon { font-size: 2.5rem; filter: drop-shadow(0 0 15px rgba(255, 81, 0, 0.4)); }
+        .phase-number {
+            font-size: 3rem; font-weight: 900; color: rgba(255,255,255,0.03);
+            position: absolute; top: 10px; left: 20px;
+        }
+        .phase-title { font-size: 1.3rem; font-weight: 900; color: #fff; margin-bottom: 5px; }
+        .phase-subtitle { color: var(--secondary-neon); font-size: 0.85rem; font-weight: bold; margin-bottom: 15px; }
+        
+        .phase-details li {
+            color: var(--text-muted); font-size: 0.95rem; margin-bottom: 12px;
+            line-height: 1.6; list-style-type: none; position: relative; padding-right: 20px;
+        }
+        .phase-details li::before {
+            content: '🔥'; position: absolute; right: 0; font-size: 0.8rem; top: 3px;
+        }
+
+        /* === شبكة القدرات والعضلات (Grid) === */
+        .grid-container { padding: 0 20px; display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid-card {
+            background: var(--glass-bg); border: 1px solid var(--glass-border);
+            border-radius: 16px; padding: 15px; text-align: center;
+        }
+        .grid-card i { font-size: 1.8rem; color: var(--secondary-neon); margin-bottom: 10px; }
+        .grid-card h4 { font-size: 0.9rem; color: #fff; margin-bottom: 5px; }
+        .grid-card p { font-size: 0.75rem; color: var(--text-muted); }
+        .grid-card.highlight { 
+            grid-column: span 2; background: linear-gradient(145deg, rgba(255,81,0,0.1), rgba(255,179,0,0.05)); 
+            border-color: var(--primary-neon); text-align: right; display: flex; align-items: center; gap: 15px;
+        }
+        .grid-card.highlight i { margin-bottom: 0; font-size: 2.5rem; color: var(--primary-neon); }
+
+        /* === Accordion (الأخطاء) === */
+        .red-flags-container { padding: 0 20px; }
+        .accordion-item {
+            background: var(--surface); border: 1px solid rgba(255, 0, 60, 0.2);
+            border-radius: 16px; margin-bottom: 15px; overflow: hidden;
+        }
+        .accordion-header {
+            padding: 18px 20px; display: flex; justify-content: space-between; align-items: center;
+            font-weight: bold; color: #fff; cursor: pointer;
+        }
+        .accordion-header i {
+            color: var(--accent-danger); transition: transform 0.3s;
+            background: rgba(255, 0, 60, 0.1); padding: 8px; border-radius: 50%;
+        }
+        .accordion-body {
+            max-height: 0; overflow: hidden; transition: max-height 0.4s ease; background: rgba(0,0,0,0.2);
+        }
+        .accordion-content { padding: 15px 20px; color: var(--text-muted); font-size: 0.9rem; line-height: 1.6; }
+        .accordion-item.active .accordion-body { max-height: 250px; }
+        .accordion-item.active .accordion-header i { transform: rotate(180deg); }
+
+        /* === قوانين السيرفر === */
+        .rules-container { padding: 0 20px; display: grid; gap: 15px; }
+        .rule-card {
+            background: var(--surface); border-right: 4px solid var(--secondary-neon);
+            padding: 15px 20px; border-radius: 12px;
+        }
+        .rule-card h4 { color: #fff; margin-bottom: 8px; font-size: 1rem; display: flex; align-items: center; gap: 8px;}
+        .rule-card h4 i { color: var(--secondary-neon); }
+        .rule-card p { color: var(--text-muted); font-size: 0.85rem; line-height: 1.5; }
+
+        /* === Floating Bottom Navigation === */
+        .bottom-nav {
+            position: fixed; bottom: 20px; left: 5%; width: 90%; height: 70px;
+            background: rgba(26, 16, 13, 0.9); backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.05); border-radius: 35px;
+            display: flex; justify-content: space-evenly; align-items: center;
+            z-index: 1000; box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+        }
+        .nav-item {
+            display: flex; flex-direction: column; align-items: center; gap: 4px;
+            color: var(--text-muted); text-decoration: none;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            padding: 10px; width: 60px;
+        }
+        .nav-item i { font-size: 1.3rem; }
+        .nav-item span { font-size: 0.65rem; font-weight: bold; opacity: 0; transform: translateY(10px); transition: all 0.3s; position: absolute; bottom: -15px;}
+        
+        .nav-item.active { color: var(--primary-neon); transform: translateY(-10px); }
+        .nav-item.active i { text-shadow: 0 0 15px var(--primary-neon); }
+        .nav-item.active span { opacity: 1; transform: translateY(0); bottom: -15px; }
+
+        /* Footer */
+        .app-footer { text-align: center; padding: 30px 20px 100px 20px; color: var(--text-muted); font-size: 0.8rem; line-height: 1.6;}
+        .app-footer span { color: var(--primary-neon); }
+
+    </style>
+</head>
+<body>
+
+    <!-- مؤثرات الإضاءة -->
+    <div class="ambient-glow"></div>
+    <div class="ambient-glow right"></div>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo"><i class="fa-solid fa-fire"></i> SP Beast</div>
+        <div class="uni-badge">
+            <i class="fa-solid fa-user-tie"></i> سيف الدبياني
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-content">
+
+        <!-- Hero Section -->
+        <section id="home" class="hero fade-up">
+            <div class="gamer-tag"><i class="fa-solid fa-dumbbell"></i> Raw Power Mode</div>
+            <h1>قوة انفجارية<br><span>دفع الجلة</span></h1>
+            <p>مش مجرد كورة حديد بتحدفها! دي لعبة بتختبر قوتك الانفجارية، التكنيك الدقيق، وتوجيه مسار طاقتك. جاهز تـ Level Up؟ 💥</p>
+        </section>
+
+        <!-- كارت الأداة -->
+        <div class="gear-card fade-up">
+            <div class="gear-icon"><i class="fa-solid fa-bowling-ball"></i></div>
+            <div class="gear-info">
+                <h3>الجلة (The Shot)</h3>
+                <p>كروية ملساء، مصنوعة من الحديد أو النحاس (لا تقل في ليونته عن النحاس).</p>
+                <div class="weight-tags">
+                    <span>الرجال: 7.260 كجم</span>
+                    <span>السيدات: 4 كجم</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Phases (التسلسل الحركي) -->
+        <div class="section-header fade-up" id="phases">
+            <div class="icon-box"><i class="fa-solid fa-shoe-prints"></i></div>
+            <h2>التسلسل الحركي (7 Levels)</h2>
+        </div>
+        
+        <div class="horizontal-scroll fade-up">
+            
+            <!-- Phase 1 -->
+            <div class="phase-card active-card">
+                <div class="phase-number">01</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">المسك والحمل (Grip)</div>
+                        <div class="phase-subtitle">التحكم في الأداة ✊</div>
+                    </div>
+                    <div class="phase-icon">🦾</div>
+                </div>
+                <ul class="phase-details">
+                    <li><strong>المسك:</strong> تسند الجلة على "مسند اليد" (المحصور بين نهاية سلاميات الأصابع وبداية العظام). الأصابع منتشرة بدون تباعد.</li>
+                    <li><strong>طرق المسك:</strong> ممكن الإبهام والخنصر على الجانبين، أو ثني الخنصر للمساعدة في السيطرة.</li>
+                    <li><strong>الحمل:</strong> توضع فوق عظمة الترقوة وأسفل الذقن، الكوع والساعد تحت الجلة.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-card">
+                <div class="phase-number">02</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">الاستعداد (Stance)</div>
+                        <div class="phase-subtitle">تظبيط الزوايا 🧍‍♂️</div>
+                    </div>
+                    <div class="phase-icon">🎯</div>
+                </div>
+                <ul class="phase-details">
+                    <li>الظهر مواجه لمقطع الرمي.</li>
+                    <li>الرجل اليمنى (قدم التزحلق) خلف الطوق مباشرة.</li>
+                    <li>الرجل اليسرى (الممرجحة) للخلف مرتكزه على المشط.</li>
+                    <li>الجذع عمودي والذراع اليسرى للأمام أعلى للـ Balance.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-card">
+                <div class="phase-number">03</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">التحفز (Glide Prep)</div>
+                        <div class="phase-subtitle">شحن السوستة (الميزان والتكور) 🔋</div>
+                    </div>
+                    <div class="phase-icon">⚖️</div>
+                </div>
+                <ul class="phase-details">
+                    <li>ميل الجذع للأمام حتى مستوى المقعدة.</li>
+                    <li><strong>الميزان:</strong> ثني الركبة اليمنى مع مرجحة اليسرى للخلف عالياً.</li>
+                    <li><strong>التكور:</strong> مرجحة سريعة للرجل اليسرى خلف اليمنى مع ارتفاع كعب اليمين قليلاً (وضع التكور).</li>
+                </ul>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-card">
+                <div class="phase-number">04</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">الزحف والسند (Glide)</div>
+                        <div class="phase-subtitle">اكتساب الدفعة الأولى 🚀</div>
+                    </div>
+                    <div class="phase-icon">💨</div>
+                </div>
+                <ul class="phase-details">
+                    <li>مرجحة بندولية قوية للرجل اليسرى للخلف نحو مقطع الرمي.</li>
+                    <li>اليد اليسرى ترتفع لتمنع دوران الكتفين مبكراً.</li>
+                    <li>زحف سريع للرجل اليمنى على الكعب لمنتصف الدائرة مع لف المشط للداخل.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 5 -->
+            <div class="phase-card">
+                <div class="phase-number">05</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">وضع الدفع (Power Position)</div>
+                        <div class="phase-subtitle">طاقة وضع عالية ⚡</div>
+                    </div>
+                    <div class="phase-icon">🔋</div>
+                </div>
+                <ul class="phase-details">
+                    <li>الوصول لوضع التحفز قبل الإطلاق لتوليد أكبر قوة ميكانيكية.</li>
+                    <li>القدمين على الأرض، اليمين في المنتصف واليسار على حافة لوحة الارتقاء.</li>
+                    <li>الظهر لا يزال مواجهاً لمقطع الرمي!</li>
+                </ul>
+            </div>
+
+            <!-- Phase 6 -->
+            <div class="phase-card">
+                <div class="phase-number">06</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">مرحلة الدفع (Delivery)</div>
+                        <div class="phase-subtitle">نقل السرعة للجلة 💥</div>
+                    </div>
+                    <div class="phase-icon">☄️</div>
+                </div>
+                <ul class="phase-details">
+                    <li>امتداد الرجل اليمنى (كعب ⬅️ ركبة ⬅️ فخذ) مع لف الجذع للأمام والأعلى.</li>
+                    <li>لف اليد اليسرى للخلف لفتح الصدر.</li>
+                    <li>بمجرد مواجهة الصدر للمقطع، تدفع الذراع اليمنى الجلة بزاوية <strong>39 - 42 درجة</strong>.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 7 -->
+            <div class="phase-card">
+                <div class="phase-number">07</div>
+                <div class="phase-header">
+                    <div>
+                        <div class="phase-title">المتابعة والتغطية (Recovery)</div>
+                        <div class="phase-subtitle">فرملة عشان متعملش فاول 🛑</div>
+                    </div>
+                    <div class="phase-icon">🛡️</div>
+                </div>
+                <ul class="phase-details">
+                    <li>الهدف: إيقاف اندفاع الجسم وحفظه داخل الدائرة.</li>
+                    <li>حركة تبديل: القدم اليمنى (الخلفية) تنتقل للأمام خلف لوحة الإيقاف.</li>
+                    <li>القدم اليسرى (الأمامية) ترجع للخلف والأعلى لحفظ التوازن.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Biomechanics & Abilities -->
+        <div class="section-header fade-up" id="physics">
+            <div class="icon-box" style="background: rgba(255, 179, 0, 0.1); color: var(--secondary-neon);"><i class="fa-solid fa-bolt"></i></div>
+            <h2>قدراتك وعضلاتك (Build Specs)</h2>
+        </div>
+        
+        <div class="grid-container fade-up">
+            <div class="grid-card highlight">
+                <i class="fa-solid fa-gauge-high"></i>
+                <div>
+                    <h4>السرعة + القوة = قدرة انفجارية</h4>
+                    <p>القوة المميزة بالسرعة هي العامل الأساسي لتحقيق أبعد مسافة (Speed Strength).</p>
+                </div>
+            </div>
+            <div class="grid-card">
+                <i class="fa-solid fa-person-arrow-up-from-line"></i>
+                <h4>عضلات الدفع العلوية</h4>
+                <p>العضلة الدالية، الظهرية العريضة، المنحرفة المربعة.</p>
+            </div>
+            <div class="grid-card">
+                <i class="fa-solid fa-dumbbell"></i>
+                <h4>عضلات الارتكاز السفلية</h4>
+                <p>القطنية، ذات الرأسين الفخذية، التوأمية، وتر أكيلس.</p>
+            </div>
+            <div class="grid-card">
+                <i class="fa-solid fa-person-running"></i>
+                <h4>الرشاقة والمرونة</h4>
+                <p>للقيام بحركة الزحف والدوران بسلاسة.</p>
+            </div>
+            <div class="grid-card">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <h4>التوافق والاتزان</h4>
+                <p>لعدم الخروج من الدائرة (Foul).</p>
+            </div>
+        </div>
+
+        <!-- Red Flags -->
+        <div class="section-header fade-up" id="errors">
+            <div class="icon-box" style="color: var(--accent-danger); background: rgba(255,0,60,0.1);"><i class="fa-solid fa-flag"></i></div>
+            <h2>قواعد الفاول (Fouls & Red Flags)</h2>
+        </div>
+        
+        <div class="red-flags-container fade-up">
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>🚩 خروج اللاعب من الدائرة</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        - <strong>ممنوع</strong> الخروج من الدائرة قبل أن تلمس الأداة الأرض.<br>
+                        - <strong>إجباري</strong> الخروج من <strong>النصف الخلفي</strong> للدائرة بعد انتهاء المحاولة.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>🚩 لمس الحواف والمناطق الممنوعة</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        - <strong>ممنوع</strong> لمس الحافة العلوية للطوق الحديدي أو لوحة الإيقاف أثناء الرمي.<br>
+                        - <strong>مسموح</strong> لمس الحافة الداخلية للطوق الحديدي.
+                    </div>
+                </div>
+            </div>
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    <span>🚩 مكان سقوط الجلة وأخطاء أخرى</span>
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        - يجب أن تسقط الجلة <strong>داخل</strong> خطي مقطع الرمي.<br>
+                        - الدفع يتم من <strong>داخل</strong> الدائرة فقط.<br>
+                        - <strong>ممنوع</strong> وضع أي مادة على اليد لمنع العرق.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules -->
+        <div class="section-header fade-up" id="rules">
+            <div class="icon-box"><i class="fa-solid fa-book-journal-whills"></i></div>
+            <h2>قوانين السيرفر (الملعب)</h2>
+        </div>
+        
+        <div class="rules-container fade-up">
+            <div class="rule-card">
+                <h4><i class="fa-solid fa-circle-notch"></i> دائرة الرمي</h4>
+                <p>قطرها <strong>2.135 متر</strong>. أرضيتها خرسانية لمنع التزحلق. يحيط بها إطار حديدي سمكه 6مم مدهون أبيض.</p>
+            </div>
+            <div class="rule-card">
+                <h4><i class="fa-solid fa-shield-halved"></i> لوحة الإيقاف (Stop Board)</h4>
+                <p>تصنع من الخشب على شكل قوس في منتصف خطي المقطع. طولها (1.21-1.22م)، عرضها (11.2-30سم)، ارتفاعها (9.8-10.20سم).</p>
+            </div>
+            <div class="rule-card">
+                <h4><i class="fa-solid fa-vector-square"></i> مقطع الرمي (Landing Sector)</h4>
+                <p>من التراب أو العشب، محدد بخطين بيض عرضهما 5سم. الزاوية بينهم <strong>40 درجة</strong> ممتدة من مركز الدائرة.</p>
+            </div>
+            <div class="rule-card">
+                <h4><i class="fa-solid fa-stopwatch"></i> نظام المنافسة</h4>
+                <p>زمن المحاولة <strong>دقيقة واحدة</strong>. إذا كان المتسابقين أكثر من 8، يأخذ كل واحد 3 محاولات، وأفضل 8 يأخذون 3 محاولات إضافية.</p>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <div class="app-footer fade-up">
+            شعبة مسابقات الميدان والمضمار<br>
+            د. الأمير عبد الستار حسن | الفرقة الثانية 2025/2026<br><br>
+            Unleash Your Power <span>🔥</span> <br><br>
+            Coded with <span>♥</span> by <a href="https://github.com/Seif4d" style="color:var(--primary-neon); text-decoration:none;">Seif</a>
+
+        </div>
+
+    </main>
+
+    <!-- Floating Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#home" class="nav-item active" data-target="home">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#phases" class="nav-item" data-target="phases">
+            <i class="fa-solid fa-shoe-prints"></i>
+            <span>المراحل</span>
+        </a>
+        <a href="#physics" class="nav-item" data-target="physics">
+            <i class="fa-solid fa-dumbbell"></i>
+            <span>العضلات</span>
+        </a>
+        <a href="#rules" class="nav-item" data-target="rules">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <span>القوانين</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        // 1. Scroll Reveal Animation
+        const observerOptions = { root: null, rootMargin: '0px', threshold: 0.1 };
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+        document.querySelectorAll('.fade-up').forEach(element => observer.observe(element));
+
+        // 2. Horizontal Scroll Active Card Indicator
+        const phaseCards = document.querySelectorAll('.phase-card');
+        const scrollContainer = document.querySelector('.horizontal-scroll');
+        
+        scrollContainer.addEventListener('scroll', () => {
+            let maxVisibleArea = 0;
+            let activeCard = null;
+            
+            phaseCards.forEach(card => {
+                const rect = card.getBoundingClientRect();
+                const visibleWidth = Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0);
+                if (visibleWidth > maxVisibleArea) {
+                    maxVisibleArea = visibleWidth;
+                    activeCard = card;
+                }
+            });
+
+            if (activeCard) {
+                phaseCards.forEach(c => c.classList.remove('active-card'));
+                activeCard.classList.add('active-card');
+            }
+        });
+
+        // 3. Accordion Logic
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                accordionItems.forEach(otherItem => {
+                    if (otherItem !== item) otherItem.classList.remove('active');
+                });
+                item.classList.toggle('active');
+            });
+        });
+
+        // 4. Bottom Navigation Sync with Scroll
+        const sections = document.querySelectorAll('section, .section-header');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (scrollY >= (sectionTop - 150)) {
+                    current = section.getAttribute('id'); 
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target') === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // 5. Smooth Scroll for Bottom Nav Links
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                window.scrollTo({
+                    top: targetSection.offsetTop - 80,
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
