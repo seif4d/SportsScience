@@ -1,0 +1,616 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Triple Jump | الوثب الثلاثي</title>
+    <!-- خطوط جوجل (Tajawal) لتصميم عصري -->
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;700;900&display=swap" rel="stylesheet">
+    <!-- أيقونات FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* === المتغيرات والألوان === */
+        :root {
+            --bg-dark: #09090e;
+            --surface: #151522;
+            --primary-neon: #00f0ff;
+            --secondary-neon: #ff0055;
+            --text-main: #ffffff;
+            --text-muted: #8e8e9f;
+            --glass-bg: rgba(21, 21, 34, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --safe-bottom: 80px; /* مكان الـ Bottom Nav */
+        }
+
+        /* === الإعدادات الأساسية === */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Tajawal', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: var(--text-main);
+            overflow-x: hidden;
+            /* إخفاء شريط التمرير الافتراضي لشعور التطبيق */
+            scrollbar-width: none; 
+        }
+        body::-webkit-scrollbar { display: none; }
+
+        /* === الـ App Header === */
+        .app-header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            padding: 15px 20px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .app-header .logo {
+            font-weight: 900;
+            font-size: 1.2rem;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .app-header .uni-badge {
+            font-size: 0.8rem;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 4px 10px;
+            border-radius: 20px;
+            color: var(--primary-neon);
+        }
+
+                .app-header .github {
+            font-weight: 900;
+            font-size: 1.2rem;
+                text-decoration-line: initial;
+            background: linear-gradient(90deg, var(--secondary-neon), var(--primary-neon));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            
+        }
+        /* === الـ Main Container === */
+        .app-content {
+            padding-top: 70px;
+            padding-bottom: calc(var(--safe-bottom) + 20px);
+        }
+
+        /* === Hero Section (Stories Style) === */
+        .hero {
+            padding: 20px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .hero h1 {
+            font-size: 2.5rem;
+            font-weight: 900;
+            line-height: 1.2;
+            margin-bottom: 10px;
+        }
+        .hero p {
+            color: var(--text-muted);
+            font-size: 1rem;
+            line-height: 1.5;
+        }
+        .tag-pill {
+            display: inline-block;
+            background: rgba(255, 0, 85, 0.15);
+            color: var(--secondary-neon);
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 0, 85, 0.3);
+        }
+
+        /* === عناوين الأقسام === */
+        .section-header {
+            padding: 0 20px;
+            margin-bottom: 15px;
+            margin-top: 30px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .section-header h2 {
+            font-size: 1.4rem;
+            font-weight: 900;
+        }
+        .section-header i {
+            color: var(--primary-neon);
+            font-size: 1.2rem;
+        }
+
+        /* === السكرول الأفقي (Swipeable Cards - Like Instagram Reels) === */
+        .horizontal-scroll {
+            display: flex;
+            overflow-x: auto;
+            scroll-snap-type: x mandatory;
+            gap: 15px;
+            padding: 0 20px 20px 20px;
+            scrollbar-width: none;
+        }
+        .horizontal-scroll::-webkit-scrollbar { display: none; }
+        
+        .phase-card {
+            min-width: 280px;
+            max-width: 320px;
+            background: var(--surface);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 25px;
+            scroll-snap-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .phase-card::before {
+            content: '';
+            position: absolute;
+            top: 0; right: 0;
+            width: 100%; height: 4px;
+            background: linear-gradient(90deg, var(--primary-neon), var(--secondary-neon));
+        }
+        .phase-icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            display: inline-block;
+            filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5));
+        }
+        .phase-title {
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--primary-neon);
+        }
+        .phase-stats {
+            display: inline-block;
+            background: rgba(255,255,255,0.1);
+            padding: 4px 10px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        .phase-details li {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            margin-bottom: 8px;
+            line-height: 1.5;
+            list-style-type: none;
+            position: relative;
+            padding-right: 15px;
+        }
+        .phase-details li::before {
+            content: '•';
+            position: absolute;
+            right: 0;
+            color: var(--secondary-neon);
+        }
+
+        /* === Accordion (الأخطاء) === */
+        .red-flags-container {
+            padding: 0 20px;
+        }
+        .accordion-item {
+            background: var(--surface);
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            border-radius: 16px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+        .accordion-header {
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: bold;
+            color: #fff;
+            cursor: pointer;
+        }
+        .accordion-header i {
+            color: var(--secondary-neon);
+            transition: transform 0.3s;
+        }
+        .accordion-body {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background: rgba(0,0,0,0.2);
+        }
+        .accordion-content {
+            padding: 15px 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        .accordion-content span {
+            color: var(--primary-neon);
+            font-weight: bold;
+        }
+        .accordion-item.active .accordion-body {
+            max-height: 300px; /* يكفي للمحتوى */
+        }
+        .accordion-item.active .accordion-header i {
+            transform: rotate(180deg);
+        }
+
+        /* === كروت التدريب === */
+        .training-grid {
+            padding: 0 20px;
+            display: grid;
+            gap: 15px;
+        }
+        .train-card {
+            background: var(--surface);
+            border-radius: 16px;
+            padding: 15px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        .train-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(0, 240, 255, 0.1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.5rem;
+            color: var(--primary-neon);
+            flex-shrink: 0;
+        }
+        .train-info h4 {
+            font-size: 1rem;
+            margin-bottom: 5px;
+        }
+        .train-info p {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        /* === قوانين السيرفر === */
+        .rules-container {
+            padding: 0 20px;
+        }
+        .rule-box {
+            background: linear-gradient(135deg, rgba(21,21,34,1) 0%, rgba(21,21,34,0.4) 100%);
+            border-right: 4px solid var(--primary-neon);
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 15px;
+        }
+        .rule-box h4 {
+            color: var(--primary-neon);
+            margin-bottom: 8px;
+        }
+        .rule-box p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+
+        /* === Bottom Navigation Bar === */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: var(--safe-bottom);
+            background: rgba(15, 15, 25, 0.95);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--glass-border);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding-bottom: 10px; /* للآيفون (Safe Area) */
+            z-index: 1000;
+        }
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: all 0.3s;
+            padding: 10px;
+        }
+        .nav-item i {
+            font-size: 1.3rem;
+        }
+        .nav-item span {
+            font-size: 0.7rem;
+            font-weight: bold;
+        }
+        .nav-item.active {
+            color: var(--primary-neon);
+            transform: translateY(-3px);
+        }
+        .nav-item.active i {
+            text-shadow: 0 0 15px var(--primary-neon);
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="app-header">
+        <div class="logo">🚀 الوثب الثلاثي</div>
+        <div class="uni-badge"><a class="github" href="https://github.com/Seif4d" target="_blank">Seif</a></div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="app-content">
+
+        <!-- Hero -->
+        <section id="home" class="hero">
+            <div class="tag-pill">🔥 Level Up Your Skills</div>
+            <h1>طير في الهوا<br>الوثب الثلاثي</h1>
+            <p>الموضوع مش جري ونط وخلاص! دي فيزياء، وتكنيك، وتحكم في الجسم. اسحب وشوف شرح تفصيلي لـ التسلسل الحركي، الأخطاء اللي بتبوظ السكور، والقوانين.</p>
+        </section>
+
+        <!-- Phases (Swipeable horizontal cards) -->
+        <div class="section-header" id="phases">
+            <i class="fa-solid fa-layer-group"></i>
+            <h2>مراحل الطيران </br>(التسلسل الحركي)</h2>
+        </div>
+        <p style="padding: 0 20px; color: var(--text-muted); font-size: 0.85rem; margin-bottom: 15px;">اسحب الكروت يمين وشمال عشان تشوف باقي المراحل 👉</p>
+        
+        <div class="horizontal-scroll">
+            <!-- Phase 1 -->
+            <div class="phase-card">
+                <div class="phase-icon">🏃‍♂️</div>
+                <div class="phase-title">1. الإقتراب (Approach)</div>
+                <div class="phase-stats">الهدف: أقصى سرعة ⚡</div>
+                <ul class="phase-details">
+                    <li>بنزود السرعة بالتدريج للوصول لأقصى سرعة نقدر نتحكم فيها للارتقاء.</li>
+                    <li>المسافة؟ من 10 خطوات (للمبتدئين/النوبز) لأكتر من 20 خطوة (للمحترفين).</li>
+                    <li>طريقة الجري زي العدو السريع، وضع القدم نشط وسريع كأنك بتخربش لورا.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-card" style="border-color: var(--secondary-neon);">
+                <div class="phase-icon">🦘</div>
+                <div class="phase-title">2. الحجلة (Hop)</div>
+                <div class="phase-stats">35% من المسافة الكلية</div>
+                <ul class="phase-details">
+                    <li>أول طيران.. لازم يكون <strong>منخفض</strong> لمسافة طويلة عشان متفقدش سرعتك الأفقية.</li>
+                    <li>اتجاه الارتقاء بيكون <strong>للأمام</strong> مش لفوق!</li>
+                    <li>الرجل الحرة بتسحبها لورا، وبتنزل على <strong>نفس رجل الارتقاء</strong>.</li>
+                    <li>حافظ على جذعك مستقيم ومتتنيش ضهرك.</li>
+                </ul>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-card">
+                <div class="phase-icon">🚶‍♂️</div>
+                <div class="phase-title">3. الخطوة (Step)</div>
+                <div class="phase-stats">30% | أهم جزء 🔥</div>
+                <ul class="phase-details">
+                    <li>دي الـ Main Character! أهم جزء في الوثب. لازم زمن الطيران فيها يساوي الحجلة.</li>
+                    <li>وضع القدم بينزل نشط وسريع للأسفل والخلف.</li>
+                    <li>فخد الرجل الحرة بيكون أعلى من الوضع الأفقي، ومفرودة تقريباً.</li>
+                    <li>شغل المرجحة بدراعاتك لو أمكن عشان تظبط التوازن (Balance).</li>
+                </ul>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="phase-card" style="border-color: var(--primary-neon);">
+                <div class="phase-title">4. الوثبة (Jump)</div>
+                <div class="phase-stats">35% | التفنيشة 🚀</div>
+                <ul class="phase-details">
+                    <li>هنا بنرتقي بالرجل <strong>العكسية</strong>. ارتقاء بقوة بزاوية مثالية.</li>
+                    <li>الجسم في الهوا مستقيم، وبنستخدم طريقة "التعلق" أو "الشراع".</li>
+                    <li>عند الهبوط: الرجلين ممتدة بالكامل للأمام.</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Training Steps -->
+        <div class="section-header" id="training">
+            <i class="fa-solid fa-dumbbell"></i>
+            <h2>خطوات التدريب </br> (Training Modes)</h2>
+        </div>
+        <div class="training-grid">
+            <div class="train-card">
+                <div class="train-icon">1</div>
+                <div class="train-info">
+                    <h4>التمهيدي (Warm-up)</h4>
+                    <p>عشان تكتشف قدم الارتقاء: خطوات طويلة مع مرجحة الركبة لفوق. أو الوثب على كرات طبية بمسافة 1.5م لـ 2م.</p>
+                </div>
+            </div>
+            <div class="train-card">
+                <div class="train-icon">2</div>
+                <div class="train-info">
+                    <h4>الأساسي (Core)</h4>
+                    <p>اقتراب بـ 5 خطوات، وتعمل (حجلة ⬅️ خطوة ⬅️ وثبة) مع تحديد علامات ضابطة على الأرض لكل قفزة.</p>
+                </div>
+            </div>
+            <div class="train-card">
+                <div class="train-icon">3</div>
+                <div class="train-info">
+                    <h4>التحسيني (Pro Max)</h4>
+                    <p>استخدام سديري مثقل (وزنه ميزيدش عن 5% من وزنك) أو التدريب باستخدام صناديق مرتفعة لضبط التكنيك.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Red Flags -->
+        <div class="section-header" id="errors">
+            <i class="fa-solid fa-flag" style="color: var(--secondary-neon);"></i>
+            <h2>أخطاء بتبوظ السكور </br> (Red Flags 🚩)</h2>
+        </div>
+        <div class="red-flags-container">
+            <!-- Error 1 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    🚩 الإيقاع بايظ والارتقاء مش مظبوط
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <strong>السبب:</strong> نقص في إيقاع خطوات الاقتراب بالذات في آخر 3 خطوات.<br>
+                        <span>التصحيح:</span> تقنين وضبط مسافة الاقتراب وعمل علامات ضابطة (Check marks).
+                    </div>
+                </div>
+            </div>
+            <!-- Error 2 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    🚩 الحجلة عالية أوي (Hop)
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <strong>السبب:</strong> ميول للخلف أو التركيز على الحجلة ونسيان باقي الخطوات.<br>
+                        <span>التصحيح:</span> تدريب بميل الجذع للأمام باتجاه الارتقاء، الهدف هو الدفع <strong>للأمام</strong> مش لفوق.
+                    </div>
+                </div>
+            </div>
+            <!-- Error 3 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    🚩 الخطوة قصيرة جداً (Step)
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <strong>السبب:</strong> فقدان السرعة الأفقية، وضعف عضلات البطن والرجلين، أو طيران منخفض بزيادة.<br>
+                        <span>التصحيح:</span> تقوية العضلات (القدرة الانفجارية)، وتدريب الارتقاء مع وضع حواجز لضبط المسافة.
+                    </div>
+                </div>
+            </div>
+            <!-- Error 4 -->
+            <div class="accordion-item">
+                <div class="accordion-header">
+                    🚩 هبوط تقيل وميل الجذع للخلف
+                    <i class="fa-solid fa-chevron-down"></i>
+                </div>
+                <div class="accordion-body">
+                    <div class="accordion-content">
+                        <strong>السبب:</strong> ضعف عضلات البطن وخلف الفخذ، وتخيل حركي غير سليم.<br>
+                        <span>التصحيح:</span> ميل الجذع للأمام مع بداية الهبوط في الحفرة، وتدريب الهبوط على رمل ممهد.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Rules -->
+        <div class="section-header" id="rules">
+            <i class="fa-solid fa-scale-balanced"></i>
+            <h2>قوانين السيرفر (القاعدة 186)</h2>
+        </div>
+        <div class="rules-container">
+            <div class="rule-box">
+                <h4>📐 مسافة اللوحة (Take-off Board)</h4>
+                <p>يجب ألا تقل المسافة بين خط الارتقاء ونهاية الرمل عن 21 متر. في البطولات الدولية: 13 متر للرجال، و 11 متر للسيدات (بين اللوحة وبداية الرمل).</p>
+            </div>
+            <div class="rule-box">
+                <h4>👟 الترتيب الإجباري</h4>
+                <p>الحركة لازم تكون بالترتيب: حجلة ⬅️ خطوة ⬅️ وثبة. <br>
+                في <strong>الحجلة</strong> تنزل على نفس القدم. وفي <strong>الخطوة</strong> تنزل على القدم التانية.</p>
+            </div>
+            <div class="rule-box">
+                <h4>💡 Cheat Code (معلومة مهمة)</h4>
+                <p>لو أثناء الوثب قدمك التانية المتأرجحة لمست الأرض غصب عنك، <strong>المحاولة لا تعتبر فاشلة</strong> (لا تطبق قاعدة الهبوط الطبيعي هنا).</p>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#home" class="nav-item active" data-target="home">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </a>
+        <a href="#phases" class="nav-item" data-target="phases">
+            <i class="fa-solid fa-bolt"></i>
+            <span>المراحل</span>
+        </a>
+        <a href="#errors" class="nav-item" data-target="errors">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>الأخطاء</span>
+        </a>
+        <a href="#rules" class="nav-item" data-target="rules">
+            <i class="fa-solid fa-book-open"></i>
+            <span>القوانين</span>
+        </a>
+    </nav>
+
+    <!-- JavaScript -->
+    <script>
+        // --- أكورديون الأخطاء (Accordion logic) ---
+        const accordionItems = document.querySelectorAll('.accordion-item');
+        
+        accordionItems.forEach(item => {
+            const header = item.querySelector('.accordion-header');
+            header.addEventListener('click', () => {
+                // إغلاق كل الأكورديونات الأخرى
+                accordionItems.forEach(otherItem => {
+                    if (otherItem !== item) {
+                        otherItem.classList.remove('active');
+                    }
+                });
+                // تبديل حالة الأكورديون الحالي
+                item.classList.toggle('active');
+            });
+        });
+
+        // --- Bottom Navigation Active State on Scroll ---
+        const sections = document.querySelectorAll('.hero, .section-header');
+        const navItems = document.querySelectorAll('.nav-item');
+
+        window.addEventListener('scroll', () => {
+            let current = '';
+            
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                // تعويض الـ Padding العلوي للـ Header
+                if (scrollY >= (sectionTop - 100)) {
+                    // نحصل على الـ id للقسم الحالي
+                    current = section.getAttribute('id'); 
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('data-target') === current) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // --- Smooth Scroll عند النقر على الناف بار ---
+        navItems.forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                
+                window.scrollTo({
+                    top: targetSection.offsetTop - 70, // تعديل المسافة عشان الـ Header الثابت
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
