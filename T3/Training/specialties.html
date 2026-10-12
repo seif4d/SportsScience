@@ -1,0 +1,1265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="theme-color" content="#070a11">
+    <title>شعبة التدريب | علوم الرياضة أسيوط</title>
+    
+    <!-- خط القاهرة والأيقونات -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        :root {
+            --bg-body: #070a12;
+            --surface-card: rgba(18, 24, 38, 0.75);
+            --surface-card-hover: rgba(26, 35, 54, 0.95);
+            --border-glass: rgba(255, 255, 255, 0.08);
+            --primary-neon: #00f2fe;
+            --secondary-neon: #4facfe;
+            --accent-green: #00ff87;
+            --accent-purple: #9d4edd;
+            --accent-coral: #ff2a85;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --radius-xl: 22px;
+            --radius-lg: 16px;
+            --radius-md: 12px;
+            --radius-pill: 999px;
+            --header-height: 126px;
+            --safe-bottom: env(safe-area-inset-bottom, 16px);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            -webkit-tap-highlight-color: transparent;
+            font-family: 'Cairo', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(0, 242, 254, 0.08) 0px, transparent 40%),
+                radial-gradient(at 100% 100%, rgba(157, 78, 221, 0.09) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            overflow-x: hidden;
+            padding-bottom: calc(85px + var(--safe-bottom));
+        }
+
+        /* Ambient subtle grain */
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            background: radial-gradient(circle at 50% 20%, rgba(0, 242, 254, 0.03), transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            max-width: 1180px;
+            margin: 0 auto;
+            padding: 0 16px;
+            width: 100%;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Top Bar - Brand Header */
+        .app-topbar {
+            padding: 14px 0 10px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .brand-logo {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary-neon), var(--accent-purple));
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            color: #050811;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(0, 242, 254, 0.35);
+        }
+
+        .brand-meta h1 {
+            font-size: 0.95rem;
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        .brand-meta span {
+            font-size: 0.72rem;
+            color: var(--primary-neon);
+            font-weight: 700;
+        }
+
+        .topbar-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .btn-icon-soft {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            width: 38px;
+            height: 38px;
+            border-radius: 12px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-icon-soft:active {
+            transform: scale(0.92);
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sticky Control Bar - Clean, Compact, No Overlap Bug */
+        .sticky-wrapper {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+            background: rgba(7, 10, 18, 0.92);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            padding: 10px 0 12px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+            margin-bottom: 16px;
+        }
+
+        .search-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .search-input-box {
+            position: relative;
+            flex: 1;
+        }
+
+        .search-input-box i {
+            position: absolute;
+            top: 50%;
+            right: 14px;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+        .search-input-box input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: #fff;
+            font-size: 0.9rem;
+            padding: 11px 40px 11px 14px;
+            border-radius: var(--radius-md);
+            outline: none;
+            transition: border-color 0.2s, background 0.2s;
+        }
+
+        .search-input-box input:focus {
+            border-color: var(--primary-neon);
+            background: rgba(255, 255, 255, 0.07);
+        }
+
+        /* Button to trigger bottom filters modal */
+        .btn-filter-trigger {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-main);
+            padding: 0 14px;
+            height: 44px;
+            border-radius: var(--radius-md);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            white-space: nowrap;
+            position: relative;
+        }
+
+        .filter-badge {
+            background: var(--primary-neon);
+            color: #000;
+            font-size: 0.7rem;
+            font-weight: 900;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: none;
+            place-items: center;
+        }
+
+        .filter-badge.show {
+            display: grid;
+        }
+
+        /* Horizontal Sports Chips Carousel with visual fade mask */
+        .chips-container {
+            position: relative;
+            margin-top: 10px;
+        }
+
+        /* Mask indicators for scrollability */
+        .chips-mask {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding: 2px 0 4px;
+            scrollbar-width: none;
+            mask-image: linear-gradient(to left, transparent 0%, black 15px, black calc(100% - 15px), transparent 100%);
+            -webkit-mask-image: linear-gradient(to left, transparent 0%, black 15px, black calc(100% - 15px), transparent 100%);
+        }
+        .chips-mask::-webkit-scrollbar { display: none; }
+
+        .chip-pill {
+            background: rgba(255, 255, 255, 0.04);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 6px 14px;
+            border-radius: var(--radius-pill);
+            font-size: 0.78rem;
+            font-weight: 700;
+            white-space: nowrap;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .chip-pill.active {
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            color: #060b13;
+            border-color: transparent;
+            font-weight: 800;
+            box-shadow: 0 2px 10px rgba(0, 242, 254, 0.3);
+        }
+
+        /* Students Cards Grid */
+        .cards-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+            gap: 14px;
+        }
+
+        /* Modern App Card */
+        .student-item {
+            background: var(--surface-card);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            transition: transform 0.2s, border-color 0.2s;
+            animation: cardAppear 0.3s cubic-bezier(0.2, 0.9, 0.3, 1) forwards;
+        }
+
+        @keyframes cardAppear {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .student-item:active {
+            transform: scale(0.99);
+        }
+
+        /* Card Top row: ID on right, Status on left (RTL aligned) */
+        .card-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .id-tag {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            font-size: 0.75rem;
+            font-weight: 800;
+            color: var(--primary-neon);
+            background: rgba(0, 242, 254, 0.08);
+            border: 1px solid rgba(0, 242, 254, 0.2);
+            padding: 2px 10px;
+            border-radius: var(--radius-pill);
+        }
+
+        .status-pill {
+            font-size: 0.68rem;
+            font-weight: 800;
+            padding: 3px 10px;
+            border-radius: var(--radius-pill);
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .status-pill.fresh {
+            background: rgba(0, 255, 135, 0.12);
+            color: var(--accent-green);
+            border: 1px solid rgba(0, 255, 135, 0.3);
+        }
+
+        .status-pill.repeater {
+            background: rgba(255, 42, 133, 0.12);
+            color: var(--accent-coral);
+            border: 1px solid rgba(255, 42, 133, 0.3);
+        }
+
+        /* Student Identity */
+        .student-bio {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .avatar-sport {
+            width: 44px;
+            height: 44px;
+            border-radius: 14px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.06), rgba(255,255,255,0.02));
+            border: 1px solid var(--border-glass);
+            display: grid;
+            place-items: center;
+            font-size: 1.15rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+
+        .bio-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .bio-name {
+            font-size: 1rem;
+            font-weight: 800;
+            color: #fff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .bio-sub {
+            font-size: 0.74rem;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 2px;
+        }
+
+        /* Specialties Bento Block */
+        .sports-bento {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.04);
+            border-radius: var(--radius-md);
+            padding: 9px 12px;
+        }
+
+        .sport-field {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .sport-field span {
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .sport-field strong {
+            font-size: 0.86rem;
+            font-weight: 800;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .sport-field.individual strong { color: #38bdf8; }
+        .sport-field.team strong { color: #f472b6; }
+
+        /* Card Interactive Footer */
+        .card-bottom-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 6px;
+            padding-top: 6px;
+            border-top: 1px solid rgba(255, 255, 255, 0.03);
+        }
+
+        .btn-card-tool {
+            background: transparent;
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: grid;
+            place-items: center;
+            font-size: 0.8rem;
+            transition: all 0.15s;
+        }
+
+        .btn-card-tool:hover, .btn-card-tool:active {
+            color: #fff;
+            border-color: var(--primary-neon);
+            background: rgba(0, 242, 254, 0.08);
+        }
+
+        /* Empty State */
+        .empty-placeholder {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px 20px;
+            background: var(--surface-card);
+            border-radius: var(--radius-xl);
+            border: 1px dashed var(--border-glass);
+        }
+
+        .empty-placeholder i {
+            font-size: 2.8rem;
+            color: var(--text-muted);
+            opacity: 0.4;
+            margin-bottom: 12px;
+        }
+
+        .empty-placeholder h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
+        }
+
+        .empty-placeholder p {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-top: 4px;
+        }
+
+        /* Native App Bottom Bar */
+        .native-bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(8, 12, 20, 0.94);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 1px solid var(--border-glass);
+            padding: 8px 16px var(--safe-bottom);
+            z-index: 50;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .nav-tap-btn {
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 3px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 4px 12px;
+            border-radius: var(--radius-md);
+            transition: color 0.2s;
+        }
+
+        .nav-tap-btn i {
+            font-size: 1.15rem;
+        }
+
+        .nav-tap-btn.active, .nav-tap-btn:active {
+            color: var(--primary-neon);
+        }
+
+        /* Bottom Sheet (Drawer) for Detailed Filters */
+        .bottom-sheet-backdrop {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.75);
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+            z-index: 99;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease;
+        }
+
+        .bottom-sheet-backdrop.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .bottom-sheet-box {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: #0f1523;
+            border-top: 1px solid var(--border-glass);
+            border-radius: 26px 26px 0 0;
+            padding: 16px 20px calc(24px + var(--safe-bottom));
+            z-index: 100;
+            transform: translateY(100%);
+            transition: transform 0.3s cubic-bezier(0.2, 0.9, 0.3, 1);
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .bottom-sheet-backdrop.active .bottom-sheet-box {
+            transform: translateY(0);
+        }
+
+        .sheet-handle {
+            width: 36px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 99px;
+            margin: 0 auto 16px;
+        }
+
+        .sheet-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+        }
+
+        .sheet-header h3 {
+            font-size: 1.05rem;
+            font-weight: 800;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin-bottom: 20px;
+        }
+
+        .filter-field label {
+            display: block;
+            font-size: 0.78rem;
+            color: var(--text-muted);
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .filter-field select {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: #fff;
+            padding: 11px 14px;
+            border-radius: var(--radius-md);
+            font-size: 0.88rem;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .filter-field select option {
+            background: #111827;
+            color: #fff;
+        }
+
+        .sheet-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-action-primary {
+            flex: 2;
+            background: linear-gradient(135deg, var(--primary-neon), var(--secondary-neon));
+            color: #060b13;
+            border: none;
+            padding: 13px;
+            border-radius: var(--radius-md);
+            font-weight: 800;
+            font-size: 0.92rem;
+            cursor: pointer;
+        }
+
+        .btn-action-secondary {
+            flex: 1;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-glass);
+            color: var(--text-muted);
+            padding: 13px;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+
+        /* Generic Center Modal (JSON Upload / Stats) */
+        .modal-wrap {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+            z-index: 110;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+        }
+
+        .modal-wrap.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-card {
+            background: #101626;
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-xl);
+            padding: 22px;
+            max-width: 480px;
+            width: 100%;
+            position: relative;
+        }
+
+        .modal-close-btn {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            cursor: pointer;
+        }
+
+        .modal-card textarea {
+            width: 100%;
+            height: 140px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            color: #fff;
+            padding: 10px;
+            font-size: 0.82rem;
+            margin: 12px 0;
+            outline: none;
+            font-family: monospace;
+            resize: none;
+        }
+
+        /* Stats Grid inside Stats Modal */
+        .modal-stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin: 14px 0;
+        }
+
+        .stat-box {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border-glass);
+            border-radius: var(--radius-md);
+            padding: 12px;
+            text-align: center;
+        }
+
+        .stat-box .num {
+            font-size: 1.6rem;
+            font-weight: 900;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            color: #fff;
+        }
+
+        .stat-box .lbl {
+            font-size: 0.72rem;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+
+        /* Toast Popup */
+        .toast-pill {
+            position: fixed;
+            bottom: calc(75px + var(--safe-bottom));
+            left: 50%;
+            transform: translateX(-50%) translateY(30px);
+            background: #172033;
+            border: 1px solid var(--primary-neon);
+            color: #fff;
+            padding: 8px 18px;
+            border-radius: var(--radius-pill);
+            font-size: 0.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 200;
+        }
+
+        .toast-pill.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        @media (min-width: 768px) {
+            .app-topbar { padding: 22px 0 14px; }
+            .brand-logo { width: 44px; height: 44px; font-size: 1.3rem; }
+            .brand-meta h1 { font-size: 1.15rem; }
+            .cards-list { grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); gap: 18px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- Top Application Bar -->
+        <header class="app-topbar">
+            <div class="brand-badge">
+                <div class="brand-logo">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div class="brand-meta">
+                    <h1>علوم الرياضة • أسيوط</h1>
+                    <span>الفرقة الثالثة - شعبة التدريب</span>
+                </div>
+            </div>
+
+            <div class="topbar-actions">
+                <button class="btn-icon-soft" title="رفع ملف JSON" onclick="openJsonModal()">
+                    <i class="fa-solid fa-file-arrow-up"></i>
+                </button>
+                <button class="btn-icon-soft" title="تصدير البيانات" onclick="exportDataToJSON()">
+                    <i class="fa-solid fa-download"></i>
+                </button>
+            </div>
+        </header>
+    </div>
+
+    <!-- Sticky Navigation & Search Bar (Protected, No Overlap Leak) -->
+    <div class="sticky-wrapper">
+        <div class="container">
+            <div class="search-row">
+                <div class="search-input-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="searchInput" placeholder="ابحث باسم الطالب أو رقم المسلسل..." autocomplete="off">
+                </div>
+
+                <button class="btn-filter-trigger" onclick="openFilterSheet()">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span>تصفية</span>
+                    <span class="filter-badge" id="filterCountBadge">0</span>
+                </button>
+            </div>
+
+            <!-- Horizontal Quick Sport Chips with Smooth Edge Mask -->
+            <div class="chips-container">
+                <div class="chips-mask" id="chipsRow">
+                    <button class="chip-pill active" data-sport="all">
+                        <i class="fa-solid fa-border-all"></i> الكل
+                    </button>
+                    <!-- Injected dynamically via JS -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content: Cards Grid -->
+    <main class="container">
+        <div class="cards-list" id="studentsContainer">
+            <!-- Rendered cards -->
+        </div>
+    </main>
+
+    <!-- Bottom Navigation Bar (True Native App Feel) -->
+    <nav class="native-bottom-nav">
+        <button class="nav-tap-btn active" onclick="scrollToTop()">
+            <i class="fa-solid fa-house"></i>
+            <span>الرئيسية</span>
+        </button>
+        <button class="nav-tap-btn" onclick="openFilterSheet()">
+            <i class="fa-solid fa-filter"></i>
+            <span>الفلاتر</span>
+        </button>
+        <button class="nav-tap-btn" onclick="openStatsModal()">
+            <i class="fa-solid fa-chart-pie"></i>
+            <span>الإحصائيات</span>
+        </button>
+        <button class="nav-tap-btn" onclick="openJsonModal()">
+            <i class="fa-solid fa-cloud-arrow-up"></i>
+            <span>استيراد</span>
+        </button>
+    </nav>
+
+    <!-- Bottom Sheet Modal for Advanced Filters -->
+    <div class="bottom-sheet-backdrop" id="filterSheet">
+        <div class="bottom-sheet-box">
+            <div class="sheet-handle"></div>
+            <div class="sheet-header">
+                <h3>تصفية وتحديد الطلاب</h3>
+                <span style="font-size: 0.75rem; color: var(--primary-neon); cursor: pointer;" onclick="resetAllFilters()">إعادة ضبط</span>
+            </div>
+
+            <div class="filter-group">
+                <div class="filter-field">
+                    <label>التخصص الفردي</label>
+                    <select id="selectIndividual">
+                        <option value="">جميع التخصصات الفردية 🥊</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label>التخصص الجماعي</label>
+                    <select id="selectTeam">
+                        <option value="">جميع التخصصات الجماعية ⚽</option>
+                    </select>
+                </div>
+
+                <div class="filter-field">
+                    <label>حالة القيد</label>
+                    <select id="selectStatus">
+                        <option value="">الكل (مستجد / باق)</option>
+                        <option value="مستجد">مستجد فقط</option>
+                        <option value="باق">باق فقط</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="sheet-actions">
+                <button class="btn-action-primary" onclick="closeFilterSheet()">عرض النتائج</button>
+                <button class="btn-action-secondary" onclick="resetAllFilters()">إلغاء</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Stats Modal -->
+    <div class="modal-wrap" id="statsModal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeStatsModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="font-size: 1.05rem; font-weight: 800; margin-bottom: 6px;">إحصائيات الدفعة</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted);">نظرة سريعة على تشعيب التدريب الفرقة الثالثة</p>
+
+            <div class="modal-stats-grid">
+                <div class="stat-box">
+                    <div class="num" id="statTotalStudents">0</div>
+                    <div class="lbl">إجمالي الطلاب</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="statFreshStudents" style="color: var(--accent-green);">0</div>
+                    <div class="lbl">طلاب مستجدين</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="statIndividualCount" style="color: var(--primary-neon);">0</div>
+                    <div class="lbl">تخصص فردي مختلف</div>
+                </div>
+                <div class="stat-box">
+                    <div class="num" id="statTeamCount" style="color: var(--accent-purple);">0</div>
+                    <div class="lbl">تخصص جماعي مختلف</div>
+                </div>
+            </div>
+
+            <button class="btn-action-primary" style="width: 100%; margin-top: 10px;" onclick="closeStatsModal()">حسناً</button>
+        </div>
+    </div>
+
+    <!-- JSON Upload Modal -->
+    <div class="modal-wrap" id="jsonModal">
+        <div class="modal-card">
+            <button class="modal-close-btn" onclick="closeJsonModal()"><i class="fa-solid fa-xmark"></i></button>
+            <h3 style="font-size: 1.05rem; font-weight: 800;">استيراد ملف الدفعة</h3>
+            <p style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">يمكنك لصق كود الـ JSON أو رفع الملف مباشرة:</p>
+
+            <textarea id="jsonInputText" placeholder='[{"مسلسل":1,"اسم الطالب":"...","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"}]'></textarea>
+
+            <input type="file" id="filePicker" accept=".json" style="display: none;" onchange="handleFileUpload(event)">
+            
+            <div style="display: flex; gap: 8px;">
+                <button class="btn-action-secondary" style="flex: 1;" onclick="document.getElementById('filePicker').click()">
+                    <i class="fa-solid fa-folder-open"></i> رفع ملف
+                </button>
+                <button class="btn-action-primary" style="flex: 1.4;" onclick="applyJsonData()">تحديث القائمة</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Toast -->
+    <div class="toast-pill" id="toast">
+        <i class="fa-solid fa-circle-check" style="color: var(--primary-neon);"></i>
+        <span id="toastMsg">تم بنجاح</span>
+    </div>
+
+    <script>
+        // Data Store (With your sample + representative student cases)
+        let studentsData = [{"مسلسل":1,"اسم الطالب":"ابراهيم عصام عبد الحفيظ محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":2,"اسم الطالب":"ابراهيم محمد محي الدين فايق","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":3,"اسم الطالب":"احمد خالد محمود عوض","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":4,"اسم الطالب":"احمد خيري احمد عليوه","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":5,"اسم الطالب":"احمد ربيع عمر عبدالمالك","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":6,"اسم الطالب":"احمد سالم حميده يونس","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":7,"اسم الطالب":"احمد شريف محمد حماد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":8,"اسم الطالب":"احمد صلاح امين حسين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":9,"اسم الطالب":"احمد طلعت عبداللاه احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":10,"اسم الطالب":"احمد عامر جاد عبدالحافظ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":11,"اسم الطالب":"احمد عبدالله عبد النبى عمر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":12,"اسم الطالب":"احمد عبدالمنعم احمد عبدالمنعم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":13,"اسم الطالب":"احمد علاء جلال فؤاد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة قدم"},{"مسلسل":14,"اسم الطالب":"احمد علم سيد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":15,"اسم الطالب":"احمد غانم دياب غانم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":16,"اسم الطالب":"احمد محمد امين على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":17,"اسم الطالب":"احمد محمد عبد الحى عطا","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":18,"اسم الطالب":"احمد محمد عبد المولي ربيع","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":19,"اسم الطالب":"احمد محمد عبدالشافي صديق","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":20,"اسم الطالب":"احمد محمد على محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":21,"اسم الطالب":"احمد محمد محمود خليل محمدين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة قدم"},{"مسلسل":22,"اسم الطالب":"احمد ياسر احمد عبدالناصر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":23,"اسم الطالب":"احمد ياسر محمد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":24,"اسم الطالب":"ادم عبدالرحمن محمود احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":25,"اسم الطالب":"ادهم محمود ابو بكر هاشم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":26,"اسم الطالب":"اسامه احمد ابراهيم عيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":27,"اسم الطالب":"اسامه صلاح ادم عليوه","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":28,"اسم الطالب":"اسامه محمد مصطفى محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":29,"اسم الطالب":"اسلام عبدالرحمن عبداللطيف أحمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":30,"اسم الطالب":"اسلام محمد احمد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة يد"},{"مسلسل":31,"اسم الطالب":"اسلام محمود احمد حمدان","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":32,"اسم الطالب":"اسماعيل محمد اسماعيل محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":33,"اسم الطالب":"اشرف صالح ضيف شحاته","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":34,"اسم الطالب":"الحسين سيد عبدالحميد سيد حماد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":35,"اسم الطالب":"اياد محمد عشرى ثابت","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة يد"},{"مسلسل":36,"اسم الطالب":"ايهاب زكريا تادرس حنا","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":37,"اسم الطالب":"بيتر عادل راتب عزيز","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":38,"اسم الطالب":"حسام عامر هاشم احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":39,"اسم الطالب":"حسام عبدالناصر حسن طه","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":40,"اسم الطالب":"حسام محمود احمد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":41,"اسم الطالب":"حسن حسام حسن حمدون","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":42,"اسم الطالب":"حسن محمد حسن عبد الجواد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":43,"اسم الطالب":"حسن محمد حماد على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":44,"اسم الطالب":"حسن محى الدين حسن سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":45,"اسم الطالب":"حسنى محمد حسنى سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":46,"اسم الطالب":"حمزه بدرى سيد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":47,"اسم الطالب":"خالد حماده مرزق متولى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":48,"اسم الطالب":"خالد علي احمد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":49,"اسم الطالب":"زياد احمد محمد عبد الموجود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":50,"اسم الطالب":"زياد رجب محمد مفضل","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":51,"اسم الطالب":"زياد محمد ابراهيم احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":52,"اسم الطالب":"سيد جمال سيد عبد العزيز","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة قدم"},{"مسلسل":53,"اسم الطالب":"سيد محمد فرغلى شوقى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة يد"},{"مسلسل":54,"اسم الطالب":"سيف عبدالرؤف على مغربي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":55,"اسم الطالب":"شعبان سيد احمد متولي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":56,"اسم الطالب":"شلبي جمال شلبي علي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":57,"اسم الطالب":"طارق عبد النبي عبد المالك محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":58,"اسم الطالب":"طلال محمد شامخ عثمان","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":59,"اسم الطالب":"عبدالتواب جميل عبدالتواب محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة يد"},{"مسلسل":60,"اسم الطالب":"عبدالحفيظ جمال عبدالحفيظ سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":61,"اسم الطالب":"عبدالحميد سعد حسن حسانين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":62,"اسم الطالب":"عبدالرحمن حماده عبدالرحمن على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":63,"اسم الطالب":"عبدالرحمن صابر محمد عبدالباسط","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":64,"اسم الطالب":"عبدالرحمن عادل كمال محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":65,"اسم الطالب":"عبدالرحمن علاء الدين سعد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":66,"اسم الطالب":"عبدالرحمن على حسن على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":67,"اسم الطالب":"عبدالرحمن محمد جاد الحق عطيفى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة يد"},{"مسلسل":68,"اسم الطالب":"عبدالرحمن محمد على ابوالفتوح","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة قدم"},{"مسلسل":69,"اسم الطالب":"عبدالرحمن محمد مصطفي علي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":70,"اسم الطالب":"عبدالرحمن محمود مرسى محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":71,"اسم الطالب":"عبدالرحمن ياسر احمد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":72,"اسم الطالب":"عبدالسلام مصطفى عبد السلام احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":73,"اسم الطالب":"عبدالعظيم محمود محمد الصغير عبدالرحمن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":74,"اسم الطالب":"عبدالكريم سيد اسماعيل سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":75,"اسم الطالب":"عبدالله عمر احمد حسن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":76,"اسم الطالب":"عبدالله هلال حامد عبدالله","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة سلة"},{"مسلسل":77,"اسم الطالب":"عبدالمالك محمد عبد المالك إبراهيم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":78,"اسم الطالب":"عبدالوهاب عبد الغفار عبد السلام عبد الله","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":79,"اسم الطالب":"على جمال على عبدالحفيظ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة قدم"},{"مسلسل":80,"اسم الطالب":"على حسين عرام امبابى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":81,"اسم الطالب":"على زين العابدين سليمان محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":82,"اسم الطالب":"على كمال ثابت على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":83,"اسم الطالب":"على محسن مرعى على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":84,"اسم الطالب":"عمر احمد على محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":85,"اسم الطالب":"عمر جمال عبدالرحمن خلف","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":86,"اسم الطالب":"عمر خالد فتحى فرغلى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة يد"},{"مسلسل":87,"اسم الطالب":"عمر رجب يحى عبداللاه","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":88,"اسم الطالب":"عمر محسن رزق احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة قدم"},{"مسلسل":89,"اسم الطالب":"عمر محمد محمود حسين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":90,"اسم الطالب":"عمرو جمال فرج صالح","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":91,"اسم الطالب":"عمرو عبدالرحمن سيد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":92,"اسم الطالب":"عمرو عبدالله جمال الدين احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":93,"اسم الطالب":"عونى طارق عونى بليغ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":94,"اسم الطالب":"كريم احمد عبدالحافظ حسانين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":95,"اسم الطالب":"كريم احمد عيسى دياب","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":96,"اسم الطالب":"كريم احمد يوسف عبود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":97,"اسم الطالب":"كريم محمد سيد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":98,"اسم الطالب":"كريم مصطفى محمود مصطفى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":99,"اسم الطالب":"كيرلس اشرف وجيه الفى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":100,"اسم الطالب":"كيرلس صلاح ميلاد صليب","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":101,"اسم الطالب":"مازن حسن عبد المعطى فرغلى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":102,"اسم الطالب":"مازن محمد يونس احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":103,"اسم الطالب":"محمد ابراهيم ثابت بخيت","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":104,"اسم الطالب":"محمد احمد حسين عبد الحافظ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":105,"اسم الطالب":"محمد احمد حسين محمد حسن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":106,"اسم الطالب":"محمد احمد درويش احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":107,"اسم الطالب":"محمد احمد رمضان عبدالرحمن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":108,"اسم الطالب":"محمد احمد عزت عيسى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة يد"},{"مسلسل":109,"اسم الطالب":"محمد احمد محمد حسن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":110,"اسم الطالب":"محمد احمد محمود عبدالعال","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":111,"اسم الطالب":"محمد احمد مصطفى محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":112,"اسم الطالب":"محمد اسامه محفوظ قطب","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":113,"اسم الطالب":"محمد اشرف صلاح سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":114,"اسم الطالب":"محمد الحسين شوقي احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":115,"اسم الطالب":"محمد جمال شبيكه عبدالله","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":116,"اسم الطالب":"محمد حسن يوسف على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":117,"اسم الطالب":"محمد حسنى عبدالله عبدالرحمن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":118,"اسم الطالب":"محمد خالد جمال عبدالرحمن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":119,"اسم الطالب":"محمد خالد عبد النبى محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":120,"اسم الطالب":"محمد زين العابدين احمد حسن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":121,"اسم الطالب":"محمد شاكر ثروت شاكر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":122,"اسم الطالب":"محمد صلاح زين العابدين عايد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":123,"اسم الطالب":"محمد صلاح مراجى عبدالونيس","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":124,"اسم الطالب":"محمد طاهر ذكى محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":125,"اسم الطالب":"محمد عادل حسن سالم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":126,"اسم الطالب":"محمد عادل محمود أحمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":127,"اسم الطالب":"محمد عادل محمود احمد حسين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":128,"اسم الطالب":"محمد عاطف سليمان عثمان","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":129,"اسم الطالب":"محمد عاطف سيد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":130,"اسم الطالب":"محمد عبدالباسط احمد إبراهيم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":131,"اسم الطالب":"محمد عثمان محمد عثمان","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة سلة"},{"مسلسل":132,"اسم الطالب":"محمد عصام حسن عبدالظاهر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":133,"اسم الطالب":"محمد علاء الدين احمد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة قدم"},{"مسلسل":134,"اسم الطالب":"محمد علاء مختار ابراهيم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":135,"اسم الطالب":"محمد عماد رشيد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":136,"اسم الطالب":"محمد عماد عبدالمجيد سيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":137,"اسم الطالب":"محمد عمر حسين عبد القادر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":138,"اسم الطالب":"محمد محمود حسن احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":139,"اسم الطالب":"محمد محمود محمد حسين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":140,"اسم الطالب":"محمد مصطفى صلاح محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":141,"اسم الطالب":"محمد مصطفى كامل ابو العلا","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":142,"اسم الطالب":"محمد مصطفى محمد فاروق احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":143,"اسم الطالب":"محمد معمر عبدالرحيم عبد الحميد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":144,"اسم الطالب":"محمد ناصر فوزى عبدالحكيم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":145,"اسم الطالب":"محمد ناصر هديه عبد العال","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":146,"اسم الطالب":"محمد نظير عبده نظير","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة يد"},{"مسلسل":147,"اسم الطالب":"محمد ياسر خميس محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":148,"اسم الطالب":"محمود احمد عبدالاه محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":149,"اسم الطالب":"محمود اسامه ابوبكر عبداللطيف","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":150,"اسم الطالب":"محمود اشرف عبد العاطى احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":151,"اسم الطالب":"محمود الأسد خليفة عبد الجابر","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":152,"اسم الطالب":"محمود حسنى محمد احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":153,"اسم الطالب":"محمود عاطف هاشم محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة طائرة"},{"مسلسل":154,"اسم الطالب":"محمود عبد الرحيم محمود عبد النعيم","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":155,"اسم الطالب":"محمود عزت احمد على","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":156,"اسم الطالب":"محمود علي محمود راتب","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":157,"اسم الطالب":"محمود فرغلي عبدالعظيم احمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":158,"اسم الطالب":"محمود محمد احمد مناع","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":159,"اسم الطالب":"محمود محمد خليل علي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة سلة"},{"مسلسل":160,"اسم الطالب":"مروان احمد محمدامين عبدالحافظ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":161,"اسم الطالب":"مروان كمال كامل عبد العزيز","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":162,"اسم الطالب":"مصطفى  احمد سيد عبدالله","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":163,"اسم الطالب":"مصطفى بدر نادى عبد العزيز","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":164,"اسم الطالب":"مصطفى سليمان علي نعمان","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":165,"اسم الطالب":"مصطفى عبدالباسط محمد حسانين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":166,"اسم الطالب":"مصطفي عمار عبد الجابر عبد الحميد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":167,"اسم الطالب":"مصطفي محمد احمد علي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة قدم"},{"مسلسل":168,"اسم الطالب":"مصطفى محمد حسانين عبد الله","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":169,"اسم الطالب":"مصطفى محمد دياب محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":170,"اسم الطالب":"مصطفى محمود سيد محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":171,"اسم الطالب":"منصور متولى ابوحسيبه محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":172,"اسم الطالب":"مهند وائل فتحى مصطفى","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":173,"اسم الطالب":"مومن عبد الحليم فارس فرج","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":174,"اسم الطالب":"مومن محمد مصطفى عبد الوهاب","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"مضمار","التخصص الجماعي":"كرة سلة"},{"مسلسل":175,"اسم الطالب":"مومن يسرى فضل الله محفوظ","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":176,"اسم الطالب":"مينا كمال رفعت عبدالشهيد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":177,"اسم الطالب":"نور مبروك نور علي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة سلة"},{"مسلسل":178,"اسم الطالب":"يحيى  محمد فوزي عبدالسلام","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":179,"اسم الطالب":"يوسف احمد ابراهيم معوض","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":180,"اسم الطالب":"يوسف جمال فتحي صاوي","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":181,"اسم الطالب":"يوسف سيد شعبان احمد محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة يد"},{"مسلسل":182,"اسم الطالب":"يوسف مؤمن سيد محمود","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة يد"},{"مسلسل":183,"اسم الطالب":"يوسف محمد عبدالتواب حسن","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة قدم"},{"مسلسل":184,"اسم الطالب":"يوسف محمد عبدالناصر حسين","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":185,"اسم الطالب":"يوسف محمد محمود محمد","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"سباحة","التخصص الجماعي":"كرة يد"},{"مسلسل":186,"اسم الطالب":"يوسف هشام عبدالجواد مبروك","الحاله":"مستجد","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة قدم"},{"مسلسل":187,"اسم الطالب":"ابوبكر حسن احمد حسن رجب","الحاله":"باق","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":188,"اسم الطالب":"عبدالرحمن محمد إبراهيم محمد","الحاله":"باق","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":189,"اسم الطالب":"محمد احمد عبدالرازق عبدالحي","الحاله":"باق","التشعيب":"تدريب","التخصص الفردي":"ملاكمة","التخصص الجماعي":"كرة طائرة"},{"مسلسل":190,"اسم الطالب":"بدر نصار فالح هادي","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":191,"اسم الطالب":"سيف الدين احمد منصور محمد","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":192,"اسم الطالب":"محمد عاطف عبدالفضيل وهيدي","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":193,"اسم الطالب":"محمد عوض سحم مبارك","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":194,"اسم الطالب":"محمود جمال محمد حسن","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":195,"اسم الطالب":"نايف محمد فيحان فلاح","الحاله":"من الخارج","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":196,"اسم الطالب":"اسلام حماده احمد هارون","الحاله":"من الخارج2","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":197,"اسم الطالب":"اشرف محمود محمد عبدالعال","الحاله":"من الخارج2","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":198,"اسم الطالب":"عبدالله حمد إبراهيم عبدالله","الحاله":"من الخارج2","التشعيب":"تدريب","التخصص الفردي":"لم يختر","التخصص الجماعي":"لم يختر"},{"مسلسل":199,"اسم الطالب":"محمد أبو الحجاج محروس محمد","الحاله":"من الخارج2","التشعيب":"تدريب","التخصص الفردي":"مصارعة","التخصص الجماعي":"كرة قدم"}]
+        ;
+
+        // Sports Icons Dictionary
+        const sportIcons = {
+            "ملاكمة": "fa-hand-back-fist",
+            "مضمار": "fa-person-running",
+            "كرة سلة": "fa-basketball",
+            "كرة طائرة": "fa-volleyball",
+            "كرة قدم": "fa-futbol",
+            "كرة يد": "fa-futbol",
+            "سباحة": "fa-person-swimming",
+            "مصارعة": "fa-handshake-angle",
+            "جمباز": "fa-child-reaching",
+            "تنس": "fa-table-tennis-paddle-ball",
+            "تايكوندو": "fa-user-ninja"
+        };
+
+        // State
+        let activeQuickSport = "all";
+
+        // Elements
+        const studentsContainer = document.getElementById('studentsContainer');
+        const searchInput = document.getElementById('searchInput');
+        const chipsRow = document.getElementById('chipsRow');
+        const selectIndividual = document.getElementById('selectIndividual');
+        const selectTeam = document.getElementById('selectTeam');
+        const selectStatus = document.getElementById('selectStatus');
+        const filterSheet = document.getElementById('filterSheet');
+        const filterCountBadge = document.getElementById('filterCountBadge');
+        const statsModal = document.getElementById('statsModal');
+        const jsonModal = document.getElementById('jsonModal');
+        const jsonInputText = document.getElementById('jsonInputText');
+        const toast = document.getElementById('toast');
+        const toastMsg = document.getElementById('toastMsg');
+
+        // Startup
+        function appInit() {
+            populateSelectOptions();
+            renderChips();
+            renderCards();
+            updateStatsNumbers();
+            attachListeners();
+        }
+
+        // Render Quick Sport Chips
+        function renderChips() {
+            const allSports = [...new Set([
+                ...studentsData.map(s => s["التخصص الفردي"]),
+                ...studentsData.map(s => s["التخصص الجماعي"])
+            ])].filter(Boolean);
+
+            let chipsHtml = `
+                <button class="chip-pill ${activeQuickSport === 'all' ? 'active' : ''}" data-sport="all">
+                    <i class="fa-solid fa-border-all"></i> الكل
+                </button>
+            `;
+
+            allSports.forEach(sport => {
+                const icon = sportIcons[sport] || "fa-medal";
+                chipsHtml += `
+                    <button class="chip-pill ${activeQuickSport === sport ? 'active' : ''}" data-sport="${sport}">
+                        <i class="fa-solid ${icon}"></i> ${sport}
+                    </button>
+                `;
+            });
+
+            chipsRow.innerHTML = chipsHtml;
+
+            chipsRow.querySelectorAll('.chip-pill').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    chipsRow.querySelectorAll('.chip-pill').forEach(c => c.classList.remove('active'));
+                    btn.classList.add('active');
+                    activeQuickSport = btn.dataset.sport;
+                    renderCards();
+                });
+            });
+        }
+
+        // Fill Detailed Dropdowns
+        function populateSelectOptions() {
+            const indList = [...new Set(studentsData.map(s => s["التخصص الفردي"]).filter(Boolean))];
+            const teamList = [...new Set(studentsData.map(s => s["التخصص الجماعي"]).filter(Boolean))];
+
+            selectIndividual.innerHTML = '<option value="">جميع التخصصات الفردية 🥊</option>' + 
+                indList.map(s => `<option value="${s}">${s}</option>`).join('');
+
+            selectTeam.innerHTML = '<option value="">جميع التخصصات الجماعية ⚽</option>' + 
+                teamList.map(s => `<option value="${s}">${s}</option>`).join('');
+        }
+
+        // Render Cards with Safe Hierarchy
+        function renderCards() {
+            const query = searchInput.value.trim().toLowerCase();
+            const indVal = selectIndividual.value;
+            const teamVal = selectTeam.value;
+            const statusVal = selectStatus.value;
+
+            // Update Active Filter Counter Badge
+            let activeFiltersCount = 0;
+            if (indVal) activeFiltersCount++;
+            if (teamVal) activeFiltersCount++;
+            if (statusVal) activeFiltersCount++;
+
+            if (activeFiltersCount > 0) {
+                filterCountBadge.textContent = activeFiltersCount;
+                filterCountBadge.classList.add('show');
+            } else {
+                filterCountBadge.classList.remove('show');
+            }
+
+            // Filter logic
+            const filtered = studentsData.filter(student => {
+                const name = (student["اسم الطالب"] || "").toLowerCase();
+                const id = String(student["مسلسل"] || "");
+                const indSport = student["التخصص الفردي"] || "";
+                const teamSport = student["التخصص الجماعي"] || "";
+                const status = student["الحاله"] || "";
+
+                const matchesQuery = !query || name.includes(query) || id.includes(query);
+                const matchesQuick = activeQuickSport === 'all' || indSport === activeQuickSport || teamSport === activeQuickSport;
+                const matchesInd = !indVal || indSport === indVal;
+                const matchesTeam = !teamVal || teamSport === teamVal;
+                const matchesStatus = !statusVal || status.includes(statusVal);
+
+                return matchesQuery && matchesQuick && matchesInd && matchesTeam && matchesStatus;
+            });
+
+            if (filtered.length === 0) {
+                studentsContainer.innerHTML = `
+                    <div class="empty-placeholder">
+                        <i class="fa-solid fa-user-ninja"></i>
+                        <h3>لا توجد نتائج مطابقة</h3>
+                        <p>جرب البحث بكلمات أخرى أو قم بإلغاء بعض الفلاتر.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            studentsContainer.innerHTML = filtered.map(student => {
+                const isFresh = (student["الحاله"] || "").includes("مستجد");
+                const initialChar = (student["اسم الطالب"] || "ط").trim().charAt(0);
+                const indIcon = sportIcons[student["التخصص الفردي"]] || "fa-trophy";
+                const teamIcon = sportIcons[student["التخصص الجماعي"]] || "fa-people-group";
+
+                return `
+                    <article class="student-item">
+                        <div class="card-top">
+                            <span class="id-tag">#${student["مسلسل"] || "0"}</span>
+                            <span class="status-pill ${isFresh ? 'fresh' : 'repeater'}">
+                                ${isFresh ? '<i class="fa-solid fa-circle-check"></i> مستجد' : '<i class="fa-solid fa-rotate-right"></i> باق'}
+                            </span>
+                        </div>
+
+                        <div class="student-bio">
+                            <div class="avatar-sport">${initialChar}</div>
+                            <div class="bio-details">
+                                <h2 class="bio-name">${student["اسم الطالب"]}</h2>
+                                <div class="bio-sub">
+                                    <i class="fa-solid fa-dumbbell"></i>
+                                    <span>${student["التشعيب"] || "تدريب رياضى"}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="sports-bento">
+                            <div class="sport-field individual">
+                                <span>التخصص الفردي</span>
+                                <strong>
+                                    <i class="fa-solid ${indIcon}"></i>
+                                    ${student["التخصص الفردي"] || "غير محدد"}
+                                </strong>
+                            </div>
+
+                            <div class="sport-field team">
+                                <span>التخصص الجماعي</span>
+                                <strong>
+                                    <i class="fa-solid ${teamIcon}"></i>
+                                    ${student["التخصص الجماعي"] || "غير محدد"}
+                                </strong>
+                            </div>
+                        </div>
+
+                        <div class="card-bottom-actions">
+                            <button class="btn-card-tool" title="نسخ بيانات الطالب" onclick="copyCardData('${student["اسم الطالب"]}', '${student["التخصص الفردي"]}', '${student["التخصص الجماعي"]}')">
+                                <i class="fa-regular fa-copy"></i>
+                            </button>
+                            <button class="btn-card-tool" title="مشاركة" onclick="shareStudentCard('${student["اسم الطالب"]}')">
+                                <i class="fa-solid fa-share-nodes"></i>
+                            </button>
+                        </div>
+                    </article>
+                `;
+            }).join('');
+        }
+
+        // Stats calculation
+        function updateStatsNumbers() {
+            document.getElementById('statTotalStudents').textContent = studentsData.length;
+            document.getElementById('statFreshStudents').textContent = studentsData.filter(s => (s["الحاله"] || "").includes("مستجد")).length;
+            
+            const indSet = new Set(studentsData.map(s => s["التخصص الفردي"]).filter(Boolean));
+            const teamSet = new Set(studentsData.map(s => s["التخصص الجماعي"]).filter(Boolean));
+            document.getElementById('statIndividualCount').textContent = indSet.size;
+            document.getElementById('statTeamCount').textContent = teamSet.size;
+        }
+
+        // Quick Scroll
+        function scrollToTop() {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Clipboard Copy
+        function copyCardData(name, ind, team) {
+            const str = `🏅 الطالب: ${name}\n• فردي: ${ind}\n• جماعي: ${team}\nكلية علوم الرياضة أسيوط`;
+            navigator.clipboard.writeText(str).then(() => {
+                showToast(`تم نسخ بيانات: ${name.split(" ")[0]} 📋`);
+            });
+        }
+
+        // Native Share
+        function shareStudentCard(name) {
+            if (navigator.share) {
+                navigator.share({ title: 'طالب تدريب رياضي أسيوط', text: `بيانات الطالب: ${name}` }).catch(() => {});
+            } else {
+                showToast(`طالب: ${name}`);
+            }
+        }
+
+        // Filter Sheet Drawer Controls
+        function openFilterSheet() { filterSheet.classList.add('active'); }
+        function closeFilterSheet() { filterSheet.classList.remove('active'); renderCards(); }
+        function resetAllFilters() {
+            selectIndividual.value = "";
+            selectTeam.value = "";
+            selectStatus.value = "";
+            activeQuickSport = "all";
+            searchInput.value = "";
+            chipsRow.querySelectorAll('.chip-pill').forEach(c => c.classList.remove('active'));
+            chipsRow.querySelector('[data-sport="all"]').classList.add('active');
+            closeFilterSheet();
+            showToast("تمت إعادة ضبط التصفية");
+        }
+
+        // Stats Modal
+        function openStatsModal() { statsModal.classList.add('open'); }
+        function closeStatsModal() { statsModal.classList.remove('open'); }
+
+        // JSON Import Modal
+        function openJsonModal() { jsonModal.classList.add('open'); }
+        function closeJsonModal() { jsonModal.classList.remove('open'); }
+
+        // Parse JSON String
+        function applyJsonData() {
+            const raw = jsonInputText.value.trim();
+            if (!raw) return showToast("الصق كود JSON أولاً");
+
+            try {
+                const parsed = JSON.parse(raw);
+                if (!Array.isArray(parsed)) throw new Error("يجب أن يكون مصفوفة [ ... ]");
+                studentsData = parsed;
+                appInit();
+                closeJsonModal();
+                showToast(`تم تحديث ${parsed.length} طالب بنجاح ⚡`);
+            } catch (err) {
+                alert("صيغة غير صحيحة: " + err.message);
+            }
+        }
+
+        // File Input Upload
+        function handleFileUpload(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const parsed = JSON.parse(evt.target.result);
+                    if (Array.isArray(parsed)) {
+                        studentsData = parsed;
+                        appInit();
+                        closeJsonModal();
+                        showToast(`تم استيراد ${parsed.length} طالب من الملف 🎉`);
+                    } else {
+                        alert("تنسيق غير متوافق، يجب أن يحتوي الملف على قائمة طلاب.");
+                    }
+                } catch(e) {
+                    alert("الملف لا يحتوي على كود JSON سليم.");
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        // Export Data File
+        function exportDataToJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(studentsData, null, 2));
+            const a = document.createElement('a');
+            a.href = dataStr;
+            a.download = `training_batch_assiut_${Date.now()}.json`;
+            a.click();
+            showToast("جاري تنزيل الملف...");
+        }
+
+        // Toast Feedback
+        function showToast(msg) {
+            toastMsg.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2200);
+        }
+
+        // Attach DOM Listeners
+        function attachListeners() {
+            searchInput.addEventListener('input', renderCards);
+            selectIndividual.addEventListener('change', renderCards);
+            selectTeam.addEventListener('change', renderCards);
+            selectStatus.addEventListener('change', renderCards);
+
+            // Close modal on backdrop click
+            filterSheet.addEventListener('click', (e) => {
+                if (e.target === filterSheet) closeFilterSheet();
+            });
+            statsModal.addEventListener('click', (e) => {
+                if (e.target === statsModal) closeStatsModal();
+            });
+            jsonModal.addEventListener('click', (e) => {
+                if (e.target === jsonModal) closeJsonModal();
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', appInit);
+    </script>
+</body>
+</html>
